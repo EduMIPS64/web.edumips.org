@@ -1,5 +1,5 @@
 /*!
- * Microsoft Dynamic Proto Utility, 1.1.8
+ * Microsoft Dynamic Proto Utility, 1.1.9
  * Copyright (c) Microsoft and contributors. All rights reserved.
  */
 
@@ -62,7 +62,7 @@
  */
 
 /**
- * @mui/styled-engine v5.11.16
+ * @mui/styled-engine v5.12.0
  *
  * @license MIT
  * This source code is licensed under the MIT license found in the
