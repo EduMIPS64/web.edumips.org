@@ -1,6 +1,6 @@
 (function(){
 var $wnd = self, $doc, $entry, $workergwtbridge, $moduleName, $moduleBase;
-window = $wnd;var $gwt_version = "2.11.0";function Wm(){}
+window = $wnd;var $gwt_version = "2.12.1";function Wm(){}
 function Sm(){}
 function pb(){}
 function Nc(){}
