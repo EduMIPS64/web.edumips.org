@@ -11,7 +11,7 @@
     <script src="_static/documentation_options.js?v=4ebe3ea6"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <script src="_static/translations.js?v=beaddf03"></script> 
+    <script src="_static/translations.js?v=540d3cec"></script> 
   </head><body>
 
     <div class="document">
@@ -20,7 +20,7 @@
           <div class="body" role="main">
             
   <section id="id1">
-<h1>源文件格式<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<h1>源文件格式<a class="headerlink" href="#id1" title="链接到此标题。">¶</a></h1>
 <p>EduMIPS64 尝试遵循其他 MIPS64 和 DLX 模拟器中使用的惯例，这样老用户就不会对其语法感到困惑。</p>
 <p>源文件中有两个部分，即 <em>data</em> 部分和 <em>code</em> 部分，分别由 <em>.data</em> 和 <em>.code</em> 指令引入。在下面的列表中，你可以看到一个非常基本的 EduMIPS64 程序:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">;</span> <span class="n">这是注释</span>
@@ -38,12 +38,12 @@
 <p>标签可在代码中用于引用内存单元或指令。 标签不区分大小写。每行源代码只能使用一个标签。
 标签可以在有效数据声明或指令的上方指定一行或多行，前提是标签和声明之间除了注释和空行外没有其他内容。</p>
 <section id="id2">
-<h2>内存限制<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<h2>内存限制<a class="headerlink" href="#id2" title="链接到此标题。">¶</a></h2>
 <p>EduMIPS64 为数据（ <cite>.data</cite> 部分，上限为 640 kB，即 80000 个 64 位值）和指令（ <cite>.code</cite> 部分，上限为 128 kB，即 32000 条指令，每条指令占用 32 位）设置了固定的内存大小。</p>
 <p>这些限制是模拟器硬编码的。</p>
 </section>
 <section id="data">
-<h2><cite>.data</cite> 部分<a class="headerlink" href="#data" title="Link to this heading">¶</a></h2>
+<h2><cite>.data</cite> 部分<a class="headerlink" href="#data" title="链接到此标题。">¶</a></h2>
 <p><cite>.data</cite> 部分包含的命令指定了程序执行开始前内存的填充方式。<cite>.data</cite> 命令的一般格式为:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">label</span><span class="p">:]</span> <span class="o">.</span><span class="n">datatype</span> <span class="n">value1</span> <span class="p">[,</span> <span class="n">value2</span> <span class="p">[,</span> <span class="o">...</span><span class="p">]]</span>
 </pre></div>
@@ -184,7 +184,7 @@
 <p>.asciiz &quot;指令的行为与&quot;.ascii &quot;命令完全相同，不同之处在于它会自动以空字节结束字符串。</p>
 </section>
 <section id="code">
-<h2><cite>.code</cite> 部分<a class="headerlink" href="#code" title="Link to this heading">¶</a></h2>
+<h2><cite>.code</cite> 部分<a class="headerlink" href="#code" title="链接到此标题。">¶</a></h2>
 <p><cite>.code</cite> 部分包含的命令指定了程序启动时内存的填充方式。 <cite>.code</cite> 命令的一般形式是:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">label</span><span class="p">:]</span> <span class="n">instruction</span> <span class="p">[</span><span class="n">param1</span> <span class="p">[,</span> <span class="n">param2</span> <span class="p">[,</span> <span class="n">param3</span><span class="p">]]]</span>
 </pre></div>
@@ -312,7 +312,7 @@
 </div></blockquote>
 </section>
 <section id="include">
-<h2><cite>#include</cite> 命令<a class="headerlink" href="#include" title="Link to this heading">¶</a></h2>
+<h2><cite>#include</cite> 命令<a class="headerlink" href="#include" title="链接到此标题。">¶</a></h2>
 <p>源文件可以包含 <cite>#include filename</cite> 命令，其作用是将文件 <cite>filename</cite> 中的内容替换为命令行。</p>
 <p>如果你想包含外部例程，这条命令是非常有用的，而且它还带有循环检测算法，如果你试图在文件 <cite>B.s</cite> 中执行&quot;<cite>#include A.s</cite>&quot;，又在文件 <cite>A.s</cite> 中执行&quot;<cite>#include B.s</cite>&quot;，它就会发出警告。</p>
 </section>

@@ -11,7 +11,7 @@
     <script src="_static/documentation_options.js?v=4ebe3ea6"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <script src="_static/translations.js?v=beaddf03"></script> 
+    <script src="_static/translations.js?v=540d3cec"></script> 
   </head><body>
 
     <div class="document">
@@ -20,7 +20,7 @@
           <div class="body" role="main">
             
   <section id="id1">
-<h1>用户界面<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<h1>用户界面<a class="headerlink" href="#id1" title="链接到此标题。">¶</a></h1>
 <p>EduMIPS64 的图形用户界面借鉴了 WinMIPS64 的用户界面。事实上，除了一些菜单外，主窗口是完全相同的。</p>
 <p>EduMIPS64 主窗口由一个菜单栏和六个框架组成，显示仿真的不同方面。此外，还有一个状态栏，它有双重作用，一是在点击内存单元和寄存器时显示它们的内容，二是在模拟已启动但未选择verbose（详细）模式时通知用户模拟器正在运行。</p>
 <p>状态栏还显示 CPU 状态。它可以显示以下四种状态之一：</p>
@@ -33,10 +33,10 @@
 <p>请注意，CPU 状态与模拟器状态不同。模拟器可能会执行若干次 CPU 循环，然后停止执行，允许用户检查内存和寄存器：在这种状态下，在 CPU 循环之间，CPU 保持 <em>RUNNING</em> 或 <em>STOPPING</em> 状态。一旦 CPU 进入 <em>HALTED</em> 状态，如果不重新加载程序（同一程序或不同程序），用户就无法运行任何 CPU 循环。</p>
 <p>更多详情请参见以下章节。</p>
 <section id="id2">
-<h2>菜单栏<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<h2>菜单栏<a class="headerlink" href="#id2" title="链接到此标题。">¶</a></h2>
 <p>菜单栏包含六个菜单：</p>
 <section id="id3">
-<h3>文件<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<h3>文件<a class="headerlink" href="#id3" title="链接到此标题。">¶</a></h3>
 <p>文件菜单包含有关打开文件、重置或关闭模拟器、写入跟踪文件的菜单项。</p>
 <ul class="simple">
 <li><p><em>打开...</em> 打开一个对话框，允许用户选择要打开的源文件。
@@ -51,7 +51,7 @@
 <p>Write Dinero Tracefile...*（写入 Dinero Tracefile...*）菜单项只有在执行了整个源文件并已结束时才可用。</p>
 </section>
 <section id="id4">
-<h3>执行<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
+<h3>执行<a class="headerlink" href="#id4" title="链接到此标题。">¶</a></h3>
 <p>执行（Execute）菜单包含有关仿真执行流程的菜单项。</p>
 <ul class="simple">
 <li><p><em>单周期</em> 执行一个仿真步骤</p></li>
@@ -65,7 +65,7 @@
 <p>请注意，在更新用户界面时模拟器的运行速度会减慢。如果想快速执行较长（数千周期）的程序，请禁用在多步执行中图形与 CPU 同步选项。</p>
 </section>
 <section id="id7">
-<h3>配置<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
+<h3>配置<a class="headerlink" href="#id7" title="链接到此标题。">¶</a></h3>
 <p>配置菜单为自定义 EduMIPS64 的外观和行为提供了便利。</p>
 <ul class="simple">
 <li><p><em>设置...</em> 打开设置&quot; 对话框，本章后续章节将对其进行介绍；</p></li>
@@ -74,7 +74,7 @@
 <p>当模拟器处于运行&quot; 或多循环&quot; 状态时，&quot;设置...&quot;菜单项不可用。&quot;运行&quot; 或多循环&quot;模式时，&quot;设置...&quot; 菜单项不可用，因为可能会出现竞争冒险 (Race Condition)。</p>
 </section>
 <section id="id8">
-<h3>工具<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h3>
+<h3>工具<a class="headerlink" href="#id8" title="链接到此标题。">¶</a></h3>
 <p>该菜单只包含一个项目，用于调用 Dinero Frontend 对话框。</p>
 <ul class="simple">
 <li><p><em>Dinero Frontend...</em> 打开 Dinero Frontend 对话框。</p></li>
@@ -82,13 +82,13 @@
 <p>在未执行程序且执行结束之前，此菜单不可用。</p>
 </section>
 <section id="id9">
-<h3>窗口<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h3>
+<h3>窗口<a class="headerlink" href="#id9" title="链接到此标题。">¶</a></h3>
 <p>该菜单包含与窗口操作有关的项目。</p>
 <p><em>Tile</em> 对可见窗口进行平铺，使一排中的窗口不超过三个。它会尽量扩大每个窗口所占的空间。</p>
 <p>其他菜单项只是切换每个窗口的状态，使其可见或最小化。</p>
 </section>
 <section id="id10">
-<h3>帮助<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h3>
+<h3>帮助<a class="headerlink" href="#id10" title="链接到此标题。">¶</a></h3>
 <p>该菜单包含与帮助相关的菜单项。</p>
 <ul class="simple">
 <li><p><em>手册...</em> 显示帮助对话框。</p></li>
@@ -97,18 +97,18 @@
 </section>
 </section>
 <section id="id11">
-<h2>窗口<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h2>
+<h2>窗口<a class="headerlink" href="#id11" title="链接到此标题。">¶</a></h2>
 <p>图形用户界面由七个窗口组成，其中六个默认可见，一个（输入/输出窗口）隐藏。</p>
 <section id="id12">
-<h3>循环<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h3>
+<h3>循环<a class="headerlink" href="#id12" title="链接到此标题。">¶</a></h3>
 <p>周期窗口显示执行流程在一段时间内的演变情况，显示每个时间段内哪些指令处于流水线中，以及这些指令处于流水线的哪个阶段。</p>
 </section>
 <section id="id13">
-<h3>寄存器<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h3>
+<h3>寄存器<a class="headerlink" href="#id13" title="链接到此标题。">¶</a></h3>
 <p>寄存器窗口显示每个寄存器的内容。左键单击寄存器可在状态栏中看到其十进制（带符号）值，双击寄存器可弹出对话框，允许用户更改寄存器的值。</p>
 </section>
 <section id="id14">
-<h3>统计数据<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h3>
+<h3>统计数据<a class="headerlink" href="#id14" title="链接到此标题。">¶</a></h3>
 <p>统计窗口显示程序执行的一些统计数据。</p>
 <p>请注意，在最后一个执行周期内，循环计数器不会递增，因为最后一个执行周期不是一个完整的 CPU 周期，而是一个伪周期，其唯一的任务是从流水线中移除最后一条指令，并递增已执行指令的计数器。</p>
 <p>当启用缓存模拟器时，统计窗口还会显示 L1 缓存统计数据：</p>
@@ -123,28 +123,28 @@
 <p>这些统计数据有助于分析缓存性能并了解程序中的内存访问模式。缓存未命中表示处理器需要访问较慢的主内存而不是较快的缓存。</p>
 </section>
 <section id="id15">
-<h3>流水线<a class="headerlink" href="#id15" title="Link to this heading">¶</a></h3>
+<h3>流水线<a class="headerlink" href="#id15" title="链接到此标题。">¶</a></h3>
 <p>流水线窗口显示流水线的实际状态，显示哪条指令处于哪个流水线阶段。不同的颜色突出显示不同的流水线阶段。</p>
 </section>
 <section id="id16">
-<h3>内存<a class="headerlink" href="#id16" title="Link to this heading">¶</a></h3>
+<h3>内存<a class="headerlink" href="#id16" title="链接到此标题。">¶</a></h3>
 <p>内存窗口显示内存单元的内容，以及来自源代码的标签和注释。与寄存器一样，内存单元的内容也可以双击修改，点击内存单元会在状态栏中显示其十进制值。
 第一列显示内存单元的十六进制地址，第二列显示单元值。其他列显示源代码中的其他信息。</p>
 </section>
 <section id="id17">
-<h3>代码<a class="headerlink" href="#id17" title="Link to this heading">¶</a></h3>
+<h3>代码<a class="headerlink" href="#id17" title="链接到此标题。">¶</a></h3>
 <p>代码窗口显示内存中加载的指令。第一列显示指令的地址，第二列显示指令的十六进制表示。其他列显示源代码中的其他信息。</p>
 </section>
 <section id="id18">
-<h3>输入/输出<a class="headerlink" href="#id18" title="Link to this heading">¶</a></h3>
+<h3>输入/输出<a class="headerlink" href="#id18" title="链接到此标题。">¶</a></h3>
 <p>输入/输出窗口为用户提供了一个界面，以查看程序通过 SYSCALL 4 和 5 创建的输出。实际上，它并不用于输入，因为 SYSCALL 3 试图从标准输入读取时会弹出一个对话框，但未来的版本将包括一个输入文本框。</p>
 </section>
 </section>
 <section id="id19">
-<h2>对话框<a class="headerlink" href="#id19" title="Link to this heading">¶</a></h2>
+<h2>对话框<a class="headerlink" href="#id19" title="链接到此标题。">¶</a></h2>
 <p>EduMIPS64 使用对话框以多种方式与用户交互。以下是最重要对话框的摘要：</p>
 <section id="id20">
-<h3>设置<a class="headerlink" href="#id20" title="Link to this heading">¶</a></h3>
+<h3>设置<a class="headerlink" href="#id20" title="链接到此标题。">¶</a></h3>
 <p>在设置对话框中可以对模拟器的各个方面进行配置。
 单击OK（确定）&quot;按钮将保存选项，而单击Cancel（取消）（或直接关闭窗口）将忽略更改。如果要保存更改，请不要忘记点击确定&quot;。</p>
 <p>主设置选项卡允许配置转发和多循环模式下的步数。</p>
@@ -169,7 +169,7 @@
 <p>需要注意的是，用户界面与字体大小之间的比例关系远非完美，但足以让模拟器在高分辨率显示器（如 4K）上使用。</p>
 </section>
 <section id="l1">
-<h3>L1 缓存模拟器<a class="headerlink" href="#l1" title="Link to this heading">¶</a></h3>
+<h3>L1 缓存模拟器<a class="headerlink" href="#l1" title="链接到此标题。">¶</a></h3>
 <p>EduMIPS64 包含一个集成的 L1 缓存模拟器，模拟分离指令和数据缓存的行为。缓存模拟器在程序执行期间自动运行，并提供关于缓存性能的详细统计数据。</p>
 <p>缓存模拟器模拟：</p>
 <ul class="simple">
@@ -194,18 +194,18 @@
 <p>缓存配置可以通过设置对话框（缓存选项卡）更改，并在模拟重置时生效。</p>
 </section>
 <section id="dinero">
-<h3>Dinero 前端<a class="headerlink" href="#dinero" title="Link to this heading">¶</a></h3>
+<h3>Dinero 前端<a class="headerlink" href="#dinero" title="链接到此标题。">¶</a></h3>
 <p>通过 Dinero Frontend 对话框，可以向 DineroIV 进程提供程序执行时内部生成的跟踪文件。第一个文本框中是 DineroIV 可执行文件的路径，第二个文本框中必须是 DineroIV 的参数。</p>
 <p>关于 DineroIV 缓存模拟器的更多信息，请参阅 ~cite{dinero-web}。</p>
 <p>下部包含 DineroIV 进程的输出，你可以从中获取所需的数据。</p>
 </section>
 <section id="id21">
-<h3>帮助<a class="headerlink" href="#id21" title="Link to this heading">¶</a></h3>
+<h3>帮助<a class="headerlink" href="#id21" title="链接到此标题。">¶</a></h3>
 <p>通过帮助（Help）对话框可以查看在线手册，该手册是本文档的 HTML 副本。</p>
 </section>
 </section>
 <section id="id22">
-<h2>命令行选项<a class="headerlink" href="#id22" title="Link to this heading">¶</a></h2>
+<h2>命令行选项<a class="headerlink" href="#id22" title="链接到此标题。">¶</a></h2>
 <p>有四个命令行选项。下面的列表对它们进行了说明，长名称用圆括号括起来。长名称和短名称的使用方法相同。</p>
 <ul class="simple">
 <li><p><cite>-v (--version)</cite> 打印模拟器版本并退出。</p></li>

@@ -11,7 +11,7 @@
     <script src="_static/documentation_options.js?v=4ebe3ea6"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <script src="_static/translations.js?v=beaddf03"></script> 
+    <script src="_static/translations.js?v=540d3cec"></script> 
   </head><body>
 
     <div class="document">
@@ -20,15 +20,15 @@
           <div class="body" role="main">
             
   <section id="id1">
-<h1>代码示例<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<h1>代码示例<a class="headerlink" href="#id1" title="链接到此标题。">¶</a></h1>
 <p>在本章中，您将看到一些对理解 EduMIPS64 如何工作非常有用的示例列表，以了解 EduMIPS64 如何工作。</p>
 <section id="syscall">
-<h2>SYSCALL<a class="headerlink" href="#syscall" title="Link to this heading">¶</a></h2>
+<h2>SYSCALL<a class="headerlink" href="#syscall" title="链接到此标题。">¶</a></h2>
 <p>重要的是要了解 SYSCALL 1-4 的示例引用了`print.s` 文件，这是 SYSCALL 5 的示例。如果要运行
 示例，应将该示例的内容复制到一个名为`print.s` 的文件，并将其包含在代码中。</p>
 <p>有些示例会使用已存在的文件描述符，即使它并不真正存在。如果要运行这些示例，请使用 SYSCALL 1 示例打开一个文件。</p>
 <section id="syscall-0">
-<h3>SYSCALL 0<a class="headerlink" href="#syscall-0" title="Link to this heading">¶</a></h3>
+<h3>SYSCALL 0<a class="headerlink" href="#syscall-0" title="链接到此标题。">¶</a></h3>
 <p>调用 SYSCALL 0 时，程序停止执行。
 示例:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">code</span>
@@ -38,7 +38,7 @@
 </div>
 </section>
 <section id="syscall-1">
-<h3>SYSCALL 1<a class="headerlink" href="#syscall-1" title="Link to this heading">¶</a></h3>
+<h3>SYSCALL 1<a class="headerlink" href="#syscall-1" title="链接到此标题。">¶</a></h3>
 <p>打开文件的示例程序:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                .data
 error_op:       .asciiz     &quot;Error opening the file&quot;
@@ -78,7 +78,7 @@ r1等于-1（第 13-14 行），否则将 ok_message 作为参数（第 12 和 1
 则将 ok_message 作为参数（第 12 和 16 行）。</p>
 </section>
 <section id="syscall-2">
-<h3>SYSCALL 2<a class="headerlink" href="#syscall-2" title="Link to this heading">¶</a></h3>
+<h3>SYSCALL 2<a class="headerlink" href="#syscall-2" title="链接到此标题。">¶</a></h3>
 <p>关闭文件的示例程序:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                .data
 params_sys2:    .space 8
@@ -108,7 +108,7 @@ end:            jal         print_string
 <p><strong>注：</strong> 此列表需要寄存器 $s2 包含要调用的文件的文件描述符。文件描述符。</p>
 </section>
 <section id="syscall-3">
-<h3>SYSCALL 3<a class="headerlink" href="#syscall-3" title="Link to this heading">¶</a></h3>
+<h3>SYSCALL 3<a class="headerlink" href="#syscall-3" title="链接到此标题。">¶</a></h3>
 <p>从文件读取 16 个字节并保存到内存的示例程序:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                .data
 params_sys3:    .space      8
@@ -142,7 +142,7 @@ end:            jal         print_string
 根据操作成功与否，将 error_3 或 ok_message 作为参数传递。</p>
 </section>
 <section id="syscall-4">
-<h3>SYSCALL 4<a class="headerlink" href="#syscall-4" title="Link to this heading">¶</a></h3>
+<h3>SYSCALL 4<a class="headerlink" href="#syscall-4" title="链接到此标题。">¶</a></h3>
 <p>向文件写入字符串的示例程序:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                .data
 params_sys4:    .space      8
@@ -175,7 +175,7 @@ end:            jal         print_string
 <p>接下来我们可以调用 SYSCALL 3，然后根据操作的成功与否调用 print_string 函数，参数为 error_3 或 ok_message。</p>
 </section>
 <section id="syscall-5">
-<h3>SYSCALL 5<a class="headerlink" href="#syscall-5" title="Link to this heading">¶</a></h3>
+<h3>SYSCALL 5<a class="headerlink" href="#syscall-5" title="链接到此标题。">¶</a></h3>
 <p>包含将 $a0 中的字符串打印到标准输出的函数的示例程序:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                .data
 params_sys5:    .space  8
@@ -192,7 +192,7 @@ print_string:
 <p>下一条指令将字符串的地址放入 r14，然后我们就可以调用 SYSCALL 5 打印字符串了。最后一条指令将程序计数器设置为 r31 中的内容，这是 MIPS 通常的调用习惯。</p>
 </section>
 <section id="id2">
-<h3>一个更复杂的 SYSCALL 5 使用示例<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<h3>一个更复杂的 SYSCALL 5 使用示例<a class="headerlink" href="#id2" title="链接到此标题。">¶</a></h3>
 <p>SYSCALL 5 使用了一种并不简单的参数传递机制，下面的示例将对此进行说明:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                <span class="o">.</span><span class="n">data</span>
 <span class="n">format_str</span><span class="p">:</span>     <span class="o">.</span><span class="n">asciiz</span>   <span class="s2">&quot;</span><span class="si">%d</span><span class="s2">th of </span><span class="si">%s</span><span class="s2">:</span><span class="se">\n</span><span class="si">%s</span><span class="s2"> version </span><span class="si">%i</span><span class="s2">.</span><span class="si">%i</span><span class="s2"> is being tested!&quot;</span>

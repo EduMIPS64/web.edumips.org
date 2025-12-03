@@ -11,7 +11,7 @@
     <script src="_static/documentation_options.js?v=4ebe3ea6"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <script src="_static/translations.js?v=beaddf03"></script> 
+    <script src="_static/translations.js?v=540d3cec"></script> 
   </head><body>
 
     <div class="document">
@@ -20,12 +20,12 @@
           <div class="body" role="main">
             
   <section id="id1">
-<h1>指令集<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<h1>指令集<a class="headerlink" href="#id1" title="链接到此标题。">¶</a></h1>
 <p>在本节中，我们将介绍 EduMIPS64 所认知的 MIPS64 指令集子集。我们可以进行两种不同的分类：一种基于指令的功能，一种基于指令的参数类型。</p>
 <p>第一种分类法将指令分为三类： ALU 结构指令、加载/存储指令、流控制指令。接下来的几个小节将介绍每一类指令以及属于这些类别的每一条指令。</p>
 <p>第四小节将介绍不属于上述任何类别的指令。</p>
 <section id="alu">
-<h2>ALU 指令<a class="headerlink" href="#alu" title="Link to this heading">¶</a></h2>
+<h2>ALU 指令<a class="headerlink" href="#alu" title="链接到此标题。">¶</a></h2>
 <p>算术逻辑单元（简称 ALU）是 CPU 执行单元的一部分，负责进行算术和逻辑运算。因此，在 ALU 指令组中，我们可以找到进行此类运算的指令。</p>
 <p>ALU 指令可分为两组： <em>R型*和I型</em>。</p>
 <p>其中四条指令使用两个特殊寄存器： LO和HI。它们是 CPU 的内部寄存器，可以通过 FLO` 和 MFHI` 指令访问其值。</p>
@@ -212,7 +212,7 @@
 </ul>
 </section>
 <section id="id2">
-<h2>加载/存储指令<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<h2>加载/存储指令<a class="headerlink" href="#id2" title="链接到此标题。">¶</a></h2>
 <p>这类指令包含所有在寄存器和内存之间进行传输操作的指令。所有这些指令的形式都是：：</p>
 <blockquote>
 <div><p>[label:] 指令 rt, 偏移量（基数）</p>
@@ -260,7 +260,7 @@
 </ul>
 </section>
 <section id="id3">
-<h2>流控制指令<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
+<h2>流控制指令<a class="headerlink" href="#id3" title="链接到此标题。">¶</a></h2>
 <p>流控制指令用于改变 CPU 抓取指令的顺序。我们可以对这些指令进行区分： R型、I型和J型。</p>
 <p>这些指令实际上是在 ID 阶段执行跳转，因此往往会执行无用的取指。在这种情况下，会从流水线中移除两条指令，分支执行停滞计数器会增加两个单位。</p>
 <p>R 型流控制指令列表：</p>
@@ -306,17 +306,17 @@
 </ul>
 </section>
 <section id="syscall">
-<h2>SYSCALL 指令<a class="headerlink" href="#syscall" title="Link to this heading">¶</a></h2>
+<h2>SYSCALL 指令<a class="headerlink" href="#syscall" title="链接到此标题。">¶</a></h2>
 <p>SYSCALL 指令为程序员提供了一个类似操作系统的接口，可进行六种不同的系统调用。</p>
 <p>系统调用希望将其参数地址寄存在寄存器 R14（$t6）中，并将其返回值寄存在寄存器 R1（$at）中。</p>
 <p>系统调用尽可能遵循 POSIX 协议。</p>
 <section id="syscall-0-exit">
-<h3><cite>SYSCALL 0 - exit()</cite><a class="headerlink" href="#syscall-0-exit" title="Link to this heading">¶</a></h3>
+<h3><cite>SYSCALL 0 - exit()</cite><a class="headerlink" href="#syscall-0-exit" title="链接到此标题。">¶</a></h3>
 <p>SYSCALL 0 不需要任何参数，也不返回任何值。它只是停止模拟器。</p>
 <p>请注意，如果模拟器在源代码中找不到 SYSCALL 0 或其任何等效代码（HALT - TRAP 0），它将自动添加到源代码的末尾。</p>
 </section>
 <section id="syscall-1-open">
-<h3><cite>SYSCALL 1 - open()</cite><a class="headerlink" href="#syscall-1-open" title="Link to this heading">¶</a></h3>
+<h3><cite>SYSCALL 1 - open()</cite><a class="headerlink" href="#syscall-1-open" title="链接到此标题。">¶</a></h3>
 <p>SYSCALL 1 需要两个参数：一个以零结尾的字符串，表示必须打开的文件的路径名；一个包含整数的双字，表示必须用来指定如何打开文件的标志。</p>
 <p>这个整数必须是你想使用的标志的总和，从以下列表中选择：</p>
 <ul class="simple">
@@ -332,24 +332,24 @@
 <p>系统调用的返回值是与文件相关联的新文件描述符，可以进一步用于其他系统调用。如果出现错误，返回值将为-1。</p>
 </section>
 <section id="syscall-2-close">
-<h3><cite>SYSCALL 2 - close()</cite><a class="headerlink" href="#syscall-2-close" title="Link to this heading">¶</a></h3>
+<h3><cite>SYSCALL 2 - close()</cite><a class="headerlink" href="#syscall-2-close" title="链接到此标题。">¶</a></h3>
 <p>SYSCALL 2 只需要一个参数，即被关闭文件的文件描述符。</p>
 <p>如果操作成功结束，SYSCALL 2 将返回 0，否则将返回-1。可能的失败原因是试图关闭一个不存在的文件描述符，或试图关闭分别与标准输入、标准输出和标准错误相关联的文件描述符 0、1 或 2。</p>
 </section>
 <section id="syscall-3-read">
-<h3><cite>SYSCALL 3 - read()</cite><a class="headerlink" href="#syscall-3-read" title="Link to this heading">¶</a></h3>
+<h3><cite>SYSCALL 3 - read()</cite><a class="headerlink" href="#syscall-3-read" title="链接到此标题。">¶</a></h3>
 <p>SYSCALL 3 需要三个参数：要读取的文件描述符、读取数据的地址、读取的字节数。</p>
 <p>如果第一个参数为 0，模拟器将通过输入对话框提示用户输入。如果输入的长度大于需要读取的字节数，模拟器将再次显示信息对话框。</p>
 <p>如果读取操作失败，模拟器将返回已有效读取的字节数或-1。可能的失败原因包括试图从一个不存在的文件描述符中读取、试图从文件描述符 1（标准输出）或 2（标准错误）中读取或试图从一个只写文件描述符中读取。</p>
 </section>
 <section id="syscall-4-write">
-<h3><cite>SYSCALL 4 - write()</cite><a class="headerlink" href="#syscall-4-write" title="Link to this heading">¶</a></h3>
+<h3><cite>SYSCALL 4 - write()</cite><a class="headerlink" href="#syscall-4-write" title="链接到此标题。">¶</a></h3>
 <p>SYSCALL 4 需要三个参数：要写入的文件描述符、必须读取数据的地址以及要写入的字节数。</p>
 <p>如果第一个参数为 2 或 3，模拟器将弹出输入/输出窗口，并在那里写入读取的数据。</p>
 <p>如果写入操作失败，模拟器将返回已写入的字节数或-1。失败的可能原因是尝试向不存在的文件描述符写入数据、尝试向文件描述符 0（标准输入）写入数据或尝试向只读文件描述符写入数据。</p>
 </section>
 <section id="syscall-5-printf">
-<h3><cite>SYSCALL 5 - printf()</cite><a class="headerlink" href="#syscall-5-printf" title="Link to this heading">¶</a></h3>
+<h3><cite>SYSCALL 5 - printf()</cite><a class="headerlink" href="#syscall-5-printf" title="链接到此标题。">¶</a></h3>
 <p>SYSCALL 5 需要多个参数，第一个参数是所谓“格式字符串”的地址。格式字符串中可以包含一些占位符，如下表所示：</p>
 <ul class="simple">
 <li><p><cite>%s</cite> 表示字符串参数；</p></li>
@@ -364,22 +364,22 @@
 </section>
 </section>
 <section id="id4">
-<h2>其他指令<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<h2>其他指令<a class="headerlink" href="#id4" title="链接到此标题。">¶</a></h2>
 <p>在本节中，有一些指令不属于前几类。</p>
 <section id="break">
-<h3><cite>BREAK`</cite><a class="headerlink" href="#break" title="Link to this heading">¶</a></h3>
+<h3><cite>BREAK`</cite><a class="headerlink" href="#break" title="链接到此标题。">¶</a></h3>
 <p>如果模拟器正在运行，BREAK 指令抛出的异常具有停止执行的效果。它可用于调试目的。</p>
 </section>
 <section id="nop">
-<h3><cite>NOP</cite><a class="headerlink" href="#nop" title="Link to this heading">¶</a></h3>
+<h3><cite>NOP</cite><a class="headerlink" href="#nop" title="链接到此标题。">¶</a></h3>
 <p>NOP 指令不执行任何操作，用于在源代码中创建间隙。</p>
 </section>
 <section id="trap">
-<h3><cite>TRAP</cite><a class="headerlink" href="#trap" title="Link to this heading">¶</a></h3>
+<h3><cite>TRAP</cite><a class="headerlink" href="#trap" title="链接到此标题。">¶</a></h3>
 <p>TRAP 指令是 SYSCALL 指令的弃用别名。</p>
 </section>
 <section id="halt">
-<h3><cite>HALT</cite><a class="headerlink" href="#halt" title="Link to this heading">¶</a></h3>
+<h3><cite>HALT</cite><a class="headerlink" href="#halt" title="链接到此标题。">¶</a></h3>
 <p>HALT 指令是 SYSCALL 0 指令的弃用别名，用于停止模拟器。</p>
 </section>
 </section>
