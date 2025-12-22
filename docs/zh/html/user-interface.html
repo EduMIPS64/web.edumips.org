@@ -206,7 +206,7 @@
 </section>
 <section id="id22">
 <h2>命令行选项<a class="headerlink" href="#id22" title="链接到此标题。">¶</a></h2>
-<p>有四个命令行选项。下面的列表对它们进行了说明，长名称用圆括号括起来。长名称和短名称的使用方法相同。</p>
+<p>有多个命令行选项可用。下面的列表对它们进行了说明，长名称用圆括号括起来。长名称和短名称的使用方法相同。</p>
 <ul class="simple">
 <li><p><cite>-v (--version)</cite> 打印模拟器版本并退出。</p></li>
 <li><p><cite>-h (--help)</cite> 打印命令行选项的帮助信息，然后退出。</p></li>
@@ -214,6 +214,9 @@
 <li><p><cite>-r (--reset)</cite> 将存储的配置重置为默认值</p></li>
 <li><p><cite>-d (--debug)</cite> 进入调试模式</p></li>
 <li><p><cite>-hl (--headless)</cite> 在无头模式下运行 EduMIPS64（无 gui）</p></li>
+<li><p><cite>--verbose</cite> 在无头/CLI 模式下启用详细模式，显示模拟器的详细输出，
+如开始/结束消息和进度指示器。默认情况下，CLI 在静默模式下运行，
+以最小化模拟器输出，避免与程序输出（例如 SYSCALL 5）混淆。</p></li>
 </ul>
 <p><cite>-debug</cite> 的作用是激活调试模式。在该模式下，会出现一个新的窗口，即调试窗口，显示 EduMIPS64 的内部活动日志。它对最终用户没有用处，仅供 EduMIPS64 开发人员使用。</p>
 </section>

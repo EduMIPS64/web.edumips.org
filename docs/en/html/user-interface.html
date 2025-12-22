@@ -304,7 +304,7 @@ document.</p>
 </section>
 <section id="command-line-options">
 <h2>Command line options<a class="headerlink" href="#command-line-options" title="Link to this heading">¶</a></h2>
-<p>Four command line options are available. They are described in the following
+<p>Several command line options are available. They are described in the following
 list, with the long name enclosed in round brackets. Long and short names can
 be used in the same way.</p>
 <ul class="simple">
@@ -315,6 +315,10 @@ options, then exits.</p></li>
 <li><p><cite>-r (–reset)</cite> resets the stored configuration to the default values</p></li>
 <li><p><cite>-d (–debug)</cite> enters Debug mode</p></li>
 <li><p><cite>-hl (–headless)</cite> Runs EduMIPS64 in headless mode (no gui)</p></li>
+<li><p><cite>–verbose</cite> enables verbose mode in headless/CLI mode, showing detailed
+simulator output such as start/end messages and progress indicators. By
+default, the CLI runs in quiet mode, which minimizes simulator output to
+avoid confusion with program output (e.g., from SYSCALL 5).</p></li>
 </ul>
 <p>The <cite>–debug</cite> flag has the effect to activate Debug mode. In this mode, a new
 frame is available, the Debug frame, and it shows the log of internal
