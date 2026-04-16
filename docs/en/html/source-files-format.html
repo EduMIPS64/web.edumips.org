@@ -46,6 +46,18 @@ instruction.  They are case insensitive. Only a label for each source code line
 can be used.  The label can be specified one or more rows above the effective
 data declaration or instruction, provided that there’s nothing, except for
 comments and empty lines, between the label and the declaration.</p>
+<p>Multiple labels can refer to the same address. This is useful when two or more
+labels are placed on consecutive lines before an instruction, for example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>        <span class="o">.</span><span class="n">code</span>
+        <span class="n">daddi</span>   <span class="n">r1</span><span class="p">,</span> <span class="n">r0</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">loop_end</span><span class="p">:</span>
+<span class="n">loop_begin</span><span class="p">:</span>
+        <span class="n">daddi</span>   <span class="n">r1</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span>
+</pre></div>
+</div>
+<p>In this case, both <cite>loop_end</cite> and <cite>loop_begin</cite> will point to the same
+instruction. Each label must still have a unique name; using the same label
+name twice will result in a parser error.</p>
 <section id="memory-limits">
 <h2>Memory limits<a class="headerlink" href="#memory-limits" title="Link to this heading">¶</a></h2>
 <p>EduMIPS64 has a fixed memory size for both data (the <cite>.data</cite> section, capped

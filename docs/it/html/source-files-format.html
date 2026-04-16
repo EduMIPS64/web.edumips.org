@@ -50,6 +50,19 @@ di codice può essere utilizzata un’unica etichetta. Quest’ultima può esser
 inserita una o più righe al di sopra dell’effettiva dichiarazione del dato
 o dell’istruzione, facendo in modo che non ci sia nulla, eccetto commenti e
 linee vuote, tra l’etichetta stessa e la dichiarazione.</p>
+<p>Più etichette possono fare riferimento allo stesso indirizzo. Questo è utile
+quando due o più etichette sono posizionate su righe consecutive prima di
+un’istruzione, ad esempio:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>        <span class="o">.</span><span class="n">code</span>
+        <span class="n">daddi</span>   <span class="n">r1</span><span class="p">,</span> <span class="n">r0</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">loop_end</span><span class="p">:</span>
+<span class="n">loop_begin</span><span class="p">:</span>
+        <span class="n">daddi</span>   <span class="n">r1</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span>
+</pre></div>
+</div>
+<p>In questo caso, sia <cite>loop_end</cite> che <cite>loop_begin</cite> punteranno alla stessa
+istruzione. Ogni etichetta deve comunque avere un nome univoco; l’utilizzo
+dello stesso nome di etichetta due volte causerà un errore del parser.</p>
 <section id="limiti-di-memoria">
 <h2>Limiti di memoria<a class="headerlink" href="#limiti-di-memoria" title="Link to this heading">¶</a></h2>
 <p>EduMIPS64 ha memoria limitata, sia per i dati (sezione <cite>.data</cite>, limitata a 640

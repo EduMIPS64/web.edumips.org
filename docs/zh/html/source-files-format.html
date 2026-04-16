@@ -37,6 +37,16 @@
 <p>注释可以使用 &quot;;&quot; 字符指定，该字符后面的所有内容都将被忽略。因此，注释可以内联（指令之后）或单独一行中使用。</p>
 <p>标签可在代码中用于引用内存单元或指令。 标签不区分大小写。每行源代码只能使用一个标签。
 标签可以在有效数据声明或指令的上方指定一行或多行，前提是标签和声明之间除了注释和空行外没有其他内容。</p>
+<p>多个标签可以指向同一个地址。当两个或多个标签在一条指令之前连续放置在不同行上时，这很有用，例如:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>        <span class="o">.</span><span class="n">code</span>
+        <span class="n">daddi</span>   <span class="n">r1</span><span class="p">,</span> <span class="n">r0</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">loop_end</span><span class="p">:</span>
+<span class="n">loop_begin</span><span class="p">:</span>
+        <span class="n">daddi</span>   <span class="n">r1</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span>
+</pre></div>
+</div>
+<p>在这种情况下， <cite>loop_end</cite> 和 <cite>loop_begin</cite> 都将指向同一条指令。每个标签仍然必须具有唯一的名称；
+两次使用相同的标签名称将导致解析器错误。</p>
 <section id="id2">
 <h2>内存限制<a class="headerlink" href="#id2" title="链接到此标题。">¶</a></h2>
 <p>EduMIPS64 为数据（ <cite>.data</cite> 部分，上限为 640 kB，即 80000 个 64 位值）和指令（ <cite>.code</cite> 部分，上限为 128 kB，即 32000 条指令，每条指令占用 32 位）设置了固定的内存大小。</p>
