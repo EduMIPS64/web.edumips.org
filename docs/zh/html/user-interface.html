@@ -162,8 +162,6 @@
 <li><p><strong>L1 Instruction Cache Block Size</strong> - 每个缓存块的大小（字节）（默认：16）</p></li>
 <li><p><strong>L1 Data Cache Associativity</strong> - 缓存路数，决定缓存组织（默认：1）</p></li>
 <li><p><strong>L1 Instruction Cache Associativity</strong> - 缓存路数，决定缓存组织（默认：1）</p></li>
-<li><p><strong>L1 Data Cache Penalty</strong> - 缓存未命中的额外周期数（默认：40）</p></li>
-<li><p><strong>L1 Instruction Cache Penalty</strong> - 缓存未命中的额外周期数（默认：40）</p></li>
 </ul>
 <p>这些设置允许您尝试不同的缓存配置，以了解它们对程序性能的影响。缓存模拟器模拟分离的 L1 数据和指令缓存，这在现代处理器中很常见。</p>
 <p>需要注意的是，用户界面与字体大小之间的比例关系远非完美，但足以让模拟器在高分辨率显示器（如 4K）上使用。</p>
@@ -181,7 +179,6 @@
 <li><p><strong>Size</strong> - 缓存的总容量（字节）</p></li>
 <li><p><strong>Block Size</strong> - 每个缓存行的大小（字节）（也称为缓存块）</p></li>
 <li><p><strong>Associativity</strong> - 缓存组中的路数（1 = 直接映射，&gt;1 = 组关联）</p></li>
-<li><p><strong>Penalty</strong> - 缓存未命中时产生的额外 CPU 周期</p></li>
 </ul>
 <p>缓存模拟器对组关联缓存使用最近最少使用（LRU）替换策略。缓存统计数据在执行期间实时更新，并显示在统计窗口中。</p>
 <p>缓存性能会显著影响程序执行时间，特别是对于内存局部性差的程序。使用缓存模拟器可以：</p>

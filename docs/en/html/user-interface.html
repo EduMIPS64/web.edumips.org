@@ -246,8 +246,6 @@ an option to set the UI font size.</p>
 <li><p><strong>L1 Instruction Cache Block Size</strong> - Size of each cache block in bytes (default: 16)</p></li>
 <li><p><strong>L1 Data Cache Associativity</strong> - Number of cache ways, determining cache organization (default: 1)</p></li>
 <li><p><strong>L1 Instruction Cache Associativity</strong> - Number of cache ways, determining cache organization (default: 1)</p></li>
-<li><p><strong>L1 Data Cache Penalty</strong> - Number of additional cycles for cache misses (default: 40)</p></li>
-<li><p><strong>L1 Instruction Cache Penalty</strong> - Number of additional cycles for cache misses (default: 40)</p></li>
 </ul>
 <p>These settings allow you to experiment with different cache configurations to
 understand their impact on program performance. The cache simulator models
@@ -271,7 +269,6 @@ cache performance.</p>
 <li><p><strong>Size</strong> - Total capacity of the cache in bytes</p></li>
 <li><p><strong>Block Size</strong> - Size of each cache line in bytes (also called cache block)</p></li>
 <li><p><strong>Associativity</strong> - Number of ways in the cache set (1 = direct-mapped, &gt;1 = set-associative)</p></li>
-<li><p><strong>Penalty</strong> - Additional CPU cycles incurred on cache misses</p></li>
 </ul>
 <p>The cache simulator uses a Least Recently Used (LRU) replacement policy for
 set-associative caches. Cache statistics are updated in real-time during
