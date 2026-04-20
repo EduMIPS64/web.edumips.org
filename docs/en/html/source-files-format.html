@@ -256,6 +256,27 @@ available in the bit encoding of the instruction.</p>
 <p>When 16-bit immediates can be used, for example in ALU I-Type instructions,
 it’s also possible to use as an immediate value a memory label. The assembler
 will put as immediate value the memory address the label points to.</p>
+<section id="label-offset-arithmetic">
+<h3>Label offset arithmetic<a class="headerlink" href="#label-offset-arithmetic" title="Link to this heading">¶</a></h3>
+<p>In the address form of a parameter (e.g. the offset of a load or store
+instruction) the immediate value can be a simple expression built from memory
+labels and numeric literals combined with the <code class="docutils literal notranslate"><span class="pre">+</span></code> and <code class="docutils literal notranslate"><span class="pre">-</span></code> operators. A
+leading <code class="docutils literal notranslate"><span class="pre">+</span></code> or <code class="docutils literal notranslate"><span class="pre">-</span></code> is also accepted and whitespace is allowed between the
+operands and the operators. Each operand is either a numeric literal (in base
+10, 16 or 2) or a memory label defined in the <code class="docutils literal notranslate"><span class="pre">.data</span></code> section; labels are
+replaced by their address before the expression is evaluated.</p>
+<p>For example, given the data definitions <code class="docutils literal notranslate"><span class="pre">data1:</span> <span class="pre">.word</span> <span class="pre">42</span></code> and
+<code class="docutils literal notranslate"><span class="pre">data2:</span> <span class="pre">.word</span> <span class="pre">43</span></code>, the following forms are all accepted:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">lw</span> <span class="n">r1</span><span class="p">,</span> <span class="n">data1</span><span class="o">+</span><span class="mi">8</span><span class="p">(</span><span class="n">r0</span><span class="p">)</span>       <span class="p">;</span> <span class="n">load</span> <span class="kn">from</span><span class="w"> </span><span class="nn">data1</span> <span class="n">offset</span> <span class="n">by</span> <span class="mi">8</span> <span class="nb">bytes</span>
+<span class="n">lw</span> <span class="n">r1</span><span class="p">,</span> <span class="n">data1</span><span class="o">-</span><span class="mi">8</span><span class="p">(</span><span class="n">r0</span><span class="p">)</span>       <span class="p">;</span> <span class="n">load</span> <span class="kn">from</span><span class="w"> </span><span class="nn">data1</span> <span class="n">offset</span> <span class="n">by</span> <span class="o">-</span><span class="mi">8</span> <span class="nb">bytes</span>
+<span class="n">lw</span> <span class="n">r1</span><span class="p">,</span> <span class="mi">0</span><span class="o">+</span><span class="n">data1</span><span class="p">(</span><span class="n">r0</span><span class="p">)</span>       <span class="p">;</span> <span class="n">equivalent</span> <span class="n">to</span> <span class="n">data1</span><span class="p">(</span><span class="n">r0</span><span class="p">)</span>
+<span class="n">lw</span> <span class="n">r1</span><span class="p">,</span> <span class="n">data2</span><span class="o">-</span><span class="n">data1</span><span class="p">(</span><span class="n">r0</span><span class="p">)</span>   <span class="p">;</span> <span class="n">difference</span> <span class="n">between</span> <span class="n">two</span> <span class="n">label</span> <span class="n">addresses</span>
+<span class="n">lw</span> <span class="n">r1</span><span class="p">,</span> <span class="n">data1</span><span class="o">-</span><span class="mi">8</span><span class="o">+</span><span class="mi">16</span><span class="p">(</span><span class="n">r0</span><span class="p">)</span>    <span class="p">;</span> <span class="n">chains</span> <span class="n">of</span> <span class="o">+</span> <span class="ow">and</span> <span class="o">-</span> <span class="n">are</span> <span class="n">supported</span>
+</pre></div>
+</div>
+<p>Expressions with an empty operand (for example <code class="docutils literal notranslate"><span class="pre">data1+</span></code> or <code class="docutils literal notranslate"><span class="pre">data1++0</span></code>) are
+rejected as malformed, and an unknown label anywhere in the expression
+produces the usual “label not found” error.</p>
 <p>You can use standard MIPS assembly aliases to address the first 32 registers,
 appending the alias to one of the standard register prefixes like “r”, “$”
 and “R”. See the next table.</p>
@@ -366,6 +387,7 @@ and “R”. See the next table.</p>
 </tbody>
 </table>
 </div></blockquote>
+</section>
 </section>
 <section id="the-include-command">
 <h2>The <cite>#include</cite> command<a class="headerlink" href="#the-include-command" title="Link to this heading">¶</a></h2>

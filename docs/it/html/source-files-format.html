@@ -268,6 +268,28 @@ nella codifica associata all’istruzione.</p>
 istruzioni ALU I-Type, è possibile utilizzare come valore immediato un’etichetta
 di memoria. L’assembler usera come valore immediato l’indirizzo della locazione
 di memoria a cui l’etichetta punta.</p>
+<section id="aritmetica-di-offset-sulle-etichette">
+<h3>Aritmetica di offset sulle etichette<a class="headerlink" href="#aritmetica-di-offset-sulle-etichette" title="Link to this heading">¶</a></h3>
+<p>Nella forma «indirizzo» di un parametro (ad esempio l’offset di un’istruzione
+di load o store) il valore immediato può essere una semplice espressione
+costituita da etichette di memoria e valori numerici combinati con gli
+operatori <code class="docutils literal notranslate"><span class="pre">+</span></code> e <code class="docutils literal notranslate"><span class="pre">-</span></code>. È ammesso anche un segno <code class="docutils literal notranslate"><span class="pre">+</span></code> o <code class="docutils literal notranslate"><span class="pre">-</span></code> iniziale ed è
+consentito utilizzare spazi bianchi tra operandi e operatori. Ogni operando è
+un valore numerico (in base 10, 16 o 2) oppure un’etichetta di memoria
+definita nella sezione <code class="docutils literal notranslate"><span class="pre">.data</span></code>; le etichette vengono sostituite con il loro
+indirizzo prima che l’espressione venga valutata.</p>
+<p>Ad esempio, dati <code class="docutils literal notranslate"><span class="pre">data1:</span> <span class="pre">.word</span> <span class="pre">42</span></code> e <code class="docutils literal notranslate"><span class="pre">data2:</span> <span class="pre">.word</span> <span class="pre">43</span></code>, le seguenti forme
+sono tutte accettate:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">lw</span> <span class="n">r1</span><span class="p">,</span> <span class="n">data1</span><span class="o">+</span><span class="mi">8</span><span class="p">(</span><span class="n">r0</span><span class="p">)</span>       <span class="p">;</span> <span class="n">carica</span> <span class="n">da</span> <span class="n">data1</span> <span class="n">con</span> <span class="n">offset</span> <span class="n">di</span> <span class="mi">8</span> <span class="n">byte</span>
+<span class="n">lw</span> <span class="n">r1</span><span class="p">,</span> <span class="n">data1</span><span class="o">-</span><span class="mi">8</span><span class="p">(</span><span class="n">r0</span><span class="p">)</span>       <span class="p">;</span> <span class="n">carica</span> <span class="n">da</span> <span class="n">data1</span> <span class="n">con</span> <span class="n">offset</span> <span class="n">di</span> <span class="o">-</span><span class="mi">8</span> <span class="n">byte</span>
+<span class="n">lw</span> <span class="n">r1</span><span class="p">,</span> <span class="mi">0</span><span class="o">+</span><span class="n">data1</span><span class="p">(</span><span class="n">r0</span><span class="p">)</span>       <span class="p">;</span> <span class="n">equivalente</span> <span class="n">a</span> <span class="n">data1</span><span class="p">(</span><span class="n">r0</span><span class="p">)</span>
+<span class="n">lw</span> <span class="n">r1</span><span class="p">,</span> <span class="n">data2</span><span class="o">-</span><span class="n">data1</span><span class="p">(</span><span class="n">r0</span><span class="p">)</span>   <span class="p">;</span> <span class="n">differenza</span> <span class="n">tra</span> <span class="n">gli</span> <span class="n">indirizzi</span> <span class="n">di</span> <span class="n">due</span> <span class="n">etichette</span>
+<span class="n">lw</span> <span class="n">r1</span><span class="p">,</span> <span class="n">data1</span><span class="o">-</span><span class="mi">8</span><span class="o">+</span><span class="mi">16</span><span class="p">(</span><span class="n">r0</span><span class="p">)</span>    <span class="p">;</span> <span class="n">sono</span> <span class="n">supportate</span> <span class="n">sequenze</span> <span class="n">di</span> <span class="o">+</span> <span class="n">e</span> <span class="o">-</span>
+</pre></div>
+</div>
+<p>Espressioni con un operando vuoto (ad esempio <code class="docutils literal notranslate"><span class="pre">data1+</span></code> oppure
+<code class="docutils literal notranslate"><span class="pre">data1++0</span></code>) sono rifiutate come malformate e un’etichetta non definita
+all’interno dell’espressione genera il consueto errore «label not found».</p>
 <p>è possibile utilizzare gli alias standard MIPS per i primi 32 registri,
 mettendo in coda ai prefissi standard per i registri («r», «$», «R») uno
 degli alias indicati nella seguente tabella.</p>
@@ -378,6 +400,7 @@ degli alias indicati nella seguente tabella.</p>
 </tbody>
 </table>
 </div></blockquote>
+</section>
 </section>
 <section id="il-comando-include">
 <h2>Il comando <cite>#include</cite><a class="headerlink" href="#il-comando-include" title="Link to this heading">¶</a></h2>

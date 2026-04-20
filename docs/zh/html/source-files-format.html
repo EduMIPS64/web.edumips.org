@@ -212,6 +212,24 @@
 <p>立即值的大小受指令位编码中可用位数的限制。</p>
 <p>当可以使用 16 位立即值时，例如在 ALU I-Type 指令中，也可以使用内存标签作为立即值。汇编程序
 将把标签指向的内存地址作为立即值。</p>
+<section id="id3">
+<h3>标签偏移运算<a class="headerlink" href="#id3" title="链接到此标题。">¶</a></h3>
+<p>在参数的地址形式中（例如加载或存储指令的偏移量），立即值可以是由内存标签和数字
+字面量组成的简单表达式，使用 <code class="docutils literal notranslate"><span class="pre">+</span></code> 和 <code class="docutils literal notranslate"><span class="pre">-</span></code> 运算符连接。也允许使用开头的 <code class="docutils literal notranslate"><span class="pre">+</span></code>
+或 <code class="docutils literal notranslate"><span class="pre">-</span></code> 符号，运算符和操作数之间可以包含空格。每个操作数要么是数字字面量
+（10 进制、16 进制或 2 进制），要么是在 <code class="docutils literal notranslate"><span class="pre">.data</span></code> 段中定义的内存标签；在对
+表达式求值之前，标签会被替换为其地址。</p>
+<p>例如，给定数据定义 <code class="docutils literal notranslate"><span class="pre">data1:</span> <span class="pre">.word</span> <span class="pre">42</span></code> 和 <code class="docutils literal notranslate"><span class="pre">data2:</span> <span class="pre">.word</span> <span class="pre">43</span></code>，以下形式都是
+可接受的:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">lw</span> <span class="n">r1</span><span class="p">,</span> <span class="n">data1</span><span class="o">+</span><span class="mi">8</span><span class="p">(</span><span class="n">r0</span><span class="p">)</span>       <span class="p">;</span> <span class="n">从</span> <span class="n">data1</span> <span class="n">向后偏移</span> <span class="mi">8</span> <span class="n">个字节处加载</span>
+<span class="n">lw</span> <span class="n">r1</span><span class="p">,</span> <span class="n">data1</span><span class="o">-</span><span class="mi">8</span><span class="p">(</span><span class="n">r0</span><span class="p">)</span>       <span class="p">;</span> <span class="n">从</span> <span class="n">data1</span> <span class="n">向前偏移</span> <span class="mi">8</span> <span class="n">个字节处加载</span>
+<span class="n">lw</span> <span class="n">r1</span><span class="p">,</span> <span class="mi">0</span><span class="o">+</span><span class="n">data1</span><span class="p">(</span><span class="n">r0</span><span class="p">)</span>       <span class="p">;</span> <span class="n">等价于</span> <span class="n">data1</span><span class="p">(</span><span class="n">r0</span><span class="p">)</span>
+<span class="n">lw</span> <span class="n">r1</span><span class="p">,</span> <span class="n">data2</span><span class="o">-</span><span class="n">data1</span><span class="p">(</span><span class="n">r0</span><span class="p">)</span>   <span class="p">;</span> <span class="n">两个标签地址之差</span>
+<span class="n">lw</span> <span class="n">r1</span><span class="p">,</span> <span class="n">data1</span><span class="o">-</span><span class="mi">8</span><span class="o">+</span><span class="mi">16</span><span class="p">(</span><span class="n">r0</span><span class="p">)</span>    <span class="p">;</span> <span class="n">支持连续使用</span> <span class="o">+</span> <span class="n">和</span> <span class="o">-</span>
+</pre></div>
+</div>
+<p>包含空操作数的表达式（例如 <code class="docutils literal notranslate"><span class="pre">data1+</span></code> 或 <code class="docutils literal notranslate"><span class="pre">data1++0</span></code>）会被拒绝并视为格式错误，
+如果表达式中的某个标签未定义，则会产生通常的“找不到标签”错误。</p>
 <p>你可以使用标准的 MIPS 汇编别名来寻址前 32 个寄存器，将别名附加到标准寄存器前缀之一，如 &quot;r&quot;、&quot;$&quot;
 和 &quot;R &quot;等标准寄存器前缀。请参见下表。</p>
 <blockquote>
@@ -321,6 +339,7 @@
 </tbody>
 </table>
 </div></blockquote>
+</section>
 </section>
 <section id="include">
 <h2><cite>#include</cite> 命令<a class="headerlink" href="#include" title="链接到此标题。">¶</a></h2>
