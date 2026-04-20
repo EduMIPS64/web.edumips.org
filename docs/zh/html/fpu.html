@@ -61,6 +61,33 @@
 <span id="id8"></span><h2>异常配置<a class="headerlink" href="#exception-configuration" title="链接到此标题。">¶</a></h2>
 <p>EduMIPS64 允许用户通过 <em>配置</em> → <em>设置</em> 窗口中的 <em>FPU 异常</em> 选项卡，启用或禁用 5 个 IEEE 异常中 4 个的陷阱。
 如果禁用了其中任何一个，将返回相应的特殊值（如 <a class="reference internal" href="#special-values"><span class="std std-ref">特殊价值</span></a> 中所述）。</p>
+<p>In the situation depicted in
+Figure <a class="reference internal" href="#fig-exception-cfg"><span class="std std-ref">Trap configuration for IEEE exceptions</span></a>, in which some checkbox are selected, if the
+CPU does not mask synchronous exceptions (Figure
+<a class="reference internal" href="#fig-exception-mask-cfg"><span class="std std-ref">Option that masks all the synchronous exceptions</span></a>) the selected traps will be raised if the IEEE
+exceptional condition is encountered (Figure
+<a class="reference internal" href="#fig-invalid-operation-trap"><span class="std std-ref">Trap notification window</span></a>).</p>
+<figure class="align-default" id="id10">
+<span id="fig-exception-cfg"></span><a class="reference internal image-reference" href="_images/exception_cfg.png"><img alt="_images/exception_cfg.png" height="94" src="_images/exception_cfg.png" width="246" />
+</a>
+<figcaption>
+<p><span class="caption-text">Trap configuration for IEEE exceptions</span><a class="headerlink" href="#id10" title="链接到此图片">¶</a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="id11">
+<span id="fig-exception-mask-cfg"></span><a class="reference internal image-reference" href="_images/exception_mask_cfg.png"><img alt="_images/exception_mask_cfg.png" height="100" src="_images/exception_mask_cfg.png" width="246" />
+</a>
+<figcaption>
+<p><span class="caption-text">Option that masks all the synchronous exceptions</span><a class="headerlink" href="#id11" title="链接到此图片">¶</a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="id12">
+<span id="fig-invalid-operation-trap"></span><a class="reference internal image-reference" href="_images/invalid_operation_trap.png"><img alt="_images/invalid_operation_trap.png" height="59" src="_images/invalid_operation_trap.png" width="134" />
+</a>
+<figcaption>
+<p><span class="caption-text">Trap notification window</span><a class="headerlink" href="#id12" title="链接到此图片">¶</a></p>
+</figcaption>
+</figure>
 </section>
 <section id="double">
 <span id="double-directive"></span><h2>.double 指令<a class="headerlink" href="#double" title="链接到此标题。">¶</a></h2>
@@ -162,11 +189,19 @@ CVT.D.W f5,f5</p>
 <div><p>CVT.L.D f5,f5
 DMFC1 r6,f5</p>
 </div></blockquote>
-<p><cite>CVT.L.D</cite> 将 f5 中的 double 值转换为 long 值；然后 &quot;DMFC1 &quot;将 f5 复制到 r6；此操作的结果取决于当前的舍入模式，可在 &quot;配置 &quot;* → &quot;设置 &quot;* 窗口的 &quot;<em>FPU 舍入 &quot;</em> 选项卡中进行设置。</p>
+<p><cite>CVT.L.D</cite> 将 f5 中的 double 值转换为 long 值；然后 &quot;DMFC1 &quot;将 f5 复制到 r6；此操作的结果取决于当前的舍入模式，可在 &quot;配置 &quot;* → &quot;设置 &quot;* 窗口的 &quot;<em>FPU 舍入 &quot;</em> 选项卡中进行设置，如图 <a class="reference internal" href="#fig-fpu-rounding"><span class="std std-ref">FPU Rounding</span></a> 所示。</p>
+<p><em>异常：</em> 如果 fs 包含无限值、任何 NaN 或结果超出长域 [-2 <sup>63</sup>, 2 <sup>63</sup> -1] 则抛出无效操作。</p>
 </li>
 </ul>
-<table class="docutils align-default" id="id10">
-<caption><span class="caption-text">四舍五入示例</span><a class="headerlink" href="#id10" title="链接到此表格。">¶</a></caption>
+<figure class="align-default" id="id13">
+<span id="fig-fpu-rounding"></span><a class="reference internal image-reference" href="_images/fpu_rounding.png"><img alt="_images/fpu_rounding.png" height="88" src="_images/fpu_rounding.png" width="248" />
+</a>
+<figcaption>
+<p><span class="caption-text">FPU Rounding</span><a class="headerlink" href="#id13" title="链接到此图片">¶</a></p>
+</figcaption>
+</figure>
+<table class="docutils align-default" id="id14">
+<caption><span class="caption-text">四舍五入示例</span><a class="headerlink" href="#id14" title="链接到此表格。">¶</a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>Tipo</p></th>
 <th class="head"><p>RM field</p></th>

@@ -105,6 +105,33 @@ condizioni di eccezione IEEE, implementate dalla scheda <em>Eccezioni FPU</em>
 della finestra <em>Configura</em> → <em>Impostazioni</em>. Se esse
 sono disabilitate, verrà fornito un risultato per qualunque operazione
 speciale la FPU effettui (si veda il Paragrafo <a class="reference internal" href="#special-values"><span class="std std-ref">Valori speciali</span></a>.</p>
+<p>Nel
+caso illustrato in Figura <a class="reference internal" href="#fig-exception-cfg"><span class="std std-ref">Configurazione delle trap per le eccezioni IEEE</span></a>, in cui alcune
+caselle di controllo sono spuntate, se la CPU non maschera le eccezioni
+sincrone nel simulatore (Figura <a class="reference internal" href="#fig-exception-mask-cfg"><span class="std std-ref">Opzione che maschera le eccezioni sincrone (disabilita tutte le trap)</span></a>),
+verrà simulata una trap relativa alla condizione di eccezione IEEE che si è
+verificata (Figura <a class="reference internal" href="#fig-invalid-operation-trap"><span class="std std-ref">Finestra che notifica la trap</span></a>).</p>
+<figure class="align-default" id="id3">
+<span id="fig-exception-cfg"></span><a class="reference internal image-reference" href="_images/exception_cfg.png"><img alt="_images/exception_cfg.png" height="94" src="_images/exception_cfg.png" width="246" />
+</a>
+<figcaption>
+<p><span class="caption-text">Configurazione delle trap per le eccezioni IEEE</span><a class="headerlink" href="#id3" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="id4">
+<span id="fig-exception-mask-cfg"></span><a class="reference internal image-reference" href="_images/exception_mask_cfg.png"><img alt="_images/exception_mask_cfg.png" height="100" src="_images/exception_mask_cfg.png" width="246" />
+</a>
+<figcaption>
+<p><span class="caption-text">Opzione che maschera le eccezioni sincrone (disabilita tutte le trap)</span><a class="headerlink" href="#id4" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="id5">
+<span id="fig-invalid-operation-trap"></span><a class="reference internal image-reference" href="_images/invalid_operation_trap.png"><img alt="_images/invalid_operation_trap.png" height="59" src="_images/invalid_operation_trap.png" width="134" />
+</a>
+<figcaption>
+<p><span class="caption-text">Finestra che notifica la trap</span><a class="headerlink" href="#id5" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
 </section>
 <section id="direttiva-double">
 <span id="double-directive"></span><h2>Direttiva .double<a class="headerlink" href="#direttiva-double" title="Link to this heading">¶</a></h2>
@@ -128,6 +155,13 @@ consentendo l’inserimento diretto in memoria dei valori speciali.</p>
 diversi aspetti funzionali della FPU. Esso è lungo 32 bit e, fino alla
 ridisegnazione grafica di EduMIPS64, sarà posto nella finestra delle
 statistiche.</p>
+<figure class="align-default" id="id6">
+<a class="reference internal image-reference" href="_images/fcsr_register.png"><img alt="_images/fcsr_register.png" height="105" src="_images/fcsr_register.png" width="182" />
+</a>
+<figcaption>
+<p><span class="caption-text">Registro FCSR in EduMIPS64</span><a class="headerlink" href="#id6" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
 <p>Il campo <strong>FCC</strong> è costituito da 8 bit, identificati con numeri da 0 a 7. Le
 istruzioni condizionali (<code class="docutils literal notranslate"><span class="pre">C.EQ.D,C.LT.D</span></code>) lo utilizzano per memorizzare il
 risultato booleano di un confronto tra due registri.</p>
@@ -142,7 +176,7 @@ esegue un programma dall’inizio alla fine senza fermarlo, per determinare se
 si è verificata una qualunque eccezione.</p>
 <p>Il campo <strong>Enable</strong> mostra le eccezioni IEEE per le quali è attiva la trap. I
 bit di questo campo vengono modificati, anche senza resettare il simulatore,
-dalla finestra di configurazione.</p>
+dalla finestra di configurazione della Figura <a class="reference internal" href="#fig-exception-cfg"><span class="std std-ref">Configurazione delle trap per le eccezioni IEEE</span></a>.</p>
 <p>Il campo <strong>Flag</strong> mostra le eccezioni IEEE che si sono verificate ma, non
 avendo la relativa trap attivata, hanno fornito come risultato dei valori
 speciali, illustrati nel Paragrafo <a class="reference internal" href="#special-values"><span class="std std-ref">Valori speciali</span></a>.</p>
@@ -292,11 +326,20 @@ Infinito</p>
 Dopodichè, <code class="docutils literal notranslate"><span class="pre">DMFC1</span></code> copia l’FPR f5 nel GPR r6. Il risultato di questa
 istruzione dipende dalla modalità di arrotondamento corrente, che viene
 impostata dalla scheda <em>Arrotondamenti FPU</em> della finestra <em>Configura</em> →
-<em>Impostazioni</em>.</p>
+<em>Impostazioni</em>, come in Figura <a class="reference internal" href="#fig-fpu-rounding"><span class="std std-ref">Arrotondamento FPU</span></a>.</p>
+<p><em>Eccezioni:</em> Invalid Operation è lanciata quando fs vale Infinito, XNaN, o
+il risultato è fuori dall’intervallo dei long [-2 <sup>63</sup>, 2 <sup>63</sup> -1]</p>
 </li>
 </ul>
-<table class="docutils align-default" id="id3">
-<caption><span class="caption-text">Esempi sui tipi di arrotondamento</span><a class="headerlink" href="#id3" title="Link to this table">¶</a></caption>
+<figure class="align-default" id="id7">
+<span id="fig-fpu-rounding"></span><a class="reference internal image-reference" href="_images/fpu_rounding.png"><img alt="_images/fpu_rounding.png" height="88" src="_images/fpu_rounding.png" width="248" />
+</a>
+<figcaption>
+<p><span class="caption-text">Arrotondamento FPU</span><a class="headerlink" href="#id7" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<table class="docutils align-default" id="id8">
+<caption><span class="caption-text">Esempi sui tipi di arrotondamento</span><a class="headerlink" href="#id8" title="Link to this table">¶</a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>Tipo</p></th>
 <th class="head"><p>Campo RM</p></th>
