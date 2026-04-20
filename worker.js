@@ -1354,5 +1354,5 @@ var b3='object',c3='\n',d3='function',e3='boolean',f3='number',g3='string',h3=21
 var $stats = function(){};
 var $sessionId = function(){};
 $strongName = 'D5254A4F445D934A3DE8483346499228';
-gwtOnLoad(null,'edumips64',null);
+gwtOnLoad(null,'web',null);
 })();
