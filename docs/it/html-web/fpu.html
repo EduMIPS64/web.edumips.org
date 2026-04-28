@@ -199,9 +199,6 @@ registri per ogni istruzione. Infine, i valori ritornati dalle operazioni di
 conversione vengono indicati con la notazione
 <code class="docutils literal notranslate"><span class="pre">convert_tipoconversione(registro[,tipo</span> <span class="pre">arrotondamento])</span></code>, dove il parametro
 tra parentesi quadre è presente solo in certe circostanze.</p>
-<p>Per prendere confidenza con le istruzioni floating point, alcuni file sorgenti
-possono essere scaricati dal link
-<code class="docutils literal notranslate"><span class="pre">http://www.edumips.org/attachment/wiki/Upload/FPUMaxSamples.rar</span></code>.</p>
 <ul>
 <li><p><cite>ADD.D fd, fs, ft</cite></p>
 <p><em>Descrizione</em>: <code class="docutils literal notranslate"><span class="pre">fd</span> <span class="pre">=</span> <span class="pre">fs</span> <span class="pre">+</span> <span class="pre">ft</span></code></p>
@@ -410,12 +407,12 @@ risultato è fuori dall’intervallo degli interi con segno [-2 <sup>31</sup>, 2
 <sup>31</sup>-1]</p>
 </li>
 <li><p><cite>DIV.D fd, fs, ft</cite></p>
-<p><em>Descrizione:</em> <code class="docutils literal notranslate"><span class="pre">fd</span> <span class="pre">=</span> <span class="pre">fs</span> <span class="pre">\div</span> <span class="pre">ft</span></code></p>
+<p><em>Descrizione:</em> <code class="docutils literal notranslate"><span class="pre">fd</span> <span class="pre">=</span> <span class="pre">fs</span> <span class="pre">/</span> <span class="pre">ft</span></code></p>
 <p><em>Eccezioni:</em> Le trap di Overflow e Underflow vengono generate se il
 risultato non può essere rappresentato secondo lo standard IEEE 754. Invalid
 Operation è generata se fs o ft contengono QNaN o SNaN, o se viene eseguita
-un’operazione non valida (0div0,∞ div ∞). Divide by zero è generata se è
-eseguita una divisione per zero che non ha per dividendo un XNaN (5div0).</p>
+un’operazione non valida (0/0, ∞/∞). Divide by zero è generata se è
+eseguita una divisione per zero che non ha per dividendo un XNaN (5/0).</p>
 </li>
 <li><p><cite>DMFC1 rt,fs</cite></p>
 <p><em>Descrizione:</em> <code class="docutils literal notranslate"><span class="pre">rt</span> <span class="pre">=</span> <span class="pre">fs</span></code></p>
@@ -432,10 +429,12 @@ di formato viene eseguito su fs prima della copia.</p>
 non appartiene all’ISA MIPS64; si consiglia l’utilizzo di <code class="docutils literal notranslate"><span class="pre">LDC1</span></code>.</p>
 </li>
 </ul>
-<div class="admonition note">
-<p class="admonition-title">Nota</p>
-<p><cite>L.D</cite> è un’istruzione non presente nell’ISA MIPS64, inclusa in
-EduMIPS64, solo per compabitibilità con WinMIPS64</p>
+<div class="admonition warning">
+<p class="admonition-title">Avvertimento</p>
+<p><code class="docutils literal notranslate"><span class="pre">L.D</span></code> non è presente nell’ISA MIPS64; è un alias di
+<code class="docutils literal notranslate"><span class="pre">LDC1</span></code> accettato da EduMIPS64 per compatibilità con
+WinMIPS64. Il parser segnala un avviso quando viene utilizzata;
+preferire <code class="docutils literal notranslate"><span class="pre">LDC1</span></code>.</p>
 </div>
 <ul>
 <li><p><cite>LDC1 ft, offset(base)</cite></p>
@@ -487,8 +486,6 @@ diverso da zero</p>
 <p>Copia fs su fd, senza alcun controllo del formato di fs, se il il GPR rt è
 uguale a zero</p>
 </li>
-</ul>
-<ul>
 <li><p><cite>MTC1 rt, fs</cite></p>
 <p><em>Descrizione:</em> fs = rt <sub>0..31</sub></p>
 <p>Copia la word più bassa di rt scrivendola sull’FPR fs.</p>
@@ -513,10 +510,12 @@ generata se fs o ft contiene  QNaN o SNaN, o se si effettua un’operazione
 <p>Copia la doubleword (64 bit) dell’FPR ft in memoria.</p>
 </li>
 </ul>
-<div class="admonition note">
-<p class="admonition-title">Nota</p>
-<p><cite>S.D</cite> è un’istruzione non presente nell’ISA MIPS64, inclusa in
-EduMIPS64, solo per compabitibilità con WinMIPS64</p>
+<div class="admonition warning">
+<p class="admonition-title">Avvertimento</p>
+<p><code class="docutils literal notranslate"><span class="pre">S.D</span></code> non è presente nell’ISA MIPS64; è un alias di
+<code class="docutils literal notranslate"><span class="pre">SDC1</span></code> accettato da EduMIPS64 per compatibilità con
+WinMIPS64. Il parser segnala un avviso quando viene utilizzata;
+preferire <code class="docutils literal notranslate"><span class="pre">SDC1</span></code>.</p>
 </div>
 <ul>
 <li><p><cite>SDC1 ft, offset(base)</cite></p>

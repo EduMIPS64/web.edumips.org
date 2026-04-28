@@ -172,9 +172,9 @@ end:            jal         print_string
                 #include    print.s
 </pre></div>
 </div>
-<p>.data 部分的前 4 行包含 SYSCALL 4 的参数、我们必须读取的文件描述符、SYSCALL 必须读取的内存地址、要写入的字节数。我们给那些稍后必须访问的参数加上标签。接下来，像往常一样，我们将包含错误信息和成功信息的字符串放入其中。</p>
+<p>.data 部分的前 4 行包含 SYSCALL 4 的参数、我们必须写入的文件描述符、SYSCALL 必须读取数据的内存地址、要写入的字节数。我们给那些稍后必须访问的参数加上标签。接下来，像往常一样，我们将包含错误信息和成功信息的字符串放入其中。</p>
 <p>在 .text 部分，我们将 params_sys4 的地址保存到寄存器 r14 中，在 SYSCALL 参数的内存单元中保存文件描述符（我们假设保存在 $s2 中）和我们必须读取写入字节的地址。</p>
-<p>接下来我们可以调用 SYSCALL 3，然后根据操作的成功与否调用 print_string 函数，参数为 error_3 或 ok_message。</p>
+<p>接下来我们可以调用 SYSCALL 4，然后根据操作的成功与否调用 print_string 函数，参数为 error_4 或 ok_message。</p>
 </section>
 <section id="syscall-5">
 <h3>SYSCALL 5<a class="headerlink" href="#syscall-5" title="链接到此标题。">¶</a></h3>

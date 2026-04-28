@@ -22,7 +22,7 @@
             
   <section id="the-instruction-set">
 <h1>The instruction set<a class="headerlink" href="#the-instruction-set" title="Link to this heading">¶</a></h1>
-<p>In this section we will the subset of the MIPS64 instruction set that EduMIPS64
+<p>In this section we will describe the subset of the MIPS64 instruction set that EduMIPS64
 recognizes. We can operate two different taxonomic classification: one based on
 the functionality of the instructions and one based on the type of the
 parameters of the instructions.</p>
@@ -42,6 +42,16 @@ of operations.</p>
 <p>Four of those instructions make use of two special registers: LO and HI. They
 are internal CPU registers, whose value can be accessed through the
 <cite>MFLO</cite> and <cite>MFHI</cite> instructions.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Several MIPS instructions have a name ending in <code class="docutils literal notranslate"><span class="pre">U</span></code> (for example
+<code class="docutils literal notranslate"><span class="pre">ADDU</span></code>, <code class="docutils literal notranslate"><span class="pre">ADDIU</span></code>, <code class="docutils literal notranslate"><span class="pre">DADDU</span></code>, <code class="docutils literal notranslate"><span class="pre">DADDIU</span></code>, <code class="docutils literal notranslate"><span class="pre">DSUBU</span></code>, <code class="docutils literal notranslate"><span class="pre">SUBU</span></code>). Despite
+the suggestive suffix, these instructions <strong>do not</strong> treat their operands
+as unsigned: the result is sign-extended exactly like in the non-<code class="docutils literal notranslate"><span class="pre">U</span></code>
+variant. The only difference is that no Integer Overflow exception is
+raised. This naming is a well-known historical misnomer in the MIPS
+architecture.</p>
+</div>
 <p>Here’s the list of R-Type ALU Instructions.</p>
 <ul>
 <li><p><cite>AND rd, rs, rt</cite></p>
@@ -55,8 +65,6 @@ values, and puts the result into rd. If an overflow occurs then trap.</p>
 <p>Sums the content of 32-bits registers rs and rt, and puts the result into rd.
 No integer overflow occurs under any circumstances.</p>
 </li>
-</ul>
-<ul>
 <li><p><cite>DADD rd, rs, rt</cite></p>
 <p>Sums the content of 64-bits registers rs and rt, considering them as signed
 values, and puts the result into rd. If an overflow occurs then trap.</p>
@@ -65,8 +73,6 @@ values, and puts the result into rd. If an overflow occurs then trap.</p>
 <p>Sums the content of 64-bits registers rs and rt, and puts the result into rd.
 No integer overflow occurs under any circumstances.</p>
 </li>
-</ul>
-<ul>
 <li><p><cite>DDIV rs, rt</cite> OR <cite>DDIV rd, rs, rt</cite></p>
 <p>Executes the division between 64-bits registers rs and rt.</p>
 <p>Two-operand form (DDIV rs, rt): Puts the 64-bits quotient in LO and the
@@ -128,7 +134,7 @@ rd. Empty bits are padded with zeros.</p>
 </li>
 <li><p><cite>DSLLV rd, rt, rs</cite></p>
 <p>Does a left shift of 64-bits register rt, by the amount specified in
-low-order 6-bits of rs threatd as unsigned value, and puts the result into
+low-order 6-bits of rs treated as unsigned value, and puts the result into
 64-bits register rd. Empty bits are padded with zeros.</p>
 </li>
 <li><p><cite>DSRA rd, rt, sa</cite></p>
@@ -139,7 +145,7 @@ otherwise they are padded with ones.</p>
 </li>
 <li><p><cite>DSRAV rd, rt, rs</cite></p>
 <p>Does a right shift of 64-bits register rt, by the amount specified in
-low-order 6-bits of rs threatd as unsigned value, and puts the result into
+low-order 6-bits of rs treated as unsigned value, and puts the result into
 64-bits register rd. Empty bits are padded with zeros if the leftmost bit
 of rt is zero, otherwise they are padded with ones.</p>
 </li>
@@ -150,20 +156,18 @@ rd. Empty bits are padded with zeros.</p>
 </li>
 <li><p><cite>DSRLV rd, rt, rs</cite></p>
 <p>Does a right shift of 64-bits register rt, by the amount specified in
-low-order 6-bits of rs threatd as unsigned value, and puts the result into
+low-order 6-bits of rs treated as unsigned value, and puts the result into
 64-bits register rd. Empty bits are padded with zeros.</p>
 </li>
 <li><p><cite>DSUB rd, rs, rt</cite></p>
-<p>Subtracts the value of 64-bits register rt to 64-bits register rs,
+<p>Subtracts the value of 64-bits register rt from 64-bits register rs,
 considering them as signed values, and puts the result in rd. If an
 overflow occurs then trap.</p>
 </li>
 <li><p><cite>DSUBU rd, rs, rt</cite></p>
-<p>Subtracts the value of 64-bits register rt to 64-bits register rs, and puts
+<p>Subtracts the value of 64-bits register rt from 64-bits register rs, and puts
 the result in rd. No integer overflow occurs under any circumstances.</p>
 </li>
-</ul>
-<ul>
 <li><p><cite>MFLO rd</cite></p>
 <p>Moves the content of the special register LO into rd.</p>
 </li>
@@ -197,7 +201,7 @@ rd. Empty bits are padded with zeros.</p>
 </li>
 <li><p><cite>SLLV rd, rt, rs</cite></p>
 <p>Does a left shift of 32-bits register rt, by the amount specified in
-low-order 5-bits of rs threatd as unsigned value, and puts the result into
+low-order 5-bits of rs treated as unsigned value, and puts the result into
 32-bits register rd. Empty bits are padded with zeros.</p>
 </li>
 <li><p><cite>SRA rd, rt, sa</cite></p>
@@ -208,7 +212,7 @@ otherwise they are padded with ones.</p>
 </li>
 <li><p><cite>SRAV rd, rt, rs</cite></p>
 <p>Does a right shift of 32-bits register rt, by the amount specified in
-low-order 5-bits of rs threatd as unsigned value, and puts the result into
+low-order 5-bits of rs treated as unsigned value, and puts the result into
 32-bits register rd. Empty bits are padded with zeros if the leftmost bit
 of rt is zero, otherwise they are padded with ones.</p>
 </li>
@@ -219,20 +223,18 @@ rd. Empty bits are padded with zeros.</p>
 </li>
 <li><p><cite>SRLV rd, rt, rs</cite></p>
 <p>Does a right shift of 32-bits register rt, by the amount specified in
-low-order 5-bits of rs threatd as unsigned value, and puts the result into
+low-order 5-bits of rs treated as unsigned value, and puts the result into
 32-bits register rd. Empty bits are padded with zeros.</p>
 </li>
 <li><p><cite>SUB rd, rs, rt</cite></p>
-<p>Subtracts the value of 32-bits register rt to 32-bits register rs,
+<p>Subtracts the value of 32-bits register rt from 32-bits register rs,
 considering them as signed values, and puts the result in rd. If an
 overflow occurs then trap.</p>
 </li>
 <li><p><cite>SUBU rd, rs, rt</cite></p>
-<p>Subtracts the value of 32-bits register rt to 32-bits register rs, and puts
+<p>Subtracts the value of 32-bits register rt from 32-bits register rs, and puts
 the result in rd. No integer overflow occurs under any circumstances.</p>
 </li>
-</ul>
-<ul>
 <li><p><cite>SLT rd, rs, rt</cite></p>
 <p>Sets the value of rd to 1 if the value of rs is less than the value of rt,
 otherwise sets it to 0. This instruction performs a signed comparison.</p>
@@ -258,8 +260,6 @@ value as signed values. If an overflow occurs then trap.</p>
 putting the result in rt. No integer overflow occurs under any
 circumstances.</p>
 </li>
-</ul>
-<ul>
 <li><p><cite>ANDI rt, rs, immediate</cite></p>
 <p>Executes the bitwise AND between rs and the immediate value, putting the
 result in rt.</p>
@@ -274,15 +274,18 @@ value as signed values. If an overflow occurs then trap.</p>
 putting the result in rt. No integer overflow occurs under any
 circumstances.</p>
 </li>
-</ul>
-<ul>
 <li><p><cite>DADDUI rt, rs, immediate</cite></p>
 <p>Executes the sum between 64-bits register rs and the immediate value,
 putting the result in rt. No integer overflow occurs under any
 circumstances.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><code class="docutils literal notranslate"><span class="pre">DADDUI</span></code> is not a standard MIPS64 instruction (it is part of the
+WinMIPS64 instruction set, accepted by EduMIPS64 for backward
+compatibility). The parser emits a warning when it is used; prefer
+<code class="docutils literal notranslate"><span class="pre">DADDIU</span></code> instead.</p>
+</div>
 </li>
-</ul>
-<ul>
 <li><p><cite>LUI rt, immediate</cite></p>
 <p>Loads the constant defined in the immediate value in the upper half (16
 bit) of the lower 32 bits of rt, sign-extending the upper 32 bits of the
@@ -407,17 +410,29 @@ value.</p>
 </li>
 <li><p><cite>BEQZ rs, offset</cite></p>
 <p>Jumps to offset if rs is equal to zero.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><code class="docutils literal notranslate"><span class="pre">BEQZ</span></code> is not a standard MIPS64 instruction (it is part of the
+WinMIPS64 instruction set, accepted by EduMIPS64 for backward
+compatibility). The parser emits a warning when it is used; prefer
+<code class="docutils literal notranslate"><span class="pre">BEQ</span> <span class="pre">rs,</span> <span class="pre">r0,</span> <span class="pre">offset</span></code> instead.</p>
+</div>
 </li>
-</ul>
-<ul>
 <li><p><cite>BGEZ rs, offset</cite></p>
-<p>If rs is greather than or equal to zero, does a PC-relative jump to offset.</p>
+<p>If rs is greater than or equal to zero, does a PC-relative jump to offset.</p>
 </li>
 <li><p><cite>BNE rs, rt, offset</cite></p>
 <p>Jumps to offset if rs is not equal to rt.</p>
 </li>
 <li><p><cite>BNEZ rs, offset</cite></p>
 <p>Jumps to offset if rs is not equal to zero.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><code class="docutils literal notranslate"><span class="pre">BNEZ</span></code> is not a standard MIPS64 instruction (it is part of the
+WinMIPS64 instruction set, accepted by EduMIPS64 for backward
+compatibility). The parser emits a warning when it is used; prefer
+<code class="docutils literal notranslate"><span class="pre">BNE</span> <span class="pre">rs,</span> <span class="pre">r0,</span> <span class="pre">offset</span></code> instead.</p>
+</div>
 </li>
 </ul>
 <p>List of J-Type flow control instructions:</p>
@@ -461,12 +476,12 @@ them from the following list:</p>
 <li><p><cite>O_RDWR (0x03)</cite> Opens the file in read/write mode;</p></li>
 <li><p><cite>O_CREAT (0x04)</cite> Creates the file if it does not exist;</p></li>
 <li><p><cite>O_APPEND (0x08)</cite> In write mode, appends written text at the end of the file;</p></li>
-<li><p><cite>O_TRUNC (0x08)</cite> In write mode, deletes the content of the file as soon as it
+<li><p><cite>O_TRUNC (0x10)</cite> In write mode, deletes the content of the file as soon as it
 is opened.</p></li>
 </ul>
-<p>It is mandatory to specify one of the first three modes. The fourth and the
-fifth modes are exclusive, you can not specify O_APPEND if you specify O_TRUNC
-(and vice versa).</p>
+<p>It is mandatory to specify one of the first three modes. The fifth and the
+sixth modes are mutually exclusive: you cannot specify O_APPEND if you specify
+O_TRUNC (and vice versa).</p>
 <p>You can specify a combination of modes by simply adding the integer values of
 those flags. For instance, if you want to open a file in write only mode and
 append the written text to the end of file, you should specify the mode 2 + 8
@@ -501,8 +516,8 @@ write-only file descriptor.</p>
 <h3><cite>SYSCALL 4 - write()</cite><a class="headerlink" href="#syscall-4-write" title="Link to this heading">¶</a></h3>
 <p>SYSCALL 4 expects three parameters: the file descriptor to write to, the
 address where the data must be read from, the number of bytes to write.</p>
-<p>If the first parameter is two or three, the simulator will pop the input/output
-frame, and write there the read data.</p>
+<p>If the first parameter is one or two (i.e. <code class="docutils literal notranslate"><span class="pre">stdout</span></code> or <code class="docutils literal notranslate"><span class="pre">stderr</span></code>), the
+simulator pops up the input/output frame and writes the data there.</p>
 <p>It returns the number of bytes that have been written, or -1 if the write
 operation fails. Possible causes of failure are the attempt to write to a
 non-existent file descriptor, the attempt to write to file descriptor 0
@@ -551,6 +566,13 @@ source code.</p>
 <h3><cite>HALT</cite><a class="headerlink" href="#halt" title="Link to this heading">¶</a></h3>
 <p>The HALT instruction is a deprecated alias for the SYSCALL 0 instruction, that
 halts the simulator.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><code class="docutils literal notranslate"><span class="pre">HALT</span></code> is not a standard MIPS64 instruction (it is part of the
+WinMIPS64 instruction set, accepted by EduMIPS64 for backward
+compatibility). The parser emits a warning when it is used; prefer
+<code class="docutils literal notranslate"><span class="pre">SYSCALL</span> <span class="pre">0</span></code> instead.</p>
+</div>
 </section>
 </section>
 </section>

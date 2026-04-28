@@ -44,6 +44,16 @@ questo tipo di operazioni.</p>
 <p>Quattro di esse utilizzano due registri speciali: LO e HI. Tali registri sono
 interni alla CPU ed è possibile accedere al loro valore mediante le
 istruzioni <cite>MFLO</cite> e <cite>MFHI</cite>.</p>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<p>Diverse istruzioni MIPS hanno un nome che termina con <code class="docutils literal notranslate"><span class="pre">U</span></code> (ad esempio
+<code class="docutils literal notranslate"><span class="pre">ADDU</span></code>, <code class="docutils literal notranslate"><span class="pre">ADDIU</span></code>, <code class="docutils literal notranslate"><span class="pre">DADDU</span></code>, <code class="docutils literal notranslate"><span class="pre">DADDIU</span></code>, <code class="docutils literal notranslate"><span class="pre">DSUBU</span></code>, <code class="docutils literal notranslate"><span class="pre">SUBU</span></code>).
+Nonostante il suffisso, queste istruzioni <strong>non</strong> trattano gli operandi
+come valori senza segno: il risultato viene esteso in segno esattamente
+come nella variante senza <code class="docutils literal notranslate"><span class="pre">U</span></code>. L’unica differenza è che non viene
+sollevata l’eccezione di Integer Overflow. È un noto refuso storico
+(misnomer) dell’architettura MIPS.</p>
+</div>
 <p>Ecco la lista delle istruzioni ALU di tipo R.</p>
 <ul>
 <li><p><cite>AND rd, rs, rt</cite></p>
@@ -58,8 +68,6 @@ overflow.</p>
 <p>Somma il contenuto dei registri a 32-bit rs ed rt, e pone il risultato in
 rd. Non si verificano eccezioni di overflow.</p>
 </li>
-</ul>
-<ul>
 <li><p><cite>DADD rd, rs, rt</cite></p>
 <p>Somma il contenuto dei registri a 64-bit rs ed rt, considerandoli come
 valori con segno, e pone il risultato in rd.  Lancia un’eccezione in caso di
@@ -69,8 +77,6 @@ overflow.</p>
 <p>Somma il contenuto dei registri a 64-bit rs ed rt, e pone il risultato in rd.
 Non si verificano eccezioni di overflow.</p>
 </li>
-</ul>
-<ul>
 <li><p><cite>DDIV rs, rt</cite> O <cite>DDIV rd, rs, rt</cite></p>
 <p>Esegue la divisione tra i registri a 64-bit rs ed rt.</p>
 <p>Forma a due operandi (DDIV rs, rt): Pone i 64-bit del quoziente in LO ed i
@@ -154,16 +160,14 @@ bit specificato nei 6 bit bassi del registro rs che verrà letto come valore
 senza segno, e pone il risultato in rd. I bit liberi vengono posti a zero.</p>
 </li>
 <li><p><cite>DSUB rd, rs, rt</cite></p>
-<p>Sottrae il valore del registro a 64-bit rt al valore del registro a 64-bit
+<p>Sottrae il valore del registro a 64-bit rt dal valore del registro a 64-bit
 rs, considerandoli come valori con segno, e pone il risultato in rd. Lancia
 un’eccezione in caso di overflow.</p>
 </li>
 <li><p><cite>DSUBU rd, rs, rt</cite></p>
-<p>Sottrae il valore del registro a 64-bit rt al valore del registro a 64-bit
+<p>Sottrae il valore del registro a 64-bit rt dal valore del registro a 64-bit
 rs, e pone il risultato in rd.  Non si verificano eccezioni di overflow.</p>
 </li>
-</ul>
-<ul>
 <li><p><cite>MFLO rd</cite></p>
 <p>Copia il contenuto del registro speciale LO in rd.</p>
 </li>
@@ -227,17 +231,15 @@ senza segno, e pone il risultato nel registro a 32-bit rd. I bit liberi
 vengono posti a zero.</p>
 </li>
 <li><p><cite>SUB rd, rs, rt</cite></p>
-<p>Sottrae il valore del registro a 32-bit rt al valore del registro a 32-bit
+<p>Sottrae il valore del registro a 32-bit rt dal valore del registro a 32-bit
 rs, considerandoli come valori con segno, e pone il risultato in rd. Lancia
 un’eccezione in caso di overflow.</p>
 </li>
 <li><p><cite>SUBU rd, rs, rt</cite></p>
-<p>Sottrae il valore del registro a 32-bit rt al valore del registro a 32-bit
+<p>Sottrae il valore del registro a 32-bit rt dal valore del registro a 32-bit
 rs, e pone il risultato in rd.
 Non si verificano eccezioni di overflow.</p>
 </li>
-</ul>
-<ul>
 <li><p><cite>SLT rd, rs, rt</cite></p>
 <p>Pone il valore di rd ad 1 se il valore contenuto in rs è minore di
 quello contenuto in rt, altrimenti pone rd a 0. Questa istruzione esegue un
@@ -264,8 +266,6 @@ valori con segno.  Lancia un’eccezione in caso di overflow.</p>
 <p>Effettua la somma tra il registro a 32 bit rs ed il valore immediato,
 ponendo il risultato in rt.  Non si verificano eccezioni di overflow.</p>
 </li>
-</ul>
-<ul>
 <li><p><cite>ANDI rt, rs, immediate</cite></p>
 <p>Esegue un AND bit a bit tra rs ed il valore immediato, ponendo il risultato
 in rt.</p>
@@ -279,14 +279,17 @@ valori con segno.  Lancia un’eccezione in caso di overflow.</p>
 <p>Effettua la somma tra il registro a 64 bit rs ed il valore immediato,
 ponendo il risultato in rt.  Non si verificano eccezioni di overflow.</p>
 </li>
-</ul>
-<ul>
 <li><p><cite>DADDUI rt, rs, immediate</cite></p>
 <p>Effettua la somma tra il registro a 64 bit rs ed il valore immediato,
 ponendo il risultato in rt.  Non si verificano eccezioni di overflow.</p>
+<div class="admonition warning">
+<p class="admonition-title">Avvertimento</p>
+<p><code class="docutils literal notranslate"><span class="pre">DADDUI</span></code> non è un’istruzione MIPS64 standard (fa parte
+dell’instruction set di WinMIPS64, accettata da EduMIPS64 per
+retrocompatibilità). Il parser segnala un avviso quando viene
+utilizzata; preferire <code class="docutils literal notranslate"><span class="pre">DADDIU</span></code>.</p>
+</div>
 </li>
-</ul>
-<ul>
 <li><p><cite>LUI rt, immediate</cite></p>
 <p>Carica la costante definita dal valore immediato nella metà superiore dei 32
 bit inferiori di rt, effettuando l’estensione del segno sui 32 bit superiori
@@ -419,9 +422,14 @@ ritorno.</p>
 </li>
 <li><p><cite>BEQZ rs, offset</cite></p>
 <p>Salta ad offset se rs è uguale a zero.</p>
+<div class="admonition warning">
+<p class="admonition-title">Avvertimento</p>
+<p><code class="docutils literal notranslate"><span class="pre">BEQZ</span></code> non è un’istruzione MIPS64 standard (fa parte
+dell’instruction set di WinMIPS64, accettata da EduMIPS64 per
+retrocompatibilità). Il parser segnala un avviso quando viene
+utilizzata; preferire <code class="docutils literal notranslate"><span class="pre">BEQ</span> <span class="pre">rs,</span> <span class="pre">r0,</span> <span class="pre">offset</span></code>.</p>
+</div>
 </li>
-</ul>
-<ul>
 <li><p><cite>BGEZ rs, offset</cite></p>
 <p>Effettua un salto relativo al PC ad offset se rs è maggiore o uguale a zero.</p>
 </li>
@@ -430,6 +438,13 @@ ritorno.</p>
 </li>
 <li><p><cite>BNEZ rs, offset</cite></p>
 <p>Salta ad offset se rs non è uguale a zero.</p>
+<div class="admonition warning">
+<p class="admonition-title">Avvertimento</p>
+<p><code class="docutils literal notranslate"><span class="pre">BNEZ</span></code> non è un’istruzione MIPS64 standard (fa parte
+dell’instruction set di WinMIPS64, accettata da EduMIPS64 per
+retrocompatibilità). Il parser segnala un avviso quando viene
+utilizzata; preferire <code class="docutils literal notranslate"><span class="pre">BNE</span> <span class="pre">rs,</span> <span class="pre">r0,</span> <span class="pre">offset</span></code>.</p>
+</div>
 </li>
 </ul>
 <p>Ecco la lista delle istruzioni di controllo del flusso di tipo J:</p>
@@ -475,7 +490,7 @@ utilizzare, scelti dalla seguente lista:</p>
 <li><p><cite>O_CREAT (0x04)</cite> Crea il file se non esiste;</p></li>
 <li><p><cite>O_APPEND (0x08)</cite> In modalità di scrittura, aggiunge il testo alla fine del
 file;</p></li>
-<li><p><cite>O_TRUNC (0x08)</cite> In modalità di scrittura, cancella il contenuto del file al
+<li><p><cite>O_TRUNC (0x10)</cite> In modalità di scrittura, cancella il contenuto del file al
 momento della sua apertura.</p></li>
 </ul>
 <p>È obbligatorio specificare una delle prime tre modalità. La quinta e
@@ -521,8 +536,8 @@ file di sola scrittura.</p>
 <p>SYSCALL 4 richiede tre parametri: il file descriptor su cui scrivere,
 l’indirizzo dal quale i dati dovranno essere letti, il numero di byte da
 scrivere.</p>
-<p>Se il primo parametro è 2 o 3, il simulatore mostrerà la finestra di
-input/output dove scriverà i dati letti.</p>
+<p>Se il primo parametro è 1 o 2 (cioè <code class="docutils literal notranslate"><span class="pre">stdout</span></code> o <code class="docutils literal notranslate"><span class="pre">stderr</span></code>), il simulatore
+mostrerà la finestra di input/output dove scriverà i dati.</p>
 <p>Questa chiamata di sistema ritorna il numero di byte che sono stati scritti, o
 -1 se l’operazione di scrittura fallisce.  Possibili cause di errore sono il
 tentativo di scrivere su un file inesistente, o sul file descriptor 0
@@ -574,6 +589,13 @@ SYSCALL.</p>
 <h3><cite>HALT</cite><a class="headerlink" href="#halt" title="Link to this heading">¶</a></h3>
 <p>L’istruzione HALT è deprecated, rappresenta un’alternativa all’istruzione
 SYSCALL 0, che ferma il simulatore.</p>
+<div class="admonition warning">
+<p class="admonition-title">Avvertimento</p>
+<p><code class="docutils literal notranslate"><span class="pre">HALT</span></code> non è un’istruzione MIPS64 standard (fa parte dell’instruction
+set di WinMIPS64, accettata da EduMIPS64 per retrocompatibilità). Il
+parser segnala un avviso quando viene utilizzata; preferire
+<code class="docutils literal notranslate"><span class="pre">SYSCALL</span> <span class="pre">0</span></code>.</p>
+</div>
 </section>
 </section>
 </section>

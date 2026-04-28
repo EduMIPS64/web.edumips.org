@@ -54,14 +54,14 @@ simulatore di CPU MIPS64”.</p>
 computation or not, if invalid operations are carried on. In this scenario,
 operations like the division between zeroes or square roots of negative
 numbers must produce a result that, not being a number (NaN) is treated as
-somehting different.</p>
+something different.</p>
 <section id="nan-or-invalid-operation">
 <span id="nan"></span><h3>NaN or Invalid Operation<a class="headerlink" href="#nan-or-invalid-operation" title="Link to this heading">¶</a></h3>
 <p>The IEEE Standard for Floating-Point Arithmetic (IEEE 754) defined that
 invalid arithmetic operations can either signal the error while the program is
 running (using a trap for the IEEE exception <strong>Invalid Operation</strong>) or return
 as a result the special value QNan (Quit Not a Number). Another NaN value,
-that inconditionally raises the same trap once it is detected as being one of
+that unconditionally raises the same trap once it is detected as being one of
 the operands, is SNan (Signalling Not a Number). This value is seldom used in
 applications, and historically it has been used to initialize variables.</p>
 </section>
@@ -132,7 +132,7 @@ files, and allows to allocate a memory cell for a <em>double</em> value.</p>
 <p>where <code class="docutils literal notranslate"><span class="pre">double_number</span></code> can be represented either in extended notation
 (<code class="docutils literal notranslate"><span class="pre">1.0,0.003</span></code>), or in scientific notation(<code class="docutils literal notranslate"><span class="pre">3.7E-12,0.5E32</span></code>).
 <code class="docutils literal notranslate"><span class="pre">keyword</span></code> can be <code class="docutils literal notranslate"><span class="pre">POSITIVEINFINITY</span></code>, <code class="docutils literal notranslate"><span class="pre">NEGATIVEINFINITY</span></code>,
-<code class="docutils literal notranslate"><span class="pre">POSITIVEZERO</span></code>, <code class="docutils literal notranslate"><span class="pre">NEGATIVEZERO</span></code>, <code class="docutils literal notranslate"><span class="pre">SNAN</span></code> e <code class="docutils literal notranslate"><span class="pre">QNAN</span></code>,
+<code class="docutils literal notranslate"><span class="pre">POSITIVEZERO</span></code>, <code class="docutils literal notranslate"><span class="pre">NEGATIVEZERO</span></code>, <code class="docutils literal notranslate"><span class="pre">SNAN</span></code> and <code class="docutils literal notranslate"><span class="pre">QNAN</span></code>,
 thus allowing to directly insert in memory the special values.</p>
 </section>
 <section id="the-fcsr-register">
@@ -154,7 +154,7 @@ two registers.</p>
 described in <a class="reference internal" href="#special-values"><span class="std std-ref">Special values</span></a>. Each of them is composed of 5 bits, V
 (Invalid Operation), Z (Divide by Zero), O (Overflow), U (Underflow) and I
 (Inexact); the latter is not yet used.</p>
-<p>The <strong>Clause</strong> field bits are set if the corresponding IEEE exceptions occur
+<p>The <strong>Cause</strong> field bits are set if the corresponding IEEE exceptions occur
 during the execution of a program.</p>
 <p>The <strong>Enable</strong> field bits are set through the configuration window and show
 the IEEE exceptions for which traps are enabled, as shown in Figure
@@ -180,8 +180,6 @@ indicate the purpose of each register (destination, source, third). Lastly,
 the values returned by conversion operations are represented with the
 following notation: <code class="docutils literal notranslate"><span class="pre">convert_conversiontype(register[,rounding_type])</span></code>,
 where the <code class="docutils literal notranslate"><span class="pre">rounding_type</span></code> parameter is optional.</p>
-<p>Some examples for the FPU instructions are available at
-<code class="docutils literal notranslate"><span class="pre">http://www.edumips.org/attachment/wiki/Upload/FPUMaxSamples.rar</span></code>.</p>
 <ul>
 <li><p><cite>ADD.D fd, fs, ft</cite></p>
 <p><em>Description</em>: <code class="docutils literal notranslate"><span class="pre">fd</span> <span class="pre">=</span> <span class="pre">fs</span> <span class="pre">+</span> <span class="pre">ft</span></code></p>
@@ -213,15 +211,15 @@ comparison is 0 (false).</p>
 </div>
 <p>In this example, <code class="docutils literal notranslate"><span class="pre">C.EQ.D</span></code> checks if <code class="docutils literal notranslate"><span class="pre">f1</span></code> and <code class="docutils literal notranslate"><span class="pre">f2</span></code> are equal, writing
 the results of the comparison in the 7th bit of the FCC field of the FCSR
-register. After that, <code class="docutils literal notranslate"><span class="pre">BC1F</span></code> jumps to <code class="docutils literal notranslate"><span class="pre">label</span></code> if the result of the
-comparison is 1 (false).</p>
+register. After that, <code class="docutils literal notranslate"><span class="pre">BC1T</span></code> jumps to <code class="docutils literal notranslate"><span class="pre">label</span></code> if the result of the
+comparison is 1 (true).</p>
 </li>
 <li><p><cite>C.EQ.D cc, fs, ft</cite></p>
 <p><em>Description</em>: <code class="docutils literal notranslate"><span class="pre">FCSR_FCC[cc]</span> <span class="pre">=</span> <span class="pre">(fs==ft)</span></code></p>
 <p>Checks if <code class="docutils literal notranslate"><span class="pre">fs</span></code> is equal to <code class="docutils literal notranslate"><span class="pre">ft</span></code>, and saves the result of the comparison
 in <code class="docutils literal notranslate"><span class="pre">FCSR_FCC[cc]</span></code>. See examples for <code class="docutils literal notranslate"><span class="pre">BC1T</span></code>, <code class="docutils literal notranslate"><span class="pre">BC1F</span></code>.</p>
 <p><em>Exceptions</em>: Invalid Operation can be thrown if <code class="docutils literal notranslate"><span class="pre">fs</span></code> or <code class="docutils literal notranslate"><span class="pre">ft</span></code> contain
-QNaN (trap is triggered if it is enabled) o SNaN (trap is always triggered).</p>
+QNaN (trap is triggered if it is enabled) or SNaN (trap is always triggered).</p>
 </li>
 <li><p><cite>C.LT.D cc, fs, ft</cite></p>
 <p><em>Description</em>: <code class="docutils literal notranslate"><span class="pre">FCSR_FCC[cc]</span> <span class="pre">=</span> <span class="pre">(fs&lt;ft)</span></code></p>
@@ -237,7 +235,7 @@ saves the result of the comparison in the second bit of the FCC field of the
 FCSR register. After that, <code class="docutils literal notranslate"><span class="pre">BC1T</span></code> jumps to <code class="docutils literal notranslate"><span class="pre">target</span></code> if that bit is set
 to 1.</p>
 <p><em>Exceptions</em>: Invalid Operation can be thrown if <code class="docutils literal notranslate"><span class="pre">fs</span></code> or <code class="docutils literal notranslate"><span class="pre">ft</span></code> contain
-QNaN (trap is triggered if it is enabled) o SNaN (trap is always triggered).</p>
+QNaN (trap is triggered if it is enabled) or SNaN (trap is always triggered).</p>
 </li>
 <li><p><cite>CVT.D.L fd, fs</cite></p>
 <p><em>Description</em>: <code class="docutils literal notranslate"><span class="pre">fd</span> <span class="pre">=</span> <span class="pre">convert_longToDouble(fs)</span></code></p>
@@ -281,13 +279,12 @@ infinite.</p>
 <span class="n">DMFC1</span> <span class="n">r6</span><span class="p">,</span><span class="n">f5</span>
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">CVT.L.D</span></code> the double value in f5 to a long; then <code class="docutils literal notranslate"><span class="pre">DMFC1</span></code> copies f5 to
+<p><code class="docutils literal notranslate"><span class="pre">CVT.L.D</span></code> converts the double value in f5 to a long; then <code class="docutils literal notranslate"><span class="pre">DMFC1</span></code> copies f5 to
 r6; the result of this operation depends on the current rounding modality,
 that can be set in the <em>FPU Rounding</em> tab of the <em>Configure</em> →  <em>Settings</em>
 window, as depicted in Figure <a class="reference internal" href="#fig-fpu-rounding"><span class="std std-ref">FPU Rounding</span></a>.</p>
 <p><em>Exceptions:</em> Invalid Operation is thrown if fs contains an infinite value,
-any NaN or the results is outside the long domain [-2 <sup>63</sup>, 2 <sup>63</sup>
--1]</p>
+any NaN or the result is outside the long domain [-2 <sup>63</sup>, 2 <sup>63</sup> -1].</p>
 </li>
 </ul>
 <figure class="align-default" id="id9">
@@ -300,7 +297,7 @@ any NaN or the results is outside the long domain [-2 <sup>63</sup>, 2 <sup>63</
 <table class="docutils align-default" id="id10">
 <caption><span class="caption-text">Rounding examples</span><a class="headerlink" href="#id10" title="Link to this table">¶</a></caption>
 <thead>
-<tr class="row-odd"><th class="head"><p>Tipo</p></th>
+<tr class="row-odd"><th class="head"><p>Type</p></th>
 <th class="head"><p>RM field</p></th>
 <th class="head"><p>f5 register</p></th>
 <th class="head"><p>r6 register</p></th>
@@ -364,16 +361,15 @@ any NaN or the results is outside the long domain [-2 <sup>63</sup>, 2 <sup>63</
 <p><em>Description:</em> <code class="docutils literal notranslate"><span class="pre">fd</span> <span class="pre">=</span> <span class="pre">convert_DoubleToInt(fs,</span> <span class="pre">CurrentRoundingMode)</span></code></p>
 <p>Converts a double to an int, using the current rounding modality.</p>
 <p><em>Exceptions:</em> Invalid Operation is thrown if fs contains an infinite value,
-any NaN or the results is outside the signed int domain [-2 <sup>63</sup>, 2
-<sup>63</sup> -1]</p>
+any NaN or the result is outside the signed int domain [-2 <sup>31</sup>, 2 <sup>31</sup> -1].</p>
 </li>
 <li><p><cite>DIV.D fd, fs, ft</cite></p>
-<p><em>Description:</em> <code class="docutils literal notranslate"><span class="pre">fd</span> <span class="pre">=</span> <span class="pre">fs</span> <span class="pre">\div</span> <span class="pre">ft</span></code></p>
+<p><em>Description:</em> <code class="docutils literal notranslate"><span class="pre">fd</span> <span class="pre">=</span> <span class="pre">fs</span> <span class="pre">/</span> <span class="pre">ft</span></code></p>
 <p><em>Exceptions:</em> Overflow or Underflow are raised if the results cannot be
 represented using the IEEE 754 standard. Invalid Operation is raised if fs
-or ft contain QNaN or SNan, or if an invalid operation is executed (0div0,∞
-div ∞). Divide by zero is raised if a division by zero is attempted with a
-dividend that is not QNaN or SNaN.</p>
+or ft contain QNaN or SNan, or if an invalid operation is executed
+(0/0, ∞/∞). Divide by zero is raised if a division by zero is attempted
+with a dividend that is not QNaN or SNaN.</p>
 </li>
 <li><p><cite>DMFC1 rt,fs</cite></p>
 <p><em>Description:</em> <code class="docutils literal notranslate"><span class="pre">rt</span> <span class="pre">=</span> <span class="pre">fs</span></code></p>
@@ -388,14 +384,16 @@ dividend that is not QNaN or SNaN.</p>
 <p>Loads from memory a doubleword and stores it in ft.</p>
 </li>
 </ul>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p><cite>L.D</cite> is not present in the MIPS64 ISA, it is an alias for <code class="docutils literal notranslate"><span class="pre">LDC1</span></code>
-that is present in EduMIPS64 for compatibility with WinMIPS64.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><code class="docutils literal notranslate"><span class="pre">L.D</span></code> is not present in the MIPS64 ISA; it is an alias for
+<code class="docutils literal notranslate"><span class="pre">LDC1</span></code> that EduMIPS64 accepts for compatibility with
+WinMIPS64. The parser emits a warning when it is used; prefer
+<code class="docutils literal notranslate"><span class="pre">LDC1</span></code> instead.</p>
 </div>
 <ul>
 <li><p><cite>LDC1 ft, offset(base)</cite></p>
-<p><em>Description:</em> <code class="docutils literal notranslate"><span class="pre">memory[GPR[base]</span> <span class="pre">+</span> <span class="pre">offset]</span></code></p>
+<p><em>Description:</em> <code class="docutils literal notranslate"><span class="pre">ft</span> <span class="pre">=</span> <span class="pre">memory[GPR[base]</span> <span class="pre">+</span> <span class="pre">offset]</span></code></p>
 <p>Loads from memory a doubleword and stores it in ft.</p>
 </li>
 <li><p><cite>LWC1 ft, offset(base)</cite></p>
@@ -419,11 +417,11 @@ since the sign in r6 was extended.</p>
 </li>
 <li><p><cite>MOVF.D fd, fs, cc</cite></p>
 <p><em>Description:</em> <code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">FCSR_FCC[cc]</span> <span class="pre">==</span> <span class="pre">0</span> <span class="pre">then</span> <span class="pre">fd=fs</span></code></p>
-<p>If FCSR_FCC[cc] is false, the copies fs to fd.</p>
+<p>If FCSR_FCC[cc] is false, copies fs to fd.</p>
 </li>
 <li><p><cite>MOVT.D fd, fs, cc</cite></p>
 <p><em>Description:</em> <code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">FCSR_FCC[cc]</span> <span class="pre">==</span> <span class="pre">1</span> <span class="pre">then</span> <span class="pre">fd=fs</span></code></p>
-<p>If FCSR_FCC[cc] is true, the copies fs to fd.</p>
+<p>If FCSR_FCC[cc] is true, copies fs to fd.</p>
 </li>
 <li><p><cite>MOV.D fd, fs</cite></p>
 <p><em>Description:</em> <code class="docutils literal notranslate"><span class="pre">fd</span> <span class="pre">=</span> <span class="pre">fs</span></code></p>
@@ -437,8 +435,6 @@ since the sign in r6 was extended.</p>
 <p><em>Description:</em> <code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">rt</span> <span class="pre">==</span> <span class="pre">0</span> <span class="pre">then</span> <span class="pre">fd=fs</span></code></p>
 <p>If rt is equal to zero, copies fs to fd.</p>
 </li>
-</ul>
-<ul>
 <li><p><cite>MTC1 rt, fs</cite></p>
 <p><em>Description:</em> fs = rt <sub>0..31</sub></p>
 <p>Copies the lower 32 bit of rt to fs.</p>
@@ -462,10 +458,12 @@ by ∞ OR BY QNaN).</p>
 <p>Copies ft to memory.</p>
 </li>
 </ul>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p><cite>S.D</cite> is not present in the MIPS64 ISA, it is an alias for <code class="docutils literal notranslate"><span class="pre">SDC1</span></code>
-that is present in EduMIPS64 for compatibility with WinMIPS64.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><code class="docutils literal notranslate"><span class="pre">S.D</span></code> is not present in the MIPS64 ISA; it is an alias for
+<code class="docutils literal notranslate"><span class="pre">SDC1</span></code> that EduMIPS64 accepts for compatibility with
+WinMIPS64. The parser emits a warning when it is used; prefer
+<code class="docutils literal notranslate"><span class="pre">SDC1</span></code> instead.</p>
 </div>
 <ul>
 <li><p><cite>SDC1 ft, offset(base)</cite></p>
@@ -475,7 +473,7 @@ that is present in EduMIPS64 for compatibility with WinMIPS64.</p>
 <li><p><cite>SUB.D fd, fs, ft</cite></p>
 <p><em>Description:</em> <code class="docutils literal notranslate"><span class="pre">fd</span> <span class="pre">=</span> <span class="pre">fs-ft</span></code></p>
 <p><em>Exceptions</em>: Overflow and underflow traps are generated if the result
-cannot be represented according to IEEE 753. Invalid operation is raised if
+cannot be represented according to IEEE 754. Invalid operation is raised if
 fs or ft contain QNaN or SNan, or if an invalid operation (+∞ - ∞) is
 executed.</p>
 </li>
