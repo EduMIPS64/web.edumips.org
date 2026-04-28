@@ -1,0 +1,252 @@
+
+
+<html lang="it" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>L’interfaccia a linea di comando interattiva &#8212; Documentazione EduMIPS64 1.3.0 </title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/epub.css?v=e4d0adb4" />
+    <script src="_static/documentation_options.js?v=79d73783"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/translations.js?v=45930005"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ 
+  </head><body>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="l-interfaccia-a-linea-di-comando-interattiva">
+<h1>L’interfaccia a linea di comando interattiva<a class="headerlink" href="#l-interfaccia-a-linea-di-comando-interattiva" title="Link to this heading">¶</a></h1>
+<p>Oltre alla GUI desktop, il JAR di EduMIPS64 può essere eseguito anche
+come shell interattiva a linea di comando. La shell è pensata per la
+sperimentazione «batch» su programmi assembly (esecuzione di test in
+script, materiale didattico, valutazione automatica, debug da
+terminale, ecc.) ed offre lo stesso core simulatore della GUI desktop,
+con la sola differenza di un’interfaccia testuale.</p>
+<p>Questo capitolo descrive i <em>comandi</em> disponibili all’interno della
+shell. Le <em>opzioni</em> da linea di comando per avviare il JAR
+(<code class="docutils literal notranslate"><span class="pre">--headless</span></code>, <code class="docutils literal notranslate"><span class="pre">--file</span></code>, <code class="docutils literal notranslate"><span class="pre">--verbose</span></code>, …) sono documentate in
+<a class="reference internal" href="user-interface-swing.html#command-line-options-it"><span class="std std-ref">Opzioni da riga di comando</span></a>; in particolare, la shell si raggiunge
+avviando il JAR con <code class="docutils literal notranslate"><span class="pre">--headless</span></code> (con o senza <code class="docutils literal notranslate"><span class="pre">--verbose</span></code>).</p>
+<p>Quando <code class="docutils literal notranslate"><span class="pre">--verbose</span></code> è abilitato, la shell stampa messaggi
+informativi aggiuntivi — un banner di benvenuto all’avvio, messaggi di
+«esecuzione iniziata» / «esecuzione terminata» attorno a <code class="docutils literal notranslate"><span class="pre">run</span></code>,
+puntini di progresso durante esecuzioni lunghe, eventuali warning del
+parser dopo <code class="docutils literal notranslate"><span class="pre">load</span></code>, ecc. Senza <code class="docutils literal notranslate"><span class="pre">--verbose</span></code> la shell produce solo
+l’output del programma (ad esempio le stringhe stampate da
+<code class="docutils literal notranslate"><span class="pre">SYSCALL</span> <span class="pre">5</span></code>) e le risposte esplicite di <code class="docutils literal notranslate"><span class="pre">show</span></code>, <code class="docutils literal notranslate"><span class="pre">config</span></code> ed
+altri comandi. Il default silenzioso è comodo quando EduMIPS64 viene
+inserito in pipeline con altri strumenti.</p>
+<section id="il-prompt">
+<h2>Il prompt<a class="headerlink" href="#il-prompt" title="Link to this heading">¶</a></h2>
+<p>All’avvio la shell stampa un prompt <code class="docutils literal notranslate"><span class="pre">&gt;</span></code> ed attende un comando. I
+comandi sono letti una riga per volta e suddivisi in token in
+corrispondenza degli spazi. Premendo Invio su una riga vuota viene
+ristampato l’help. Il loop della shell continua fino al comando
+<code class="docutils literal notranslate"><span class="pre">exit</span></code> (o fino a <code class="docutils literal notranslate"><span class="pre">Ctrl+D</span></code> / EOF su standard input).</p>
+<p>Ogni comando accetta <code class="docutils literal notranslate"><span class="pre">-h</span></code> / <code class="docutils literal notranslate"><span class="pre">--help</span></code>, che ne stampa l’uso
+specifico. Il comando di livello superiore <code class="docutils literal notranslate"><span class="pre">help</span></code> elenca tutti i
+comandi disponibili con una breve descrizione; è il modo più semplice
+per scoprire cosa la shell può fare.</p>
+</section>
+<section id="comandi-disponibili">
+<h2>Comandi disponibili<a class="headerlink" href="#comandi-disponibili" title="Link to this heading">¶</a></h2>
+<p>La shell espone un piccolo insieme di comandi, che mappano direttamente
+sul ciclo di vita del simulatore: caricare un file sorgente,
+eseguirlo passo passo o tutto d’un fiato, ispezionare lo stato
+risultante e, opzionalmente, generare un tracefile per Dinero per
+l’analisi della cache.</p>
+<section id="load">
+<h3>load<a class="headerlink" href="#load" title="Link to this heading">¶</a></h3>
+<p>Carica un nuovo file da eseguire:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">load</span> <span class="n">percorso</span><span class="o">/</span><span class="n">al</span><span class="o">/</span><span class="n">programma</span><span class="o">.</span><span class="n">s</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">load</span></code> analizza il file indicato e prepara il simulatore
+all’esecuzione. Se il caricamento ha successo la CPU passa nello stato
+<code class="docutils literal notranslate"><span class="pre">RUNNING</span></code> ed è pronta per essere fatta avanzare con <code class="docutils literal notranslate"><span class="pre">step</span></code> o
+<code class="docutils literal notranslate"><span class="pre">run</span></code>.</p>
+<p>Se il parser segnala errori il file non viene caricato e viene
+stampata la descrizione degli errori. Se invece vengono prodotti solo
+warning, il file viene caricato comunque — coerentemente con il
+comportamento della GUI; con <code class="docutils literal notranslate"><span class="pre">--verbose</span></code> i warning vengono stampati
+a schermo.</p>
+<p>Non è possibile caricare un nuovo programma mentre uno precedente è
+ancora in esecuzione; usa prima <code class="docutils literal notranslate"><span class="pre">reset</span></code> per riportare la CPU in uno
+stato in cui sia possibile caricare un nuovo file.</p>
+</section>
+<section id="step">
+<h3>step<a class="headerlink" href="#step" title="Link to this heading">¶</a></h3>
+<p>Fa avanzare la macchina a stati della CPU di N cicli:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">step</span>          <span class="c1"># avanza di 1 ciclo (default)</span>
+<span class="o">&gt;</span> <span class="n">step</span> <span class="mi">10</span>       <span class="c1"># avanza di 10 cicli</span>
+</pre></div>
+</div>
+<p>Dopo ogni ciclo viene stampato il contenuto della pipeline, quindi
+<code class="docutils literal notranslate"><span class="pre">step</span></code> è il modo canonico per seguire l’esecuzione un’istruzione
+alla volta ed osservare come le istruzioni attraversino gli stadi IF
+/ ID / EX / MEM / WB e gli stadi della FPU.</p>
+<p>Se il programma termina (<code class="docutils literal notranslate"><span class="pre">SYSCALL</span> <span class="pre">0</span></code> o <code class="docutils literal notranslate"><span class="pre">BREAK</span></code>) prima del numero
+richiesto di cicli, <code class="docutils literal notranslate"><span class="pre">step</span></code> si interrompe a quel punto e stampa il
+messaggio corrispondente.</p>
+</section>
+<section id="run">
+<h3>run<a class="headerlink" href="#run" title="Link to this heading">¶</a></h3>
+<p>Esegue il programma senza interventi:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">run</span>
+</pre></div>
+</div>
+<p>Il simulatore avanza finché il programma non termina con
+<code class="docutils literal notranslate"><span class="pre">SYSCALL</span> <span class="pre">0</span></code> (o equivalente) o con un’istruzione <code class="docutils literal notranslate"><span class="pre">BREAK</span></code>. Con
+<code class="docutils literal notranslate"><span class="pre">--verbose</span></code>, la shell stampa banner di <em>inizio</em> / <em>fine</em>, un puntino
+di progresso ogni mille cicli ed un riepilogo finale con il numero
+totale di cicli eseguiti ed il tempo wall-clock impiegato. Usa
+<code class="docutils literal notranslate"><span class="pre">run</span></code> per ottenere rapidamente l’output del programma
+(<code class="docutils literal notranslate"><span class="pre">SYSCALL</span> <span class="pre">4</span></code> / <code class="docutils literal notranslate"><span class="pre">SYSCALL</span> <span class="pre">5</span></code>) e lo stato finale, e poi <code class="docutils literal notranslate"><span class="pre">show</span></code> per
+ispezionare il risultato.</p>
+</section>
+<section id="show">
+<h3>show<a class="headerlink" href="#show" title="Link to this heading">¶</a></h3>
+<p>Ispeziona lo stato della CPU simulata. <code class="docutils literal notranslate"><span class="pre">show</span></code> è un gruppo di
+sotto-comandi; ognuno stampa su standard output un aspetto diverso
+dello stato del simulatore.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">show</span> <span class="pre">registers</span></code> — stampa tutti i 32 registri general-purpose
+interi (<code class="docutils literal notranslate"><span class="pre">R0</span></code>–<code class="docutils literal notranslate"><span class="pre">R31</span></code>) con il loro valore corrente.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">show</span> <span class="pre">register</span> <span class="pre">N</span></code> — stampa il contenuto del registro intero
+<code class="docutils literal notranslate"><span class="pre">N</span></code> (<code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">≤</span> <span class="pre">N</span> <span class="pre">≤</span> <span class="pre">31</span></code>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">show</span> <span class="pre">fps</span></code> — stampa tutti i 32 registri in virgola mobile
+(<code class="docutils literal notranslate"><span class="pre">F0</span></code>–<code class="docutils literal notranslate"><span class="pre">F31</span></code>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">show</span> <span class="pre">fp</span> <span class="pre">N</span></code> — stampa il contenuto del registro in virgola mobile
+<code class="docutils literal notranslate"><span class="pre">N</span></code> (<code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">≤</span> <span class="pre">N</span> <span class="pre">≤</span> <span class="pre">31</span></code>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">show</span> <span class="pre">fcsr</span></code> — stampa il Floating-Point Control and Status
+Register.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">show</span> <span class="pre">hi</span></code> / <code class="docutils literal notranslate"><span class="pre">show</span> <span class="pre">lo</span></code> — stampano il contenuto dei registri
+speciali <code class="docutils literal notranslate"><span class="pre">HI</span></code> e <code class="docutils literal notranslate"><span class="pre">LO</span></code> usati dalle istruzioni di moltiplicazione
+e divisione.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">show</span> <span class="pre">memory</span></code> — stampa il contenuto della memoria principale
+simulata.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">show</span> <span class="pre">symbols</span></code> — stampa la tabella dei simboli (le label
+dichiarate nelle sezioni <code class="docutils literal notranslate"><span class="pre">.data</span></code> e <code class="docutils literal notranslate"><span class="pre">.code</span></code> con i relativi
+indirizzi).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">show</span> <span class="pre">pipeline</span></code> — stampa quale istruzione si trovi attualmente in
+ciascuno stadio della pipeline.</p></li>
+</ul>
+<p>Invocando <code class="docutils literal notranslate"><span class="pre">show</span></code> senza sotto-comando viene stampato l’elenco dei
+sotto-comandi disponibili.</p>
+</section>
+<section id="dinero">
+<h3>dinero<a class="headerlink" href="#dinero" title="Link to this heading">¶</a></h3>
+<p>Scrive un tracefile Dinero su un file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">dinero</span> <span class="n">trace</span><span class="o">.</span><span class="n">xdin</span>
+</pre></div>
+</div>
+<p>Viene generata una traccia testuale degli accessi in memoria
+effettuati dal programma nel formato atteso dal simulatore di cache
+Dinero IV, adatto ad un’analisi offline della cache. <code class="docutils literal notranslate"><span class="pre">dinero</span></code> può
+essere invocato in qualsiasi momento dell’esecuzione; il tracefile
+riflette gli accessi osservati fino a quel punto.</p>
+</section>
+<section id="config">
+<h3>config<a class="headerlink" href="#config" title="Link to this heading">¶</a></h3>
+<p>Stampa i valori correnti di configurazione:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">config</span>
+</pre></div>
+</div>
+<p>È lo stesso insieme di preferenze che la GUI desktop espone nella
+finestra <em>Settings</em> (forwarding on/off, percorso del tracefile,
+parametri della cache, opzioni comportamentali, …). È in sola
+lettura — la shell stampa i valori correnti ed esce. I valori
+provengono dallo stesso store di configurazione usato dalla GUI,
+quindi le modifiche fatte dalla GUI sono visibili dalla shell e
+viceversa.</p>
+</section>
+<section id="reset">
+<h3>reset<a class="headerlink" href="#reset" title="Link to this heading">¶</a></h3>
+<p>Resetta la macchina a stati della CPU:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">reset</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">reset</span></code> re-inizializza memoria, registri, tabella dei simboli,
+gestore di I/O, simulatore di cache e parser, riportando la CPU allo
+stato <code class="docutils literal notranslate"><span class="pre">READY</span></code>. Usa <code class="docutils literal notranslate"><span class="pre">reset</span></code> per caricare un programma diverso dopo
+quello corrente, oppure per ricominciare un programma da zero dopo
+un’esecuzione parziale.</p>
+</section>
+<section id="help">
+<h3>help<a class="headerlink" href="#help" title="Link to this heading">¶</a></h3>
+<p>Mostra l’elenco dei comandi disponibili con una breve descrizione di
+ciascuno. <code class="docutils literal notranslate"><span class="pre">help</span></code> è il punto di partenza per scoprire le funzionalità
+della shell; combinalo con l’opzione <code class="docutils literal notranslate"><span class="pre">-h</span></code> / <code class="docutils literal notranslate"><span class="pre">--help</span></code> di ogni
+comando per vedere i parametri accettati dai singoli sotto-comandi.</p>
+</section>
+<section id="exit">
+<h3>exit<a class="headerlink" href="#exit" title="Link to this heading">¶</a></h3>
+<p>Esce dalla shell e termina la JVM. Lo stesso effetto si ottiene
+inviando <code class="docutils literal notranslate"><span class="pre">Ctrl+D</span></code> (EOF) su standard input.</p>
+</section>
+</section>
+<section id="una-sessione-tipica">
+<h2>Una sessione tipica<a class="headerlink" href="#una-sessione-tipica" title="Link to this heading">¶</a></h2>
+<p>Mettendo insieme i comandi, una tipica sessione interattiva ha questo
+aspetto:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ java -jar edumips64.jar --headless --verbose
+&gt; load examples/hello.s
+File loaded: /…/examples/hello.s
+&gt; step 5
+… (5 cicli di contenuto della pipeline)
+&gt; run
+Hello, world!
+Execution finished in 42 cycles, 3 ms
+&gt; show registers
+… (R0..R31)
+&gt; show pipeline
+… (stato finale della pipeline)
+&gt; dinero hello.xdin
+&gt; reset
+&gt; load examples/sum.s
+&gt; run
+&gt; exit
+</pre></div>
+</div>
+<p>Lo standard input da <code class="docutils literal notranslate"><span class="pre">SYSCALL</span> <span class="pre">3</span></code> viene letto direttamente dal
+terminale, quindi i programmi che richiedono input utente funzionano
+in modo trasparente nella shell.</p>
+</section>
+<section id="suggerimenti-per-gli-script">
+<h2>Suggerimenti per gli script<a class="headerlink" href="#suggerimenti-per-gli-script" title="Link to this heading">¶</a></h2>
+<p>Dato che la shell legge i comandi da standard input uno per riga, è
+possibile darle in pasto direttamente uno script:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ java -jar edumips64.jar --headless &lt; session.txt
+</pre></div>
+</div>
+<p>Un <code class="docutils literal notranslate"><span class="pre">session.txt</span></code> contenente ad esempio:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">load</span> <span class="n">examples</span><span class="o">/</span><span class="n">hello</span><span class="o">.</span><span class="n">s</span>
+<span class="n">run</span>
+<span class="n">show</span> <span class="n">registers</span>
+<span class="n">exit</span>
+</pre></div>
+</div>
+<p>caricherà il programma, lo eseguirà, stamperà il register file finale
+e terminerà. In combinazione con <code class="docutils literal notranslate"><span class="pre">--verbose</span></code> e con la
+redirezione della shell di sistema, questo rende immediato integrare
+EduMIPS64 in suite di test automatiche o catturare trace
+riproducibili di un’esecuzione.</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,389 @@
+
+
+<html lang="it" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>L’interfaccia utente web &#8212; Documentazione EduMIPS64 1.3.0 </title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/epub.css?v=e4d0adb4" />
+    <script src="_static/documentation_options.js?v=79d73783"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/translations.js?v=45930005"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ 
+  </head><body>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="l-interfaccia-utente-web">
+<h1>L’interfaccia utente web<a class="headerlink" href="#l-interfaccia-utente-web" title="Link to this heading">¶</a></h1>
+<p>EduMIPS64 è disponibile anche come applicazione web che gira
+interamente nel browser. Il core del simulatore è cross-compilato da
+Java a JavaScript ed è eseguito come Web Worker, mentre l’interfaccia
+utente è realizzata con React. Il deployment di produzione è ospitato
+su <a class="reference external" href="https://web.edumips.org">https://web.edumips.org</a>.</p>
+<p>Questo capitolo descrive il frontend web. Per il formato dei file
+sorgente, l’insieme di istruzioni supportato, la FPU e gli esempi di
+programmi, fai riferimento agli altri capitoli del manuale: quei
+contenuti sono indipendenti dall’interfaccia utente.</p>
+<section id="panoramica-del-layout">
+<h2>Panoramica del layout<a class="headerlink" href="#panoramica-del-layout" title="Link to this heading">¶</a></h2>
+<p>La finestra è suddivisa in una barra degli strumenti superiore e due
+aree principali:</p>
+<ul class="simple">
+<li><p>a sinistra, l”<strong>editor di codice</strong> (un editor MIPS64 basato su
+Monaco);</p></li>
+<li><p>a destra, una pila di pannelli a fisarmonica che mostrano lo stato
+della simulazione: <strong>Issues</strong>, <strong>Statistics</strong>, <strong>Pipeline</strong>,
+<strong>Registers</strong>, <strong>Memory</strong>, <strong>Standard Output</strong>, <strong>Cache
+Configuration</strong> e <strong>General Settings</strong>.</p></li>
+</ul>
+</section>
+<section id="la-barra-degli-strumenti">
+<h2>La barra degli strumenti<a class="headerlink" href="#la-barra-degli-strumenti" title="Link to this heading">¶</a></h2>
+<p>La barra in alto raccoglie tutte le azioni che controllano il
+simulatore. Ogni pulsante ha un tooltip che ne descrive l’effetto.</p>
+<ul class="simple">
+<li><p><strong>Logo EduMIPS64 ed etichetta «Web Version»</strong> — indicano la build
+corrente. Una piccola etichetta colorata viene mostrata quando la
+build non è quella di produzione:</p>
+<ul>
+<li><p>un’etichetta gialla <code class="docutils literal notranslate"><span class="pre">PR</span> <span class="pre">#N</span></code> identifica una build di anteprima
+associata ad una pull request e contiene il link alla PR su
+GitHub;</p></li>
+<li><p>un’etichetta blu <code class="docutils literal notranslate"><span class="pre">dev</span></code> identifica una build di sviluppo locale.</p></li>
+</ul>
+</li>
+<li><p><strong>Indicatore di stato della CPU</strong> — mostra lo stato corrente della
+CPU simulata, con un codice colore:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">READY</span></code> (verde) — nessun programma caricato, oppure la CPU è
+appena stata resettata;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RUNNING</span></code> (giallo) — un programma è caricato e la CPU sta
+eseguendo cicli;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">STOPPING</span></code> / <code class="docutils literal notranslate"><span class="pre">STOPPED</span></code> (rosso) — è stata letta un’istruzione
+di terminazione e la pipeline si sta svuotando, oppure il
+programma è terminato.</p></li>
+</ul>
+</li>
+<li><p><strong>Load</strong> — analizza il contenuto dell’editor e carica il programma
+risultante nel simulatore. È disabilitato mentre la simulazione è
+in corso e viene nascosto una volta che il caricamento è andato a
+buon fine.</p></li>
+<li><p><strong>Single Step</strong> — esegue un singolo ciclo di CPU.</p></li>
+<li><p><strong>Multi Step</strong> — esegue un numero configurabile di cicli di CPU con
+un singolo click. Il numero corrente è mostrato nel tooltip del
+pulsante e può essere modificato nel pannello <em>General Settings</em>
+(«Multi Step Size»).</p></li>
+<li><p><strong>Run All</strong> — esegue il programma fino al termine, ovvero fino ad
+una <code class="docutils literal notranslate"><span class="pre">SYSCALL</span> <span class="pre">0</span></code> (o equivalente) o ad una istruzione <code class="docutils literal notranslate"><span class="pre">BREAK</span></code>,
+oppure fino a quando l’utente preme <em>Pause</em> o <em>Stop</em>. Tra un blocco
+interno di cicli e l’altro il simulatore può attendere un ritardo
+configurabile (<code class="docutils literal notranslate"><span class="pre">Execution</span> <span class="pre">Delay</span></code>), così da rendere visivamente
+osservabili anche esecuzioni lunghe.</p></li>
+<li><p><strong>Pause</strong> — interrompe l’esecuzione in corso al ciclo corrente. È
+poi possibile proseguire con <em>Single Step</em>, <em>Multi Step</em> o <em>Run
+All</em>.</p></li>
+<li><p><strong>Stop</strong> — interrompe l’esecuzione e riporta la CPU allo stato
+<code class="docutils literal notranslate"><span class="pre">READY</span></code>, azzerando registri, memoria e pipeline.</p></li>
+<li><p><strong>Clear</strong> — svuota l’editor lasciando solo uno scheletro di file
+assembly (direttive <code class="docutils literal notranslate"><span class="pre">.data</span></code> e <code class="docutils literal notranslate"><span class="pre">.code</span></code> ed una <code class="docutils literal notranslate"><span class="pre">SYSCALL</span> <span class="pre">0</span></code>
+finale). È disabilitato mentre la CPU sta eseguendo.</p></li>
+<li><p><strong>Open Code</strong> — apre un file locale (tipicamente un file <code class="docutils literal notranslate"><span class="pre">.s</span></code>) e
+ne carica il contenuto nell’editor.</p></li>
+<li><p><strong>Save Code</strong> — salva il contenuto corrente dell’editor in un file
+locale chiamato <code class="docutils literal notranslate"><span class="pre">code.s</span></code>.</p></li>
+<li><p><strong>Help (?)</strong> — apre questo manuale all’interno dell’applicazione,
+con un pannello di navigazione sulla sinistra ed un selettore della
+lingua. La finestra di Help include anche una scheda <em>About</em> che
+mostra la versione del simulatore ed una descrizione della build in
+esecuzione.</p></li>
+</ul>
+<p>I pulsanti che non avrebbero alcun effetto nello stato corrente sono
+disabilitati automaticamente. Ad esempio, <em>Single Step</em>, <em>Multi Step</em>
+e <em>Run All</em> sono disabilitati finché un programma non è stato
+caricato con <em>Load</em>, e <em>Pause</em> è disponibile solo durante una
+esecuzione lunga.</p>
+</section>
+<section id="l-editor-di-codice">
+<h2>L’editor di codice<a class="headerlink" href="#l-editor-di-codice" title="Link to this heading">¶</a></h2>
+<p>L’editor di codice è basato su <a class="reference external" href="https://microsoft.github.io/monaco-editor/">Monaco</a> — lo stesso editor di
+Visual Studio Code — ed è dedicato alla scrittura di assembly MIPS64.
+Supporta tutte le funzionalità tipiche di un editor (cursori
+multipli, find &amp; replace, numeri di riga, undo/redo, layout
+automatico, tema chiaro/scuro automatico in base alle preferenze del
+sistema operativo) ed un certo numero di funzionalità specifiche di
+EduMIPS64 descritte di seguito.</p>
+<section id="evidenziazione-della-sintassi">
+<h3>Evidenziazione della sintassi<a class="headerlink" href="#evidenziazione-della-sintassi" title="Link to this heading">¶</a></h3>
+<p>L’editor evidenzia la sintassi dei sorgenti MIPS64:</p>
+<ul class="simple">
+<li><p>le label (righe che iniziano con un identificatore seguito da
+<code class="docutils literal notranslate"><span class="pre">:</span></code>);</p></li>
+<li><p>tutte le istruzioni supportate da EduMIPS64 (l’elenco è calcolato a
+runtime a partire dal core del simulatore);</p></li>
+<li><p>le direttive che iniziano con <code class="docutils literal notranslate"><span class="pre">.</span></code>, ad esempio <code class="docutils literal notranslate"><span class="pre">.data</span></code>,
+<code class="docutils literal notranslate"><span class="pre">.code</span></code>, <code class="docutils literal notranslate"><span class="pre">.word</span></code>;</p></li>
+<li><p>i nomi dei registri della forma <code class="docutils literal notranslate"><span class="pre">rNN</span></code>;</p></li>
+<li><p>le costanti numeriche;</p></li>
+<li><p>le stringhe;</p></li>
+<li><p>i commenti che iniziano con <code class="docutils literal notranslate"><span class="pre">;</span></code>.</p></li>
+</ul>
+</section>
+<section id="validazione-live">
+<h3>Validazione live<a class="headerlink" href="#validazione-live" title="Link to this heading">¶</a></h3>
+<p>Il simulatore analizza il codice in background mentre lo si scrive e
+segnala eventuali <strong>errori</strong> ed <strong>avvisi</strong> direttamente nell’editor:</p>
+<ul class="simple">
+<li><p>gli errori sono sottolineati in rosso;</p></li>
+<li><p>gli avvisi sono sottolineati con un riccio giallo;</p></li>
+<li><p>passando il mouse sopra un’area sottolineata viene mostrato un
+tooltip con la descrizione del problema;</p></li>
+<li><p>la riga interessata è inoltre evidenziata nel margine dell’editor.</p></li>
+</ul>
+<p>Gli stessi problemi sono riassunti nel pannello <strong>Issues</strong> sulla
+destra (vedi sotto). Gli avvisi non bloccano l’esecuzione, gli errori
+sì: premendo <em>Load</em> in presenza di errori comparirà una finestra di
+notifica con il messaggio del parser.</p>
+</section>
+<section id="informazioni-al-passaggio-del-mouse">
+<h3>Informazioni al passaggio del mouse<a class="headerlink" href="#informazioni-al-passaggio-del-mouse" title="Link to this heading">¶</a></h3>
+<p>Una volta caricato il programma con <em>Load</em>, passando il mouse sopra
+un’istruzione nell’editor compare un tooltip con informazioni
+dettagliate:</p>
+<ul class="simple">
+<li><p><strong>Address</strong> — l’indirizzo di memoria assegnato all’istruzione;</p></li>
+<li><p><strong>OpCode</strong> — l’opcode assembly (ad esempio <code class="docutils literal notranslate"><span class="pre">DADD</span></code>, <code class="docutils literal notranslate"><span class="pre">LD</span></code>);</p></li>
+<li><p><strong>Binary</strong> — la codifica binaria a 32 bit;</p></li>
+<li><p><strong>Hex</strong> — la stessa codifica in esadecimale, riempita a sinistra
+con zeri fino a 8 cifre;</p></li>
+<li><p><strong>CPU Stage</strong> — mostrato solo se l’istruzione è attualmente in
+pipeline; identifica lo stadio in cui si trova nel ciclo corrente
+(ad esempio <code class="docutils literal notranslate"><span class="pre">Instruction</span> <span class="pre">Fetch</span> <span class="pre">(IF)</span></code>, <code class="docutils literal notranslate"><span class="pre">Execute</span> <span class="pre">(EX)</span></code>, <code class="docutils literal notranslate"><span class="pre">FPU</span>
+<span class="pre">Multiplier</span> <span class="pre">(3)</span></code>).</p></li>
+</ul>
+</section>
+<section id="visualizzazione-in-tempo-reale-degli-stadi-della-pipeline">
+<h3>Visualizzazione in tempo reale degli stadi della pipeline<a class="headerlink" href="#visualizzazione-in-tempo-reale-degli-stadi-della-pipeline" title="Link to this heading">¶</a></h3>
+<p>Durante l’esecuzione, la riga di sorgente corrispondente all’istruzione
+attualmente presente in ciascuno stadio della pipeline viene
+evidenziata con un colore che identifica lo stadio. Il codice colore
+è condiviso con il pannello <strong>Pipeline</strong>:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Stadio</p></th>
+<th class="head"><p>Colore</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Instruction Fetch (IF)</p></td>
+<td><p>Giallo</p></td>
+</tr>
+<tr class="row-odd"><td><p>Instruction Decode (ID)</p></td>
+<td><p>Blu</p></td>
+</tr>
+<tr class="row-even"><td><p>Execute (EX)</p></td>
+<td><p>Rosso</p></td>
+</tr>
+<tr class="row-odd"><td><p>Memory Access (MEM)</p></td>
+<td><p>Verde</p></td>
+</tr>
+<tr class="row-even"><td><p>Write Back (WB)</p></td>
+<td><p>Magenta</p></td>
+</tr>
+<tr class="row-odd"><td><p>FPU Adder (1..4)</p></td>
+<td><p>Verde scuro</p></td>
+</tr>
+<tr class="row-even"><td><p>FPU Multiplier (1..7)</p></td>
+<td><p>Acquamarina</p></td>
+</tr>
+<tr class="row-odd"><td><p>FPU Divider</p></td>
+<td><p>Oliva</p></td>
+</tr>
+</tbody>
+</table>
+<p>L’evidenziazione segue le istruzioni attraverso la pipeline mentre la
+simulazione avanza, fornendo un colpo d’occhio immediato su quali
+righe di codice sono attive in quale stadio in ogni ciclo. Combinata
+con il tooltip al passaggio del mouse descritto sopra, rende
+semplice ispezionare lo stato della pipeline in un qualsiasi punto
+dell’esecuzione.</p>
+<p>L’editor diventa di sola lettura quando un programma è caricato nel
+simulatore. Per modificare nuovamente il codice usa <em>Stop</em> per
+resettare la CPU.</p>
+</section>
+<section id="salvataggio-e-caricamento">
+<h3>Salvataggio e caricamento<a class="headerlink" href="#salvataggio-e-caricamento" title="Link to this heading">¶</a></h3>
+<p>Il contenuto dell’editor può essere salvato e ripreso usando i
+pulsanti <strong>Save Code</strong> e <strong>Open Code</strong> della barra degli strumenti.
+<em>Save Code</em> avvia il download del sorgente come <code class="docutils literal notranslate"><span class="pre">code.s</span></code>; <em>Open
+Code</em> permette di selezionare un file locale, sostituendo il
+contenuto dell’editor.</p>
+</section>
+<section id="modalita-vi-opzionale">
+<h3>Modalità Vi opzionale<a class="headerlink" href="#modalita-vi-opzionale" title="Link to this heading">¶</a></h3>
+<p>Una <em>modalità Vi</em> per l’editor può essere attivata dal pannello
+<em>General Settings</em>. Una volta abilitata, l’editor riconosce le
+combinazioni di tasti vi di base (modi, motion, ricerca), il che
+torna utile per chi è abituato ad editare sorgenti da terminale.</p>
+</section>
+<section id="dimensione-del-font">
+<h3>Dimensione del font<a class="headerlink" href="#dimensione-del-font" title="Link to this heading">¶</a></h3>
+<p>La dimensione del font dell’editor può essere aumentata o diminuita
+dal pannello <em>General Settings</em>; lo stesso valore viene utilizzato
+anche dagli altri elementi monospaziati dell’interfaccia.</p>
+</section>
+</section>
+<section id="il-pannello-issues">
+<h2>Il pannello Issues<a class="headerlink" href="#il-pannello-issues" title="Link to this heading">¶</a></h2>
+<p>Il pannello <strong>Issues</strong> sulla destra rispecchia la diagnostica che
+l’editor mostra inline:</p>
+<ul class="simple">
+<li><p>ogni voce contiene la riga e la colonna del problema, oltre alla
+descrizione fornita dal parser;</p></li>
+<li><p>un’icona di avviso (triangolo giallo) marca gli avvisi, un’icona di
+errore (cerchio rosso) marca gli errori;</p></li>
+<li><p>l’intestazione del pannello mostra due piccoli contatori, uno per
+gli avvisi ed uno per gli errori. I contatori sono nascosti quando
+non c’è nulla da segnalare.</p></li>
+</ul>
+<p>Il pannello Issues è espanso di default, in modo che i problemi siano
+sempre visibili.</p>
+</section>
+<section id="pannelli-a-runtime">
+<h2>Pannelli a runtime<a class="headerlink" href="#pannelli-a-runtime" title="Link to this heading">¶</a></h2>
+<p>Il lato destro della finestra contiene una serie di pannelli a
+fisarmonica indipendenti. Ogni pannello può essere espanso o chiuso
+indipendentemente cliccando sulla sua intestazione; lo stato di
+espansione viene mantenuto tra una sessione e l’altra.</p>
+<p>Quando un pannello è chiuso e il suo contenuto cambia in seguito ad
+uno step della simulazione, accanto al titolo del pannello compare un
+piccolo pallino pulsante. In questo modo si può notare al volo un
+cambiamento interessante (ad esempio una scrittura in un registro)
+senza dover tenere espansi tutti i pannelli. L’indicatore pulsante
+può essere disabilitato dalle <em>General Settings</em> («Accordion Change
+Alerts»).</p>
+<section id="statistics">
+<h3>Statistics<a class="headerlink" href="#statistics" title="Link to this heading">¶</a></h3>
+<p>Contatori sull’esecuzione del programma:</p>
+<ul class="simple">
+<li><p>numero di cicli eseguiti;</p></li>
+<li><p>numero di istruzioni eseguite;</p></li>
+<li><p>CPI — cicli per istruzione (<code class="docutils literal notranslate"><span class="pre">cicli</span> <span class="pre">/</span> <span class="pre">istruzioni</span></code>);</p></li>
+<li><p>stalli RAW, WAW e strutturali;</p></li>
+<li><p>letture e miss della L1 istruzioni;</p></li>
+<li><p>letture, miss in lettura, scritture e miss in scrittura della L1
+dati (significativi solo se la cache è opportunamente configurata —
+vedi <em>Cache Configuration</em>).</p></li>
+</ul>
+</section>
+<section id="pipeline">
+<h3>Pipeline<a class="headerlink" href="#pipeline" title="Link to this heading">¶</a></h3>
+<p>Mostra quale istruzione si trova in ciascuno stadio della pipeline
+della CPU. I cinque stadi interi (IF, ID, EX, MEM, WB) sono sempre
+visibili; gli stadi della FPU (Adder, Multiplier, Divider) compaiono
+solo quando contengono un’istruzione. Gli stadi usano lo stesso
+codice colore dell’evidenziazione nell’editor.</p>
+</section>
+<section id="registers">
+<h3>Registers<a class="headerlink" href="#registers" title="Link to this heading">¶</a></h3>
+<p>Contiene il valore dei registri general purpose interi, dei registri
+in virgola mobile e del FCSR. I valori sono mostrati in
+rappresentazione esadecimale; passando il mouse sopra un valore viene
+mostrata l’interpretazione decimale corrispondente.</p>
+</section>
+<section id="memory">
+<h3>Memory<a class="headerlink" href="#memory" title="Link to this heading">¶</a></h3>
+<p>Contenuto corrente della memoria principale simulata, organizzato in
+celle indirizzabili. Ogni riga mostra l’indirizzo (in esadecimale) e
+il valore della cella corrispondente; i tooltip rivelano il valore
+decimale e le label/commenti sorgente associati alla cella.</p>
+</section>
+<section id="standard-output">
+<h3>Standard Output<a class="headerlink" href="#standard-output" title="Link to this heading">¶</a></h3>
+<p>Una text area in sola lettura che raccoglie tutto ciò che il
+programma stampa tramite <code class="docutils literal notranslate"><span class="pre">SYSCALL</span> <span class="pre">4</span></code> (scrittura intero) e
+<code class="docutils literal notranslate"><span class="pre">SYSCALL</span> <span class="pre">5</span></code> (scrittura stringa). La <code class="docutils literal notranslate"><span class="pre">SYSCALL</span> <span class="pre">3</span></code> (lettura stringa)
+è supportata tramite una finestra popup: quando il programma in
+esecuzione richiede un input, compare un <em>Input dialog</em> che chiede il
+valore da fornire. Il dialogo rispetta la lunghezza massima
+dichiarata dal programma e può essere annullato.</p>
+</section>
+<section id="cache-configuration">
+<h3>Cache Configuration<a class="headerlink" href="#cache-configuration" title="Link to this heading">¶</a></h3>
+<p>Permette di configurare i parametri del simulatore di cache L1:</p>
+<ul class="simple">
+<li><p><strong>Size</strong> — capacità totale della cache in byte;</p></li>
+<li><p><strong>Block Size</strong> — dimensione di una singola linea di cache, in byte;</p></li>
+<li><p><strong>Associativity</strong> — numero di vie per insieme (<code class="docutils literal notranslate"><span class="pre">1</span></code> per cache a
+mappatura diretta, <code class="docutils literal notranslate"><span class="pre">&gt;1</span></code> per set-associative).</p></li>
+</ul>
+<p>La cache L1 istruzioni e la cache L1 dati possono essere configurate
+indipendentemente. I campi sono disabilitati durante l’esecuzione; la
+nuova configurazione ha effetto al successivo reset.</p>
+</section>
+<section id="general-settings">
+<h3>General Settings<a class="headerlink" href="#general-settings" title="Link to this heading">¶</a></h3>
+<p>Impostazioni persistenti che influenzano simulatore e UI. Tutti i
+valori vengono salvati nel local storage del browser e sopravvivono
+ai reload della pagina.</p>
+<ul class="simple">
+<li><p><strong>Editor Vi Mode</strong> — abilita le combinazioni di tasti vi di base
+nell’editor.</p></li>
+<li><p><strong>Font Size</strong> — dimensione del font per l’editor e per gli altri
+pannelli monospaziati; può essere modificata con i pulsanti <code class="docutils literal notranslate"><span class="pre">-</span></code> e
+<code class="docutils literal notranslate"><span class="pre">+</span></code>.</p></li>
+<li><p><strong>Accordion Change Alerts</strong> — abilita o disabilita il pallino
+pulsante mostrato sui pannelli chiusi quando il loro contenuto
+cambia.</p></li>
+<li><p><strong>CPU Forwarding</strong> — abilita o disabilita il forwarding nella
+pipeline. Disabilitato durante l’esecuzione perché modificarlo
+richiede un reset della CPU.</p></li>
+<li><p><strong>Multi Step Size</strong> — numero di cicli eseguiti da un singolo click
+del pulsante <em>Multi Step</em> sulla barra degli strumenti.</p></li>
+<li><p><strong>Execution Delay (ms)</strong> — ritardo inserito tra blocchi successivi
+di cicli durante <em>Run All</em>. Aumentandolo, le esecuzioni lunghe
+diventano più lente in modo da poter seguire visivamente
+l’evidenziazione delle righe e l’aggiornamento dei pannelli. La
+modifica si applica in tempo reale, anche durante un’esecuzione in
+corso.</p></li>
+</ul>
+</section>
+</section>
+<section id="eseguire-edumips64-come-applicazione-desktop-o-da-cli">
+<h2>Eseguire EduMIPS64 come applicazione desktop o da CLI<a class="headerlink" href="#eseguire-edumips64-come-applicazione-desktop-o-da-cli" title="Link to this heading">¶</a></h2>
+<p>Il frontend web è comodo perché non richiede installazione, ma
+EduMIPS64 è distribuito principalmente come applicazione desktop
+Java, che può anche essere eseguita da linea di comando. Il JAR
+desktop espone funzionalità aggiuntive (una finestra di
+configurazione più ricca, il Dinero frontend per l’analisi delle
+trace di cache, opzioni CLI per esecuzione batch / headless, la
+scrittura di tracefile) documentate nel manuale completo disponibile
+su <a class="reference external" href="https://edumips64.readthedocs.io/">Read the Docs</a>.</p>
+<p>Per installare l’applicazione desktop o eseguire EduMIPS64 da linea
+di comando, fai riferimento al repository GitHub del progetto:</p>
+<ul class="simple">
+<li><p>Pagina del progetto: <a class="reference external" href="https://www.edumips.org">https://www.edumips.org</a></p></li>
+<li><p>Codice sorgente, release e istruzioni d’installazione:
+<a class="reference external" href="https://github.com/EduMIPS64/edumips64">https://github.com/EduMIPS64/edumips64</a></p></li>
+</ul>
+<p>Se riscontri un bug o vuoi proporre un miglioramento del frontend
+web, apri pure una issue su GitHub.</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  </body>
+</html>
