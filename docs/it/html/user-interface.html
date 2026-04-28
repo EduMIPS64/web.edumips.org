@@ -309,6 +309,80 @@ memoria. Utilizzate il simulatore di cache per:</p>
 dialogo Impostazioni (scheda Cache) e ha effetto quando la simulazione viene
 resettata.</p>
 </section>
+<section id="forwarding">
+<h3>Forwarding<a class="headerlink" href="#forwarding" title="Link to this heading">¶</a></h3>
+<p>EduMIPS64 simula una pipeline MIPS64 a 5 stadi (IF, ID, EX, MEM, WB) e
+supporta opzionalmente il forwarding dei dati per ridurre il numero di stalli
+causati da hazard Read After Write (RAW). Il forwarding può essere abilitato
+o disabilitato dalla scheda «Impostazioni generali» della finestra di
+configurazione.</p>
+<p>Quando il forwarding è <strong>disabilitato</strong>, i registri sorgente vengono letti
+dal register file nello stadio ID. Un’istruzione che legge un registro
+scritto da una delle due istruzioni precedenti deve attendere che il
+produttore raggiunga lo stadio WB, e ciò provoca due stalli RAW.</p>
+<p>Quando il forwarding è <strong>abilitato</strong>, il simulatore implementa due cammini
+di forwarding analoghi a quelli descritti nella pipeline MIPS canonica di
+Hennessy &amp; Patterson:</p>
+<ul class="simple">
+<li><p><strong>EX → EX</strong>: il risultato di un’operazione ALU prodotto alla fine dello
+stadio EX può essere inoltrato all’ingresso EX dell’istruzione immediatamente
+successiva (nessuno stallo).</p></li>
+<li><p><strong>MEM → EX</strong>: un valore prodotto alla fine dello stadio MEM (tipicamente
+il risultato di una load, o un risultato ALU disponibile un ciclo dopo)
+può essere inoltrato all’ingresso EX di un’istruzione nello stadio EX
+(nessuno stallo).</p></li>
+</ul>
+<p>Non esistono invece cammini di forwarding <strong>EX → ID</strong> né <strong>MEM → ID</strong>.
+Questo ha due effetti visibili sulle istruzioni di salto condizionato e sui
+salti basati su registro (<code class="docutils literal notranslate"><span class="pre">BEQ</span></code>, <code class="docutils literal notranslate"><span class="pre">BNE</span></code>, <code class="docutils literal notranslate"><span class="pre">BEQZ</span></code>, <code class="docutils literal notranslate"><span class="pre">BNEZ</span></code>, <code class="docutils literal notranslate"><span class="pre">BGEZ</span></code>,
+<code class="docutils literal notranslate"><span class="pre">JR</span></code>, <code class="docutils literal notranslate"><span class="pre">JALR</span></code>), che valutano la condizione o l’indirizzo di destinazione
+nello stadio ID:</p>
+<ul class="simple">
+<li><p><strong>ALU → branch</strong>: se il registro sorgente del salto viene prodotto
+dall’istruzione ALU immediatamente precedente, il valore non è ancora
+disponibile all’inizio dell’ID e il simulatore inserisce uno stallo RAW.</p></li>
+<li><p><strong>Load → branch</strong>: se il registro sorgente del salto viene prodotto
+dalla load immediatamente precedente, il valore è disponibile solo al
+termine dello stadio MEM, mentre il salto lo richiede all’inizio
+dell’ID. Il simulatore inserisce due stalli RAW: è l’unione del
+load-use hazard (uno stallo) e del branch-in-ID hazard (uno stallo
+aggiuntivo).</p></li>
+</ul>
+<p>Entrambi i comportamenti sono coerenti con la descrizione presente in
+Hennessy &amp; Patterson.</p>
+<p>La tabella seguente riassume gli stalli RAW tipici per le coppie
+produttore/consumatore più comuni:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Produttore → consumatore</p></th>
+<th class="head"><p>Senza fwd</p></th>
+<th class="head"><p>Con forwarding</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ALU → ALU</p></td>
+<td><p>2</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>ALU → store (dato)</p></td>
+<td><p>2</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-even"><td><p>Load → ALU (load-use)</p></td>
+<td><p>2</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>ALU → branch / jump da reg.</p></td>
+<td><p>2</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>Load → branch / jump da reg.</p></td>
+<td><p>2</p></td>
+<td><p>2</p></td>
+</tr>
+</tbody>
+</table>
+</section>
 <section id="dinero-frontend">
 <h3>Dinero Frontend<a class="headerlink" href="#dinero-frontend" title="Link to this heading">¶</a></h3>
 <p>La finestra di dialogo Dinero Frontend consente di avviare un processo

@@ -192,6 +192,74 @@
 </ul>
 <p>缓存配置可以通过设置对话框（缓存选项卡）更改，并在模拟重置时生效。</p>
 </section>
+<section id="forwarding">
+<h3>数据前推（Forwarding）<a class="headerlink" href="#forwarding" title="链接到此标题。">¶</a></h3>
+<p>EduMIPS64 模拟一个 5 级 MIPS64 流水线（IF、ID、EX、MEM、WB），并可选地
+支持数据前推（forwarding），以减少由 Read After Write（RAW）冒险引起的
+停顿数量。可以在设置对话框的&quot;主设置&quot;选项卡中启用或禁用前推。</p>
+<p>当前推**被禁用**时，源寄存器在 ID 阶段从寄存器堆读取。读取由前两条
+指令之一写入的寄存器的指令，必须等待生产者到达 WB 阶段，因此会产生
+两次 RAW 停顿。</p>
+<p>当前推**被启用**时，模拟器实现了与 Hennessy &amp; Patterson 描述的经典
+MIPS 流水线相一致的两条前推路径：</p>
+<ul class="simple">
+<li><p><strong>EX → EX</strong>：在 EX 阶段末尾产生的 ALU 结果，可以前推到紧接的下一条
+指令的 EX 输入（无停顿）。</p></li>
+<li><p><strong>MEM → EX</strong>：在 MEM 阶段末尾产生的值（通常是 load 的结果，或
+延迟一个周期的 ALU 结果）可以前推到处于 EX 阶段的指令的 EX 输入
+（无停顿）。</p></li>
+</ul>
+<p>但**不存在 EX → ID 前推路径**，相应地也不存在 MEM → ID 前推路径。
+这对在 ID 阶段计算条件或目标地址的分支与基于寄存器的跳转指令
+（<code class="docutils literal notranslate"><span class="pre">BEQ</span></code>、<code class="docutils literal notranslate"><span class="pre">BNE</span></code>、<code class="docutils literal notranslate"><span class="pre">BEQZ</span></code>、<code class="docutils literal notranslate"><span class="pre">BNEZ</span></code>、<code class="docutils literal notranslate"><span class="pre">BGEZ</span></code>、<code class="docutils literal notranslate"><span class="pre">JR</span></code>、<code class="docutils literal notranslate"><span class="pre">JALR</span></code>）
+有两点可见的影响：</p>
+<ul class="simple">
+<li><p><strong>ALU → 分支</strong>：如果分支的源寄存器正由紧邻其前的 ALU 指令产生，
+则在 ID 开始时该值尚不可用，模拟器会插入一次 RAW 停顿。</p></li>
+<li><p><strong>Load → 分支</strong>：如果分支的源寄存器正由紧邻其前的 load 指令产生，
+则该值要到 MEM 阶段末尾才可用，而分支在 ID 开始时就需要它。模拟器
+会插入两次 RAW 停顿：这是 load-use 冒险（1 次停顿）与
+branch-in-ID 冒险（额外 1 次停顿）的叠加。</p></li>
+</ul>
+<p>以上两种行为均与 Hennessy &amp; Patterson 中的描述一致。</p>
+<p>下表总结了最常见的生产者/消费者组合下典型的 RAW 停顿次数：</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>生产者 → 消费者</p></th>
+<th class="head"><p>无前推</p></th>
+<th class="head"><p>启用前推</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ALU → ALU</p></td>
+<td><p>2</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>ALU → store（数据操作数）</p></td>
+<td><p>2</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-even"><td><p>Load → ALU（load-use）</p></td>
+<td><p>2</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>ALU → 分支 / 寄存器跳转</p></td>
+<td><p>2</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>Load → 分支 / 寄存器跳转</p></td>
+<td><p>2</p></td>
+<td><p>2</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>This section was added together with the English and Italian versions of
+the user manual; the Chinese wording above is a best-effort translation
+and may benefit from review by a native speaker.</p>
+</div>
+</section>
 <section id="dinero">
 <h3>Dinero 前端<a class="headerlink" href="#dinero" title="链接到此标题。">¶</a></h3>
 <p>通过 Dinero Frontend 对话框，可以向 DineroIV 进程提供程序执行时内部生成的跟踪文件。第一个文本框中是 DineroIV 可执行文件的路径，第二个文本框中必须是 DineroIV 的参数。</p>

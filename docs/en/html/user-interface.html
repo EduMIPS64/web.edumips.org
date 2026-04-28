@@ -289,6 +289,75 @@ for programs with poor memory locality. Use the cache simulator to:</p>
 <p>The cache configuration can be changed through the Settings dialog (Cache tab)
 and takes effect when the simulation is reset.</p>
 </section>
+<section id="forwarding">
+<h3>Forwarding<a class="headerlink" href="#forwarding" title="Link to this heading">¶</a></h3>
+<p>EduMIPS64 models a 5-stage MIPS64 pipeline (IF, ID, EX, MEM, WB) and supports
+optional data forwarding to reduce the number of stalls caused by Read After
+Write (RAW) hazards. Forwarding can be toggled from the Main Settings tab of
+the Settings dialog.</p>
+<p>When forwarding is <strong>disabled</strong>, source registers are read from the register
+file in the ID stage. An instruction that reads a register written by one of
+the two previous instructions must wait until the producer reaches WB, which
+results in two RAW stalls.</p>
+<p>When forwarding is <strong>enabled</strong>, the simulator implements two forwarding paths
+that match the canonical Hennessy &amp; Patterson MIPS pipeline:</p>
+<ul class="simple">
+<li><p><strong>EX → EX</strong>: an ALU result produced at the end of EX can be forwarded to
+the EX input of the immediately following instruction (no stall).</p></li>
+<li><p><strong>MEM → EX</strong>: a value produced at the end of MEM (typically a load
+result, or an ALU result one cycle later) can be forwarded to the EX
+input of an instruction in EX (no stall).</p></li>
+</ul>
+<p>There is <strong>no EX → ID forwarding path</strong> and, by symmetry, no MEM → ID
+forwarding path. This has two visible consequences for branch and
+register-based jump instructions (<code class="docutils literal notranslate"><span class="pre">BEQ</span></code>, <code class="docutils literal notranslate"><span class="pre">BNE</span></code>, <code class="docutils literal notranslate"><span class="pre">BEQZ</span></code>, <code class="docutils literal notranslate"><span class="pre">BNEZ</span></code>,
+<code class="docutils literal notranslate"><span class="pre">BGEZ</span></code>, <code class="docutils literal notranslate"><span class="pre">JR</span></code>, <code class="docutils literal notranslate"><span class="pre">JALR</span></code>), which evaluate their condition or target in
+the ID stage:</p>
+<ul class="simple">
+<li><p><strong>ALU → branch</strong>: if the source register of the branch is being
+produced by the immediately preceding ALU instruction, the value is not
+yet available at the start of ID, and the simulator inserts one RAW
+stall.</p></li>
+<li><p><strong>Load → branch</strong>: if the source register of the branch is being
+produced by the immediately preceding load, the value is only available
+at the end of MEM, while the branch needs it at the start of ID. The
+simulator inserts two RAW stalls: this is the union of the load-use
+hazard (one stall) and the branch-in-ID hazard (one extra stall).</p></li>
+</ul>
+<p>Both behaviors match the description in Hennessy &amp; Patterson.</p>
+<p>The following table summarises the typical RAW stalls for the most common
+producer/consumer pairs:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Producer → consumer</p></th>
+<th class="head"><p>No forwarding</p></th>
+<th class="head"><p>With forwarding</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ALU → ALU</p></td>
+<td><p>2</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>ALU → store (data operand)</p></td>
+<td><p>2</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-even"><td><p>Load → ALU (load-use)</p></td>
+<td><p>2</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>ALU → branch / register jump</p></td>
+<td><p>2</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>Load → branch / register jump</p></td>
+<td><p>2</p></td>
+<td><p>2</p></td>
+</tr>
+</tbody>
+</table>
+</section>
 <section id="dinero-frontend">
 <h3>Dinero Frontend<a class="headerlink" href="#dinero-frontend" title="Link to this heading">¶</a></h3>
 <p>The Dinero Frontend dialog allows to feed a DineroIV process with the trace
