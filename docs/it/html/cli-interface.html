@@ -45,8 +45,29 @@ altri comandi. Il default silenzioso è comodo quando EduMIPS64 viene
 inserito in pipeline con altri strumenti.</p>
 <section id="il-prompt">
 <h2>Il prompt<a class="headerlink" href="#il-prompt" title="Link to this heading">¶</a></h2>
-<p>All’avvio la shell stampa un prompt <code class="docutils literal notranslate"><span class="pre">&gt;</span></code> ed attende un comando. I
-comandi sono letti una riga per volta e suddivisi in token in
+<p>All’avvio la shell stampa un banner stilizzato con il nome
+<strong>EduMIPS64</strong> disegnato in caratteri a blocchi pesanti: «Edu» è in
+oro, «MIPS» in bianco brillante e «64» in rosso, riprendendo i colori
+del logo del progetto. Ciascun segmento sfuma da un tono brillante in
+alto a un tono più scuro in basso, ottenendo un effetto di ombra /
+tridimensionalità sui caratteri. Subito sotto compaiono la versione,
+il codename e la data di build. Il banner usa colori ANSI e caratteri
+Unicode di tipo «block», e si vede al meglio su un terminale moderno
+(Linux/macOS, Windows Terminal, Codespaces, …). Quando lo standard
+output non è un TTY, quando <code class="docutils literal notranslate"><span class="pre">COLUMNS</span></code> è troppo piccolo o la
+codifica non è UTF-8, il banner ricade automaticamente su una
+semplice riga con la versione, così che script e pipeline restino
+puliti. Per disabilitare del tutto il banner si può passare l’opzione
+<code class="docutils literal notranslate"><span class="pre">--no-banner</span></code> sulla riga di comando.</p>
+<p>Dopo il banner, la shell stampa un prompt colorato della forma:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">edumips64</span> <span class="p">[</span><span class="n">READY</span><span class="p">]</span> <span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>Il testo tra parentesi quadre riflette lo stato corrente della CPU
+(<code class="docutils literal notranslate"><span class="pre">READY</span></code>, <code class="docutils literal notranslate"><span class="pre">RUNNING</span></code>, <code class="docutils literal notranslate"><span class="pre">HALTED</span></code> o <code class="docutils literal notranslate"><span class="pre">STOPPING</span></code>) e cambia colore di
+conseguenza, dando un’indicazione a colpo d’occhio di cosa sta facendo
+il simulatore.</p>
+<p>I comandi sono letti una riga per volta e suddivisi in token in
 corrispondenza degli spazi. Premendo Invio su una riga vuota viene
 ristampato l’help. Il loop della shell continua fino al comando
 <code class="docutils literal notranslate"><span class="pre">exit</span></code> (o fino a <code class="docutils literal notranslate"><span class="pre">Ctrl+D</span></code> / EOF su standard input).</p>
@@ -54,6 +75,31 @@ ristampato l’help. Il loop della shell continua fino al comando
 specifico. Il comando di livello superiore <code class="docutils literal notranslate"><span class="pre">help</span></code> elenca tutti i
 comandi disponibili con una breve descrizione; è il modo più semplice
 per scoprire cosa la shell può fare.</p>
+</section>
+<section id="sfogliare-il-manuale-utente-dalla-shell">
+<h2>Sfogliare il manuale utente dalla shell<a class="headerlink" href="#sfogliare-il-manuale-utente-dalla-shell" title="Link to this heading">¶</a></h2>
+<p>La shell include i capitoli di questo manuale utente direttamente nel
+JAR, in modo che li si possa leggere dal terminale senza uscire da
+EduMIPS64. Si digiti <code class="docutils literal notranslate"><span class="pre">help</span> <span class="pre">topics</span></code> per vederne la lista, e poi
+<code class="docutils literal notranslate"><span class="pre">help</span> <span class="pre">&lt;argomento&gt;</span></code> per leggere un capitolo, per esempio:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">edumips64</span> <span class="p">[</span><span class="n">READY</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">help</span> <span class="n">topics</span>
+<span class="n">edumips64</span> <span class="p">[</span><span class="n">READY</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">help</span> <span class="n">cli</span>
+<span class="n">edumips64</span> <span class="p">[</span><span class="n">READY</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">help</span> <span class="n">instructions</span>
+</pre></div>
+</div>
+<p>I capitoli serviti da <code class="docutils literal notranslate"><span class="pre">help</span></code> sono gli stessi sorgenti
+reStructuredText usati per generare il sito web e il PDF
+(<code class="docutils literal notranslate"><span class="pre">cli-interface.rst</span></code>, <code class="docutils literal notranslate"><span class="pre">source-files-format.rst</span></code>,
+<code class="docutils literal notranslate"><span class="pre">instructions.rst</span></code>, <code class="docutils literal notranslate"><span class="pre">examples.rst</span></code>, <code class="docutils literal notranslate"><span class="pre">fpu.rst</span></code>, …), copiati
+letteralmente nel JAR dalla build. I capitoli lunghi vengono mostrati
+attraverso un semplice pager in stile «more»: <code class="docutils literal notranslate"><span class="pre">Invio</span></code> / <code class="docutils literal notranslate"><span class="pre">spazio</span></code>
+per avanzare, <code class="docutils literal notranslate"><span class="pre">q</span></code> per uscire. Quando lo standard input non è un TTY
+il pager viene bypassato e il capitolo viene stampato per intero.</p>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<p>I sorgenti dei capitoli serviti da <code class="docutils literal notranslate"><span class="pre">help</span></code> sono al momento
+disponibili solo in inglese.</p>
+</div>
 </section>
 <section id="comandi-disponibili">
 <h2>Comandi disponibili<a class="headerlink" href="#comandi-disponibili" title="Link to this heading">¶</a></h2>

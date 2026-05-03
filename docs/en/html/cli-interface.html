@@ -43,15 +43,53 @@ similar commands. The quiet default is convenient when EduMIPS64 is
 embedded in a pipeline of other tools.</p>
 <section id="the-prompt">
 <h2>The prompt<a class="headerlink" href="#the-prompt" title="Link to this heading">¶</a></h2>
-<p>After startup, the shell prints a <code class="docutils literal notranslate"><span class="pre">&gt;</span></code> prompt and waits for a
-command. Commands are read one line at a time and tokenized at
-whitespace. Pressing Enter on an empty line reprints the help. The
-shell loop runs until the <code class="docutils literal notranslate"><span class="pre">exit</span></code> command is issued (or until
-<code class="docutils literal notranslate"><span class="pre">Ctrl+D</span></code> / EOF is sent on standard input).</p>
+<p>On startup, the shell prints a stylised banner showing the name
+<strong>EduMIPS64</strong> in heavy block letters, with gold “Edu”, bright “MIPS”
+and red “64” matching the colours of the project logo. Each segment
+fades from a bold bright tone at the top to a deeper shade at the
+bottom, which gives the blocks a soft drop-shadow / 3-D effect. The
+version, codename and build date appear right below. The banner uses
+ANSI colours and Unicode block characters, so it appears at its best
+on any modern terminal (Linux/macOS, Windows Terminal, Codespaces,
+…). When the standard output is not a TTY, when <code class="docutils literal notranslate"><span class="pre">COLUMNS</span></code> is too
+small, or when the encoding is not UTF-8, the banner falls back
+automatically to a plain one-line version string, which keeps
+scripts and pipelines clean. If you do not want the banner at all,
+pass <code class="docutils literal notranslate"><span class="pre">--no-banner</span></code> on the command line.</p>
+<p>After the banner, the shell prints a coloured prompt of the form:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">edumips64</span> <span class="p">[</span><span class="n">READY</span><span class="p">]</span> <span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>The text in brackets reflects the current CPU status (<code class="docutils literal notranslate"><span class="pre">READY</span></code>,
+<code class="docutils literal notranslate"><span class="pre">RUNNING</span></code>, <code class="docutils literal notranslate"><span class="pre">HALTED</span></code> or <code class="docutils literal notranslate"><span class="pre">STOPPING</span></code>) and changes colour
+accordingly, giving an at-a-glance hint of what the simulator is doing.</p>
+<p>Commands are read one line at a time and tokenized at whitespace.
+Pressing Enter on an empty line reprints the help. The shell loop runs
+until the <code class="docutils literal notranslate"><span class="pre">exit</span></code> command is issued (or until <code class="docutils literal notranslate"><span class="pre">Ctrl+D</span></code> / EOF is sent
+on standard input).</p>
 <p>Every command accepts <code class="docutils literal notranslate"><span class="pre">-h</span></code> / <code class="docutils literal notranslate"><span class="pre">--help</span></code>, which prints its specific
 usage. The top-level <code class="docutils literal notranslate"><span class="pre">help</span></code> command lists every available command
 together with a short description; this is the easiest way to discover
 the shell’s capabilities.</p>
+</section>
+<section id="browsing-the-user-manual-from-the-shell">
+<h2>Browsing the user manual from the shell<a class="headerlink" href="#browsing-the-user-manual-from-the-shell" title="Link to this heading">¶</a></h2>
+<p>The shell ships with the chapters of this user manual bundled inside
+the JAR, so you can read them from the terminal without leaving
+EduMIPS64. Type <code class="docutils literal notranslate"><span class="pre">help</span> <span class="pre">topics</span></code> to see the list, then <code class="docutils literal notranslate"><span class="pre">help</span> <span class="pre">&lt;topic&gt;</span></code>
+to read a specific chapter, for example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">edumips64</span> <span class="p">[</span><span class="n">READY</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">help</span> <span class="n">topics</span>
+<span class="n">edumips64</span> <span class="p">[</span><span class="n">READY</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">help</span> <span class="n">cli</span>
+<span class="n">edumips64</span> <span class="p">[</span><span class="n">READY</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">help</span> <span class="n">instructions</span>
+</pre></div>
+</div>
+<p>The chapters served by <code class="docutils literal notranslate"><span class="pre">help</span></code> are the same reStructuredText sources
+used to build the website and PDF (<code class="docutils literal notranslate"><span class="pre">cli-interface.rst</span></code>,
+<code class="docutils literal notranslate"><span class="pre">source-files-format.rst</span></code>, <code class="docutils literal notranslate"><span class="pre">instructions.rst</span></code>, <code class="docutils literal notranslate"><span class="pre">examples.rst</span></code>,
+<code class="docutils literal notranslate"><span class="pre">fpu.rst</span></code>, …), copied verbatim into the JAR by the build. Long
+chapters are paged through a built-in “more”-style pager; press
+<code class="docutils literal notranslate"><span class="pre">Enter</span></code> / <code class="docutils literal notranslate"><span class="pre">space</span></code> to advance, <code class="docutils literal notranslate"><span class="pre">q</span></code> to quit. When stdin is not a
+TTY the pager is bypassed and the chapter is dumped in one go.</p>
 </section>
 <section id="available-commands">
 <h2>Available commands<a class="headerlink" href="#available-commands" title="Link to this heading">¶</a></h2>
