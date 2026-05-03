@@ -289,11 +289,45 @@ vedi <em>Cache Configuration</em>).</p></li>
 </section>
 <section id="pipeline">
 <h3>Pipeline<a class="headerlink" href="#pipeline" title="Link to this heading">¶</a></h3>
-<p>Mostra quale istruzione si trova in ciascuno stadio della pipeline
-della CPU. I cinque stadi interi (IF, ID, EX, MEM, WB) sono sempre
-visibili; gli stadi della FPU (Adder, Multiplier, Divider) compaiono
-solo quando contengono un’istruzione. Gli stadi usano lo stesso
-codice colore dell’evidenziazione nell’editor.</p>
+<p>Mostra una rappresentazione grafica della pipeline della CPU che ricalca
+il diagramma del classico front-end Swing. I cinque stadi interi
+(IF, ID, EX, MEM, WB) sono disegnati come blocchi collegati, e attorno
+ad essi sono distribuite le unità funzionali della FPU — l’Adder
+(4 stadi), il Multiplier (7 stadi) e il Divider. Ogni blocco:</p>
+<ul>
+<li><p>si colora con il colore associato al proprio stadio quando contiene
+un’istruzione, e mostra il nome dell’istruzione all’interno;</p></li>
+<li><p>resta come un riquadro vuoto quando lo stadio è inattivo o contiene
+una bolla della pipeline (per esempio gli slot scartati da un salto
+oppure le bolle di drain a fine programma): come nel widget Swing,
+le bolle vengono mostrate come stadi vuoti;</p></li>
+<li><p>viene riempito con un tratteggio, il colore dedicato <em>Stall</em> e una
+breve etichetta del tipo di stallo quando in quel ciclo si è
+effettivamente verificato uno stallo. Le etichette riprendono la
+classificazione del widget Cycles del front-end Swing:</p>
+<ul class="simple">
+<li><p><strong>RAW</strong> — Read-After-Write (tipicamente sullo stadio ID quando
+il forwarding è disabilitato);</p></li>
+<li><p><strong>WAW</strong> — Write-After-Write fra due istruzioni FP che
+competono per lo stesso registro destinazione;</p></li>
+<li><p><strong>Struct: Div / EX / FU</strong> — stallo strutturale sul divisore
+FP, sullo stadio EX intero o su un’altra unità funzionale FP;</p></li>
+<li><p><strong>Struct: Mem / Add / Mul</strong> — stallo strutturale causato da
+un’istruzione bloccata in MEM, nell’ultimo stadio dell’Adder
+FP (A4) o nell’ultimo stadio del Multiplier FP (M7).</p></li>
+</ul>
+<p>Gli hazard WAR (Write-After-Read) <em>non</em> sono possibili in questa
+implementazione MIPS: l’emissione in-order in ID e il writeback
+tardivo in WB ordinano sempre le letture prima delle scritture
+successive, quindi il simulatore non li genera mai.</p>
+</li>
+</ul>
+<p>Gli stalli vengono identificati dalla stessa logica che aggiorna i
+contatori di stallo della CPU, quindi il widget Pipeline sul web è
+sempre coerente con i totali mostrati nel pannello <em>Statistics</em>.</p>
+<p>I colori dei singoli stadi (incluso quello <em>Stall</em>) possono essere
+personalizzati dalla sezione <em>General Settings → Pipeline Colors</em>
+(vedi sotto) e vengono salvati nel local storage del browser.</p>
 </section>
 <section id="registers">
 <h3>Registers<a class="headerlink" href="#registers" title="Link to this heading">¶</a></h3>
@@ -357,6 +391,12 @@ diventano più lente in modo da poter seguire visivamente
 l’evidenziazione delle righe e l’aggiornamento dei pannelli. La
 modifica si applica in tempo reale, anche durante un’esecuzione in
 corso.</p></li>
+<li><p><strong>Pipeline Colors</strong> — colori usati dal diagramma <em>Pipeline</em> per
+ciascuno stadio. Ogni voce (<code class="docutils literal notranslate"><span class="pre">IF</span></code>, <code class="docutils literal notranslate"><span class="pre">ID</span></code>, <code class="docutils literal notranslate"><span class="pre">EX</span></code>, <code class="docutils literal notranslate"><span class="pre">MEM</span></code>, <code class="docutils literal notranslate"><span class="pre">WB</span></code>,
+<code class="docutils literal notranslate"><span class="pre">FP</span> <span class="pre">Adder</span></code>, <code class="docutils literal notranslate"><span class="pre">FP</span> <span class="pre">Multiplier</span></code>, <code class="docutils literal notranslate"><span class="pre">FP</span> <span class="pre">Divider</span></code>, <code class="docutils literal notranslate"><span class="pre">Stall</span></code>) può
+essere modificata con un selettore di colore; il pulsante
+<em>Reset to defaults</em> ripristina la palette originale (gli stessi
+valori RGB usati dal front-end Swing).</p></li>
 </ul>
 </section>
 </section>
