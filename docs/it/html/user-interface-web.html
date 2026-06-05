@@ -95,6 +95,13 @@ All</em>.</p></li>
 <li><p><strong>Clear</strong> — svuota l’editor lasciando solo uno scheletro di file
 assembly (direttive <code class="docutils literal notranslate"><span class="pre">.data</span></code> e <code class="docutils literal notranslate"><span class="pre">.code</span></code> ed una <code class="docutils literal notranslate"><span class="pre">SYSCALL</span> <span class="pre">0</span></code>
 finale). È disabilitato mentre la CPU sta eseguendo.</p></li>
+<li><p><strong>Restore default sample</strong> — sostituisce il contenuto dell’editor
+con il programma di esempio incluso in EduMIPS64 (lo stesso
+visualizzato in un’installazione nuova). È utile per tornare ad un
+punto di partenza noto dopo aver fatto esperimenti, o per
+scartare il contenuto dell’editor salvato in locale (si veda
+<em>Salvataggio e caricamento</em> qui sotto). Il pulsante è disabilitato
+mentre la CPU sta eseguendo.</p></li>
 <li><p><strong>Open Code</strong> — apre un file locale (tipicamente un file <code class="docutils literal notranslate"><span class="pre">.s</span></code>) e
 ne carica il contenuto nell’editor.</p></li>
 <li><p><strong>Save Code</strong> — salva il contenuto corrente dell’editor in un file
@@ -225,6 +232,14 @@ pulsanti <strong>Save Code</strong> e <strong>Open Code</strong> della barra deg
 <em>Save Code</em> avvia il download del sorgente come <code class="docutils literal notranslate"><span class="pre">code.s</span></code>; <em>Open
 Code</em> permette di selezionare un file locale, sostituendo il
 contenuto dell’editor.</p>
+<p>Inoltre, l’editor salva automaticamente il proprio contenuto nel
+local storage del browser mentre si digita, in modo che un
+ricaricamento accidentale della pagina non cancelli un programma
+non banale riportandolo al sorgente di esempio. L’ultima versione
+modificata viene ripristinata alla successiva apertura della pagina
+nello stesso browser. Per scartare il contenuto persistito e
+tornare al programma di esempio originale si può usare il pulsante
+<strong>Restore default sample</strong> della barra degli strumenti.</p>
 </section>
 <section id="modalita-vi-opzionale">
 <h3>Modalità Vi opzionale<a class="headerlink" href="#modalita-vi-opzionale" title="Link to this heading">¶</a></h3>

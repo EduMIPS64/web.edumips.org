@@ -90,6 +90,12 @@ Single Step / Multi Step / Run All can then be used to continue.</p></li>
 skeleton (<code class="docutils literal notranslate"><span class="pre">.data</span></code> and <code class="docutils literal notranslate"><span class="pre">.code</span></code> directives plus a final
 <code class="docutils literal notranslate"><span class="pre">SYSCALL</span> <span class="pre">0</span></code>). The Clear button is disabled while the CPU is
 running.</p></li>
+<li><p><strong>Restore default sample</strong> — replaces the editor contents with the
+bundled sample program shipped with EduMIPS64 (the same one shown
+on a fresh installation). This is useful to recover a known-good
+starting point after experimenting, or to discard the persisted
+editor contents (see <em>Saving and loading</em> below). The button is
+disabled while the CPU is running.</p></li>
 <li><p><strong>Open Code</strong> — opens a local file (typically a <code class="docutils literal notranslate"><span class="pre">.s</span></code> file) and
 loads its contents into the editor.</p></li>
 <li><p><strong>Save Code</strong> — saves the current contents of the editor to a local
@@ -217,6 +223,13 @@ simulator. Use <code class="docutils literal notranslate"><span class="pre">Stop
 <strong>Open Code</strong> toolbar buttons. <code class="docutils literal notranslate"><span class="pre">Save</span> <span class="pre">Code</span></code> triggers a download of
 the current source as <code class="docutils literal notranslate"><span class="pre">code.s</span></code>; <code class="docutils literal notranslate"><span class="pre">Open</span> <span class="pre">Code</span></code> lets you pick a local
 file and replaces the editor’s contents with it.</p>
+<p>In addition, the editor automatically persists its contents in the
+browser’s local storage as you type, so an accidental page reload
+does not wipe a non-trivial program back to the bundled sample. The
+last edited source is restored the next time the page is opened in
+the same browser. Use the <strong>Restore default sample</strong> toolbar button
+to discard the persisted contents and bring back the original
+example program.</p>
 </section>
 <section id="optional-vi-mode">
 <h3>Optional Vi mode<a class="headerlink" href="#optional-vi-mode" title="Link to this heading">¶</a></h3>

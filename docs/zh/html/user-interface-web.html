@@ -75,6 +75,10 @@ Step</em>、<em>Multi Step</em> 或 <em>Run All</em> 继续执行。</p></li>
 寄存器、内存和流水线。</p></li>
 <li><p><strong>Clear</strong> — 清空代码编辑器，仅保留一个空的汇编骨架（<code class="docutils literal notranslate"><span class="pre">.data</span></code> 和
 <code class="docutils literal notranslate"><span class="pre">.code</span></code> 指令以及末尾的 <code class="docutils literal notranslate"><span class="pre">SYSCALL</span> <span class="pre">0</span></code>）。CPU 运行时该按钮被禁用。</p></li>
+<li><p><strong>Restore default sample</strong> — 将编辑器的内容替换为 EduMIPS64
+自带的示例程序（与全新安装时显示的程序相同）。该按钮可在实验后
+恢复到一个已知可用的起点，或者用于丢弃保存在本地的编辑器内容
+（见下文 <em>保存与加载</em>）。CPU 运行时该按钮被禁用。</p></li>
 <li><p><strong>Open Code</strong> — 打开本地文件（通常是 <code class="docutils literal notranslate"><span class="pre">.s</span></code> 文件），并将其内容加载
 到编辑器中。</p></li>
 <li><p><strong>Save Code</strong> — 将编辑器的当前内容保存为本地文件 <code class="docutils literal notranslate"><span class="pre">code.s</span></code>。</p></li>
@@ -183,6 +187,11 @@ Step</em>、<em>Multi Step</em> 或 <em>Run All</em> 继续执行。</p></li>
 <p>编辑器内容可以通过工具栏的 <strong>Save Code</strong> 和 <strong>Open Code</strong> 按钮持久化。
 <em>Save Code</em> 会触发一个 <code class="docutils literal notranslate"><span class="pre">code.s</span></code> 文件的下载；<em>Open Code</em> 允许选择本地
 文件，并以其内容替换编辑器中的代码。</p>
+<p>此外，编辑器会在输入时自动将其内容保存到浏览器的 local storage 中，
+这样意外刷新页面不会再把一个写到一半的程序重置回示例程序。下次在同一
+浏览器中打开页面时，最后一次编辑的源代码会被恢复。如果需要丢弃保存的
+内容并恢复到原始示例程序，可以使用工具栏中的 <strong>Restore default
+sample</strong> 按钮。</p>
 </section>
 <section id="vi">
 <h3>可选的 Vi 模式<a class="headerlink" href="#vi" title="链接到此标题。">¶</a></h3>
