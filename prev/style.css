@@ -1,0 +1,248 @@
+body {
+  background-color: 'white';
+  max-height: 100vh;
+  overflow: hidden;
+}
+
+/* Visually hide an element while keeping it available to assistive tech.
+   Used for the document-level <h1> in index.html (the visible UI uses
+   MUI panel headings at H3). */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Keyboard "skip to main content" link. Hidden until focused so it
+   doesn't disturb the visual layout but is the first stop in tab order. */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #1976d2;
+  color: #fff;
+  padding: 8px 16px;
+  z-index: 100000;
+  text-decoration: none;
+  font-family: 'Roboto', sans-serif;
+  border-radius: 0 0 4px 0;
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: 2px solid #fff;
+  outline-offset: -4px;
+}
+
+
+
+/* Define the grid of widgets. */
+
+#main-grid {
+  height: calc(100vh - 64px);
+  overflow: hidden;
+}
+
+#left-panel {
+  height: 100%;
+  resize: horizontal;
+}
+
+#right-panel {
+  overflow: auto;
+  height: 100%;
+  border-left: 1px solid rgb(33, 150, 243);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background-color: #fff;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgb(33, 150, 243);
+  border-radius: 5px 0 0 5px;
+}
+
+textarea {
+  font-family: monospace;
+  width: 100%;
+  min-height: 100px;
+  height: 200px;
+  border: 0;
+  color: rgba(0, 0, 0, 0.87);
+  resize: vertical;
+}
+
+/* Controls */
+div#controls {
+  margin: 0.5em 0;
+}
+
+div#controls>input {
+  padding: 0.5em;
+  margin: 0 0.5em;
+}
+
+div#pipeline td {
+  padding: 0.1em 12px;
+}
+
+td.instructionName {
+  width: 11em;
+}
+
+/* CSS classes for pipeline stages */
+.stageIf {
+  background-color: rgba(255, 255, 0, 0.5);
+}
+
+.stageId {
+  background-color: rgba(0, 0, 255, 0.5);
+}
+
+.stageEx {
+  background-color: rgba(255, 0, 0, 0.5);
+}
+
+.stageMem {
+  background-color: rgba(0, 255, 0, 0.5);
+}
+
+.stageWb {
+  background-color: rgba(255, 0, 255, 0.5);
+}
+
+.stageFPAdder {
+  background-color: rgba(0, 128, 0, 0.5);
+}
+
+.stageFPMultiplier {
+  background-color: rgba(0, 128, 128, 0.5);
+}
+
+.stageFPDivider {
+  background-color: rgba(128, 128, 0, 0.5);
+}
+
+#errorCount {
+  color: #cc6054;
+}
+
+#warningCount {
+  color: #e6ba79;
+}
+
+#nojs {
+  width: 22em;
+  position: absolute;
+  left: 50%;
+  margin-left: -11em;
+  color: red;
+  background-color: white;
+  border: 1px solid red;
+  padding: 4px;
+  font-family: sans-serif;
+}
+
+footer {
+  color: rgb(167, 167, 167);
+  text-align: right;
+}
+
+#memory-view {
+  box-sizing: border-box;
+  margin: 5px 0;
+}
+
+div.error-list-item {
+  min-width: unset;
+  margin-right: 10px;
+}
+
+div.error-accordion {
+  position: sticky;
+  top: 0;
+  /* Keep the sticky Issues accordion above sibling accordions in the
+     right panel, but well below MUI overlays such as the Help dialog
+     (default modal z-index = 1300) and tooltips/popovers. The previous
+     value (10000) leaked through every overlay because sticky + z-index
+     creates a stacking context that outranks MUI portals. */
+  z-index: 2;
+  border-bottom: 1px solid rgb(33, 150, 243);
+}
+
+/* ---------- Responsive layout (tablets and phones) ----------
+   Below ~900px the desktop-style two-column layout is too cramped:
+   the right-panel widgets (Registers/Memory) have no horizontal room
+   and the editor becomes unreadable. Stack the panels vertically and
+   let the page scroll naturally. */
+@media (max-width: 900px) {
+  body {
+    /* The desktop layout pins the page to the viewport (no scroll) so
+       Monaco can fill the left pane. On small viewports the panels are
+       stacked, so allow the document to scroll. */
+    max-height: none;
+    overflow: auto;
+  }
+
+  #main-grid {
+    /* Let the natural document flow govern the height; don't try to
+       fit the whole simulator in a single viewport. */
+    height: auto;
+    overflow: visible;
+  }
+
+  #left-panel {
+    /* Give the editor a usable, but bounded, height so the right
+       panel is reachable by scrolling. */
+    height: 60vh;
+    min-height: 320px;
+    resize: none;
+  }
+
+  #right-panel {
+    height: auto;
+    overflow: visible;
+    /* The right panel now sits *under* the editor, not next to it. */
+    border-left: none;
+    border-top: 1px solid rgb(33, 150, 243);
+  }
+}
+
+/* Dark Mode Specific Styles */
+@media screen and (prefers-color-scheme: dark) {
+  #right-panel {
+    border-left-color: rgba(255, 255, 255, 0.188);
+  }
+
+  div.error-accordion{
+    border-bottom-color: rgba(255, 255, 255, 0.188);
+  }
+
+  @media (max-width: 900px) {
+    #right-panel {
+      border-top-color: rgba(255, 255, 255, 0.188);
+    }
+  }
+
+  textarea {
+    background: transparent;
+    color: white;
+  }
+
+  ::-webkit-scrollbar {
+    background-color: #1e1e1e;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: rgb(97, 97, 97);
+  }
+}
