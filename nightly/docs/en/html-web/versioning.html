@@ -1,0 +1,86 @@
+
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Understanding versions &#8212; EduMIPS64 1.4.0-97-gca34e1e3 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/epub.css?v=e4d0adb4" />
+    <script src="_static/documentation_options.js?v=b90290db"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ 
+  </head><body>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="understanding-versions">
+<h1>Understanding versions<a class="headerlink" href="#understanding-versions" title="Link to this heading">¶</a></h1>
+<p>Every build of EduMIPS64 displays a version identifier so you always know
+exactly what you are running. This page explains what the identifier means and
+where to find it.</p>
+<section id="the-version-string">
+<h2>The version string<a class="headerlink" href="#the-version-string" title="Link to this heading">¶</a></h2>
+<p>At an official release the version is a plain number, for example
+<code class="docutils literal notranslate"><span class="pre">1.4.1</span></code>.</p>
+<p>A build made <em>between</em> two releases looks like <code class="docutils literal notranslate"><span class="pre">1.4.0-74-geec1768</span></code>. Reading
+it from left to right:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">1.4.0</span></code> — the most recent official release that this build follows.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">74</span></code> — the number of changes made after that release.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">geec1768</span></code> — a short unique identifier for this exact build.</p></li>
+</ul>
+<p>You do not need to memorise the identifier. Its main purpose is to let you
+report the <em>exact</em> build you are using when filing a bug report, so that
+maintainers can reproduce the issue without guessing.</p>
+</section>
+<section id="where-to-find-the-version">
+<h2>Where to find the version<a class="headerlink" href="#where-to-find-the-version" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>Desktop (Swing) application</strong> — shown in the window title and in the
+<em>Help → About</em> dialog.</p></li>
+<li><p><strong>Command line</strong> — run the JAR with the <code class="docutils literal notranslate"><span class="pre">--version</span></code> flag.</p></li>
+<li><p><strong>Web application</strong> — shown in the <strong>About</strong> tab of the Help dialog, and
+next to the <strong>“Web Version”</strong> label in the top toolbar.</p></li>
+</ul>
+</section>
+<section id="which-web-build-am-i-running">
+<h2>Which web build am I running?<a class="headerlink" href="#which-web-build-am-i-running" title="Link to this heading">¶</a></h2>
+<p>The <strong>production</strong> web app at <a class="reference external" href="https://web.edumips.org">https://web.edumips.org</a> carries the stable
+version. It is only updated when the maintainers explicitly promote a new
+release, so it is the safest choice for everyday use.</p>
+<p>There are also other web builds, identified by a small coloured badge shown
+next to the <strong>“Web Version”</strong> label in the toolbar:</p>
+<ul class="simple">
+<li><p><strong>No badge</strong> — you are on the normal production build. This is the stable
+version at <a class="reference external" href="https://web.edumips.org">https://web.edumips.org</a>.</p></li>
+<li><p><strong>``NIGHTLY``</strong> (orange badge) — a build that is <strong>rebuilt automatically
+every night</strong> from the latest development code. It always has the newest
+features, but it <strong>may be unstable</strong>. Hovering over the badge shows a
+tooltip confirming this.</p></li>
+<li><p><strong>``PR #N``</strong> (yellow badge) — a temporary preview built for a specific
+proposed change (pull request) on GitHub. Clicking the badge opens the
+corresponding pull request page.</p></li>
+<li><p><strong>``dev``</strong> (blue badge) — someone is running a local development build
+directly on their machine.</p></li>
+</ul>
+<p>In short: <strong>no badge → stable production; ``NIGHTLY`` → newest features but
+possibly unstable; ``PR #N`` / ``dev`` → temporary or preview builds.</strong></p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  </body>
+</html>
