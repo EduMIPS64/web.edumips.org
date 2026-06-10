@@ -5,10 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>L’interfaccia utente web &#8212; Documentazione EduMIPS64 1.4.0-97-gca34e1e3 </title>
+    <title>L’interfaccia utente web &#8212; Documentazione EduMIPS64 1.4.0-105-g8b4fc0b4 </title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/epub.css?v=e4d0adb4" />
-    <script src="_static/documentation_options.js?v=dffc4e8b"></script>
+    <script src="_static/documentation_options.js?v=db382c6a"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/translations.js?v=45930005"></script>
@@ -72,26 +72,59 @@ di terminazione e la pipeline si sta svuotando, oppure il
 programma è terminato.</p></li>
 </ul>
 </li>
-<li><p><strong>Load</strong> — analizza il contenuto dell’editor e carica il programma
-risultante nel simulatore. È disabilitato mentre la simulazione è
-in corso e viene nascosto una volta che il caricamento è andato a
-buon fine.</p></li>
-<li><p><strong>Single Step</strong> — esegue un singolo ciclo di CPU.</p></li>
+</ul>
+<section id="controlli-di-esecuzione-e-layout-della-barra-degli-strumenti">
+<h3>Controlli di esecuzione e layout della barra degli strumenti<a class="headerlink" href="#controlli-di-esecuzione-e-layout-della-barra-degli-strumenti" title="Link to this heading">¶</a></h3>
+<p>I controlli di esecuzione appaiono come una <strong>barra degli strumenti
+fluttuante e trascinabile con solo icone</strong> che si sovrappone al
+contenuto, come la barra di debug in VS Code. La barra appare in modo
+contestuale in base allo stato attuale del simulatore, riducendo il
+disordine visivo e rendendo chiare le azioni disponibili:</p>
+<ul class="simple">
+<li><p><strong>EMPTY</strong> (nessun programma caricato) — la barra è nascosta; solo il
+pulsante <code class="docutils literal notranslate"><span class="pre">Load</span></code> nella barra superiore è disponibile.</p></li>
+<li><p><strong>READY</strong> (programma caricato, pronto per l’esecuzione) — la barra
+fluttuante appare con <code class="docutils literal notranslate"><span class="pre">Single</span> <span class="pre">Step</span></code>, <code class="docutils literal notranslate"><span class="pre">Multi</span> <span class="pre">Step</span></code>, <code class="docutils literal notranslate"><span class="pre">Run</span> <span class="pre">All</span></code> e
+<code class="docutils literal notranslate"><span class="pre">Stop</span></code> come pulsanti con icone. La barra può essere trascinata per
+riposizionarla ovunque sullo schermo.</p></li>
+<li><p><strong>EXECUTING</strong> (programma in esecuzione) — la barra mostra <code class="docutils literal notranslate"><span class="pre">Pause</span></code>
+e <code class="docutils literal notranslate"><span class="pre">Stop</span></code> (disabilitato con il messaggio «Pause before stopping»).
+La barra rimane trascinabile.</p></li>
+<li><p><strong>ENDED</strong> (programma terminato) — la barra è nascosta.</p></li>
+<li><p><strong>In attesa di input</strong> (finestra di dialogo per l’input aperta) —
+la barra è nascosta; la finestra di dialogo deve essere completata
+prima di proseguire.</p></li>
+</ul>
+<p>Il pulsante <strong>Load</strong> e i controlli dell’editor (Open, Save, Clear,
+Restore sample, Help) rimangono sempre visibili nella barra
+superiore.</p>
+<p>Descrizione dei singoli pulsanti:</p>
+<ul class="simple">
+<li><p><strong>Single Step</strong> — esegue un singolo ciclo di CPU. Appare nella barra
+fluttuante quando un programma è caricato e pronto per l’esecuzione.</p></li>
 <li><p><strong>Multi Step</strong> — esegue un numero configurabile di cicli di CPU con
 un singolo click. Il numero corrente è mostrato nel tooltip del
 pulsante e può essere modificato nel pannello <em>General Settings</em>
-(«Multi Step Size»).</p></li>
+(«Multi Step Size»). Appare nella barra fluttuante quando un
+programma è caricato e pronto per l’esecuzione.</p></li>
 <li><p><strong>Run All</strong> — esegue il programma fino al termine, ovvero fino ad
 una <code class="docutils literal notranslate"><span class="pre">SYSCALL</span> <span class="pre">0</span></code> (o equivalente) o ad una istruzione <code class="docutils literal notranslate"><span class="pre">BREAK</span></code>,
 oppure fino a quando l’utente preme <em>Pause</em> o <em>Stop</em>. Tra un blocco
 interno di cicli e l’altro il simulatore può attendere un ritardo
 configurabile (<code class="docutils literal notranslate"><span class="pre">Execution</span> <span class="pre">Delay</span></code>), così da rendere visivamente
-osservabili anche esecuzioni lunghe.</p></li>
+osservabili anche esecuzioni lunghe. Appare nella barra fluttuante
+quando un programma è caricato e pronto per l’esecuzione.</p></li>
 <li><p><strong>Pause</strong> — interrompe l’esecuzione in corso al ciclo corrente. È
 poi possibile proseguire con <em>Single Step</em>, <em>Multi Step</em> o <em>Run
-All</em>.</p></li>
+All</em>. Appare nella barra fluttuante solamente mentre il programma
+è in esecuzione.</p></li>
 <li><p><strong>Stop</strong> — interrompe l’esecuzione e riporta la CPU allo stato
-<code class="docutils literal notranslate"><span class="pre">READY</span></code>, azzerando registri, memoria e pipeline.</p></li>
+<code class="docutils literal notranslate"><span class="pre">READY</span></code>, azzerando registri, memoria e pipeline. Appare nella
+barra fluttuante negli stati READY e EXECUTING (disabilitato in
+EXECUTING con il messaggio «Pause before stopping»).</p></li>
+</ul>
+<p>I controlli dell’editor rimangono sempre visibili:</p>
+<ul class="simple">
 <li><p><strong>Clear</strong> — svuota l’editor lasciando solo uno scheletro di file
 assembly (direttive <code class="docutils literal notranslate"><span class="pre">.data</span></code> e <code class="docutils literal notranslate"><span class="pre">.code</span></code> ed una <code class="docutils literal notranslate"><span class="pre">SYSCALL</span> <span class="pre">0</span></code>
 finale). È disabilitato mentre la CPU sta eseguendo.</p></li>
@@ -100,10 +133,11 @@ con il programma di esempio incluso in EduMIPS64 (lo stesso
 visualizzato in un’installazione nuova). È utile per tornare ad un
 punto di partenza noto dopo aver fatto esperimenti, o per
 scartare il contenuto dell’editor salvato in locale (si veda
-<em>Salvataggio e caricamento</em> qui sotto). Il pulsante è disabilitato
-mentre la CPU sta eseguendo.</p></li>
+<em>Salvataggio e caricamento</em> qui sotto). È disabilitato mentre la
+CPU sta eseguendo.</p></li>
 <li><p><strong>Open Code</strong> — apre un file locale (tipicamente un file <code class="docutils literal notranslate"><span class="pre">.s</span></code>) e
-ne carica il contenuto nell’editor.</p></li>
+ne carica il contenuto nell’editor. È disabilitato mentre la CPU
+sta eseguendo.</p></li>
 <li><p><strong>Save Code</strong> — salva il contenuto corrente dell’editor in un file
 locale chiamato <code class="docutils literal notranslate"><span class="pre">code.s</span></code>.</p></li>
 <li><p><strong>Help (?)</strong> — apre questo manuale all’interno dell’applicazione,
@@ -112,11 +146,7 @@ lingua. La finestra di Help include anche una scheda <em>About</em> che
 mostra la versione del simulatore ed una descrizione della build in
 esecuzione.</p></li>
 </ul>
-<p>I pulsanti che non avrebbero alcun effetto nello stato corrente sono
-disabilitati automaticamente. Ad esempio, <em>Single Step</em>, <em>Multi Step</em>
-e <em>Run All</em> sono disabilitati finché un programma non è stato
-caricato con <em>Load</em>, e <em>Pause</em> è disponibile solo durante una
-esecuzione lunga.</p>
+</section>
 </section>
 <section id="l-editor-di-codice">
 <h2>L’editor di codice<a class="headerlink" href="#l-editor-di-codice" title="Link to this heading">¶</a></h2>

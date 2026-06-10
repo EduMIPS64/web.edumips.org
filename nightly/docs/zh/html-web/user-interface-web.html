@@ -5,10 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>网页用户界面 &#8212; EduMIPS64 1.4.0-97-gca34e1e3 文档</title>
+    <title>网页用户界面 &#8212; EduMIPS64 1.4.0-105-g8b4fc0b4 文档</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/epub.css?v=e4d0adb4" />
-    <script src="_static/documentation_options.js?v=12ec5447"></script>
+    <script src="_static/documentation_options.js?v=710ee158"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/translations.js?v=540d3cec"></script>
@@ -59,20 +59,48 @@ React 构建。生产环境部署在 <a class="reference external" href="https:/
 清空；或程序已结束。</p></li>
 </ul>
 </li>
-<li><p><strong>Load</strong> — 解析编辑器中的代码并将其加载到模拟器中。模拟器运行时
-此按钮被禁用；加载成功后该按钮被隐藏。</p></li>
-<li><p><strong>Single Step</strong> — 执行一个 CPU 周期。</p></li>
+</ul>
+<section id="id4">
+<h3>执行控制和工具栏布局<a class="headerlink" href="#id4" title="链接到此标题。">¶</a></h3>
+<p>执行控制按钮以<strong>浮动、可拖拽的纯图标工具栏</strong>的形式出现，覆盖在内容
+上方，类似 VS Code 的调试工具栏。工具栏会根据当前模拟器状态以上下文感知
+的方式显示，减少视觉混乱，让可用操作一目了然：</p>
+<ul class="simple">
+<li><p><strong>EMPTY</strong>（未加载程序）— 工具栏被隐藏；仅顶部工具栏中的 <code class="docutils literal notranslate"><span class="pre">Load</span></code>
+按钮可用。</p></li>
+<li><p><strong>READY</strong>（已加载程序，准备就绪）— 浮动工具栏出现，其中包含
+<code class="docutils literal notranslate"><span class="pre">Single</span> <span class="pre">Step</span></code>、<code class="docutils literal notranslate"><span class="pre">Multi</span> <span class="pre">Step</span></code>、<code class="docutils literal notranslate"><span class="pre">Run</span> <span class="pre">All</span></code> 和 <code class="docutils literal notranslate"><span class="pre">Stop</span></code> 作为图标
+按钮。工具栏可以拖拽到屏幕上的任何位置。</p></li>
+<li><p><strong>EXECUTING</strong>（程序正在运行）— 工具栏显示 <code class="docutils literal notranslate"><span class="pre">Pause</span></code> 和 <code class="docutils literal notranslate"><span class="pre">Stop</span></code>
+（<code class="docutils literal notranslate"><span class="pre">Stop</span></code> 被禁用，工具提示为 &quot;Pause before stopping&quot;）。工具栏
+保持可拖拽状态。</p></li>
+<li><p><strong>ENDED</strong>（程序已结束）— 工具栏被隐藏。</p></li>
+<li><p><strong>等待输入</strong>（输入对话框打开）— 工具栏被隐藏；必须先完成
+输入对话框。</p></li>
+</ul>
+<p><strong>Load</strong> 按钮以及编辑器控制（Open、Save、Clear、Restore sample、
+Help）始终在顶部工具栏中可见。</p>
+<p>各按钮的详细说明：</p>
+<ul class="simple">
+<li><p><strong>Single Step</strong> — 执行一个 CPU 周期。当程序已加载且准备就绪时
+显示在浮动工具栏中。</p></li>
 <li><p><strong>Multi Step</strong> — 一次点击执行可配置数量的 CPU 周期。当前数量会显示
-在按钮的工具提示中，可在 <em>General Settings</em> 面板（&quot;Multi Step Size&quot;）
-中修改。</p></li>
-<li><p><strong>Run All</strong> — 一直执行程序，直到遇到 <code class="docutils literal notranslate"><span class="pre">SYSCALL</span> <span class="pre">0</span></code> （或等效指令）
+在按钮的工具提示中，可在 <em>General Settings</em> 面板（&quot;Multi Step
+Size&quot;）中修改。当程序已加载且准备就绪时显示在浮动工具栏中。</p></li>
+<li><p><strong>Run All</strong> — 一直执行程序，直到遇到 <code class="docutils literal notranslate"><span class="pre">SYSCALL</span> <span class="pre">0</span></code>（或等效指令）
 或 <code class="docutils literal notranslate"><span class="pre">BREAK</span></code> 指令，或者用户手动暂停或停止。在每两个内部批次的周期
 之间，模拟器可以等待一个可配置的延迟（<code class="docutils literal notranslate"><span class="pre">Execution</span> <span class="pre">Delay</span></code>），以便
-长时间运行也能在视觉上被观察到。</p></li>
+长时间运行也能在视觉上被观察到。当程序已加载且准备就绪时显示在
+浮动工具栏中。</p></li>
 <li><p><strong>Pause</strong> — 在当前周期暂停正在执行的程序。之后可以使用 <em>Single
-Step</em>、<em>Multi Step</em> 或 <em>Run All</em> 继续执行。</p></li>
+Step</em>、<em>Multi Step</em> 或 <em>Run All</em> 继续执行。仅在程序主动执行时显示
+在浮动工具栏中。</p></li>
 <li><p><strong>Stop</strong> — 停止当前的执行，并将 CPU 重置到 <code class="docutils literal notranslate"><span class="pre">READY</span></code> 状态，同时清空
-寄存器、内存和流水线。</p></li>
+寄存器、内存和流水线。在 READY 和 EXECUTING 状态下显示在浮动工具栏
+中（在 EXECUTING 中被禁用，工具提示为 &quot;Pause before stopping&quot;）。</p></li>
+</ul>
+<p>编辑器控制始终可见：</p>
+<ul class="simple">
 <li><p><strong>Clear</strong> — 清空代码编辑器，仅保留一个空的汇编骨架（<code class="docutils literal notranslate"><span class="pre">.data</span></code> 和
 <code class="docutils literal notranslate"><span class="pre">.code</span></code> 指令以及末尾的 <code class="docutils literal notranslate"><span class="pre">SYSCALL</span> <span class="pre">0</span></code>）。CPU 运行时该按钮被禁用。</p></li>
 <li><p><strong>Restore default sample</strong> — 将编辑器的内容替换为 EduMIPS64
@@ -80,25 +108,23 @@ Step</em>、<em>Multi Step</em> 或 <em>Run All</em> 继续执行。</p></li>
 恢复到一个已知可用的起点，或者用于丢弃保存在本地的编辑器内容
 （见下文 <em>保存与加载</em>）。CPU 运行时该按钮被禁用。</p></li>
 <li><p><strong>Open Code</strong> — 打开本地文件（通常是 <code class="docutils literal notranslate"><span class="pre">.s</span></code> 文件），并将其内容加载
-到编辑器中。</p></li>
+到编辑器中。CPU 运行时该按钮被禁用。</p></li>
 <li><p><strong>Save Code</strong> — 将编辑器的当前内容保存为本地文件 <code class="docutils literal notranslate"><span class="pre">code.s</span></code>。</p></li>
 <li><p><strong>Help (?)</strong> — 在应用内打开本手册，左侧带有导航抽屉，并提供语言
 选择器，可在英语、意大利语和中文之间切换。Help 对话框中的 <em>About</em>
 选项卡会显示模拟器版本以及当前运行版本的说明。</p></li>
 </ul>
-<p>在当前状态下不会产生任何效果的按钮会被自动禁用。例如，<em>Single Step</em>、
-<em>Multi Step</em> 和 <em>Run All</em> 在使用 <em>Load</em> 加载程序之前是禁用的，
-<em>Pause</em> 仅在长时间执行进行中时可用。</p>
 </section>
-<section id="id4">
-<h2>代码编辑器<a class="headerlink" href="#id4" title="链接到此标题。">¶</a></h2>
+</section>
+<section id="id5">
+<h2>代码编辑器<a class="headerlink" href="#id5" title="链接到此标题。">¶</a></h2>
 <p>代码编辑器基于 <a class="reference external" href="https://microsoft.github.io/monaco-editor/">Monaco</a> ——
 即 Visual Studio Code 所使用的编辑器 —— 专门用于编写 MIPS64 汇编。
 它支持所有常见的代码编辑器功能（多光标、查找替换、行号、撤销/重做、
 自动布局、根据操作系统偏好自动切换浅色/深色主题），并提供下面描述的
 若干 EduMIPS64 专用功能。</p>
-<section id="id5">
-<h3>语法高亮<a class="headerlink" href="#id5" title="链接到此标题。">¶</a></h3>
+<section id="id6">
+<h3>语法高亮<a class="headerlink" href="#id6" title="链接到此标题。">¶</a></h3>
 <p>编辑器为 MIPS64 源代码提供语法高亮：</p>
 <ul class="simple">
 <li><p>标签（以标识符后跟 <code class="docutils literal notranslate"><span class="pre">:</span></code> 开头的行）；</p></li>
@@ -111,8 +137,8 @@ Step</em>、<em>Multi Step</em> 或 <em>Run All</em> 继续执行。</p></li>
 <li><p>以 <code class="docutils literal notranslate"><span class="pre">;</span></code> 开头的注释。</p></li>
 </ul>
 </section>
-<section id="id6">
-<h3>实时校验<a class="headerlink" href="#id6" title="链接到此标题。">¶</a></h3>
+<section id="id7">
+<h3>实时校验<a class="headerlink" href="#id7" title="链接到此标题。">¶</a></h3>
 <p>当你在编辑器中输入代码时，模拟器会在后台对其进行解析，并直接在编辑器
 中报告 <strong>错误</strong> 和 <strong>警告</strong>：</p>
 <ul class="simple">
@@ -125,8 +151,8 @@ Step</em>、<em>Multi Step</em> 或 <em>Run All</em> 继续执行。</p></li>
 阻止执行；错误会阻止执行 —— 在程序存在错误时点击 <em>Load</em> 会弹出
 解析器返回的错误信息。</p>
 </section>
-<section id="id7">
-<h3>悬停信息<a class="headerlink" href="#id7" title="链接到此标题。">¶</a></h3>
+<section id="id8">
+<h3>悬停信息<a class="headerlink" href="#id8" title="链接到此标题。">¶</a></h3>
 <p>程序被解析后（即使用 <em>Load</em> 按钮加载之后），将鼠标悬停在编辑器中的
 某条指令上会打开一个工具提示，其中包含：</p>
 <ul class="simple">
@@ -139,8 +165,8 @@ Step</em>、<em>Multi Step</em> 或 <em>Run All</em> 继续执行。</p></li>
 <code class="docutils literal notranslate"><span class="pre">FPU</span> <span class="pre">Multiplier</span> <span class="pre">(3)</span></code>）。</p></li>
 </ul>
 </section>
-<section id="id8">
-<h3>流水线阶段实时可视化<a class="headerlink" href="#id8" title="链接到此标题。">¶</a></h3>
+<section id="id9">
+<h3>流水线阶段实时可视化<a class="headerlink" href="#id9" title="链接到此标题。">¶</a></h3>
 <p>程序运行时，与每个流水线阶段当前所执行的指令对应的源代码行会被高亮
 显示，并使用一种标识该阶段的颜色。该颜色编码与 <strong>Pipeline</strong> 面板共享：</p>
 <table class="docutils align-default">
@@ -182,8 +208,8 @@ Step</em>、<em>Multi Step</em> 或 <em>Run All</em> 继续执行。</p></li>
 <p>当程序被加载到模拟器时，编辑器会变为只读。要重新编辑源代码，请使用
 <em>Stop</em> 重置 CPU。</p>
 </section>
-<section id="id9">
-<h3>保存与加载<a class="headerlink" href="#id9" title="链接到此标题。">¶</a></h3>
+<section id="id10">
+<h3>保存与加载<a class="headerlink" href="#id10" title="链接到此标题。">¶</a></h3>
 <p>编辑器内容可以通过工具栏的 <strong>Save Code</strong> 和 <strong>Open Code</strong> 按钮持久化。
 <em>Save Code</em> 会触发一个 <code class="docutils literal notranslate"><span class="pre">code.s</span></code> 文件的下载；<em>Open Code</em> 允许选择本地
 文件，并以其内容替换编辑器中的代码。</p>
@@ -199,8 +225,8 @@ sample</strong> 按钮。</p>
 会响应基本的 vi 按键绑定（模式、移动、查找），这对习惯于在终端中编辑
 源代码的用户很方便。</p>
 </section>
-<section id="id10">
-<h3>字体大小<a class="headerlink" href="#id10" title="链接到此标题。">¶</a></h3>
+<section id="id11">
+<h3>字体大小<a class="headerlink" href="#id11" title="链接到此标题。">¶</a></h3>
 <p>可以在 <em>General Settings</em> 面板中增大或减小编辑器的字体大小；该值同时
 也用于界面中其他的等宽显示元素。</p>
 </section>
@@ -219,8 +245,8 @@ sample</strong> 按钮。</p>
 </ul>
 <p>Issues 面板默认展开，以便问题始终可见。</p>
 </section>
-<section id="id11">
-<h2>运行时面板<a class="headerlink" href="#id11" title="链接到此标题。">¶</a></h2>
+<section id="id12">
+<h2>运行时面板<a class="headerlink" href="#id12" title="链接到此标题。">¶</a></h2>
 <p>窗口右侧由若干可独立折叠的面板（accordion）堆叠而成。每个面板可以
 通过点击其标题独立展开或折叠；展开状态会跨页面刷新保持。</p>
 <p>当面板被折叠且其内容因模拟步进而发生变化时，面板标题旁会出现一个
