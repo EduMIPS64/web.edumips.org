@@ -5,10 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>The web user interface &#8212; EduMIPS64 1.4.0-102-gc0027167 documentation</title>
+    <title>The web user interface &#8212; EduMIPS64 1.4.0-113-gfdd86763 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/epub.css?v=e4d0adb4" />
-    <script src="_static/documentation_options.js?v=c0cbdb62"></script>
+    <script src="_static/documentation_options.js?v=85957f9d"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -68,49 +68,90 @@ been fetched and the pipeline is draining, or the program has
 ended.</p></li>
 </ul>
 </li>
-<li><p><strong>Load</strong> — parses the contents of the editor and loads the resulting
-program into the simulator. The button is disabled while the
-simulator is running, and is hidden once a program has been loaded
-successfully.</p></li>
-<li><p><strong>Single Step</strong> — executes one CPU cycle.</p></li>
+</ul>
+<section id="execution-controls-and-toolbar-layout">
+<h3>Execution controls and toolbar layout<a class="headerlink" href="#execution-controls-and-toolbar-layout" title="Link to this heading">¶</a></h3>
+<p>The execution controls appear as a <strong>floating, draggable, icon-only
+toolbar</strong> that overlays the content, much like the debug toolbar in
+VS Code. The toolbar is contextually shown based on the current
+simulator state, reducing visual clutter and making available actions
+immediately obvious:</p>
+<ul class="simple">
+<li><p><strong>EMPTY</strong> (no program loaded) — the toolbar is hidden; only the
+<code class="docutils literal notranslate"><span class="pre">Load</span></code> button in the top header is available.</p></li>
+<li><p><strong>READY</strong> (program loaded, ready to run) — the floating toolbar
+appears with <code class="docutils literal notranslate"><span class="pre">Single</span> <span class="pre">Step</span></code>, <code class="docutils literal notranslate"><span class="pre">Multi</span> <span class="pre">Step</span></code>, <code class="docutils literal notranslate"><span class="pre">Run</span> <span class="pre">All</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">Stop</span></code> as icon buttons. The toolbar can be dragged to reposition
+it anywhere on the screen.</p></li>
+<li><p><strong>EXECUTING</strong> (program running) — the toolbar shows <code class="docutils literal notranslate"><span class="pre">Pause</span></code> and
+<code class="docutils literal notranslate"><span class="pre">Stop</span></code> (disabled with the tooltip “Pause before stopping”). The
+toolbar remains draggable.</p></li>
+<li><p><strong>ENDED</strong> (program finished) — the toolbar is hidden.</p></li>
+<li><p><strong>Waiting for input</strong> (input dialog open) — the toolbar is hidden;
+the input dialog must be resolved first.</p></li>
+</ul>
+<p>The <strong>Load</strong> button, the <strong>Program</strong> menu, and the <strong>Help (?)</strong> button
+remain always visible in the top header bar.</p>
+<p>Individual button descriptions:</p>
+<ul class="simple">
+<li><p><strong>Single Step</strong> — executes one CPU cycle. Shown in the floating
+toolbar when a program is loaded and ready to execute.</p></li>
 <li><p><strong>Multi Step</strong> — executes a configurable number of CPU cycles in a
 single click. The number of steps is shown in the button’s tooltip
 and can be changed in the <em>General Settings</em> panel (“Multi Step
-Size”).</p></li>
+Size”). Shown in the floating toolbar when a program is loaded and
+ready to execute.</p></li>
 <li><p><strong>Run All</strong> — executes the program until it terminates with a
 <code class="docutils literal notranslate"><span class="pre">SYSCALL</span> <span class="pre">0</span></code> (or equivalent) or a <code class="docutils literal notranslate"><span class="pre">BREAK</span></code> instruction, or until
 it is paused or stopped manually. Between batches of cycles the
 simulator can wait a configurable delay (<code class="docutils literal notranslate"><span class="pre">Execution</span> <span class="pre">Delay</span></code>) so
-that long runs remain visually observable.</p></li>
+that long runs remain visually observable. Shown in the floating
+toolbar when a program is loaded and ready to execute.</p></li>
 <li><p><strong>Pause</strong> — interrupts a running execution at the current cycle.
-Single Step / Multi Step / Run All can then be used to continue.</p></li>
+Single Step / Multi Step / Run All can then be used to continue.
+Shown in the floating toolbar only while the program is actively
+executing.</p></li>
 <li><p><strong>Stop</strong> — halts the running execution and resets the CPU to the
-<code class="docutils literal notranslate"><span class="pre">READY</span></code> state, clearing registers, memory and pipeline.</p></li>
-<li><p><strong>Clear</strong> — empties the code editor, leaving only an empty assembly
+<code class="docutils literal notranslate"><span class="pre">READY</span></code> state, clearing registers, memory and pipeline. Shown in
+the floating toolbar in READY and EXECUTING states (disabled in
+EXECUTING with tooltip “Pause before stopping”).</p></li>
+</ul>
+</section>
+<section id="program-menu">
+<h3>Program menu<a class="headerlink" href="#program-menu" title="Link to this heading">¶</a></h3>
+<p>The <strong>Program</strong> menu (folder icon with a dropdown caret) consolidates
+program management into a single header button. It opens a dropdown menu
+with the following items. <strong>The menu is unavailable while a program is
+loaded in the simulator</strong> (i.e. while the simulator is running), preventing
+accidental changes to the program during simulation. It becomes available
+again once the loaded program has finished running or after the simulator
+is reset (no program loaded).</p>
+<ul class="simple">
+<li><p><strong>New</strong> — empties the code editor, leaving only an empty assembly
 skeleton (<code class="docutils literal notranslate"><span class="pre">.data</span></code> and <code class="docutils literal notranslate"><span class="pre">.code</span></code> directives plus a final
-<code class="docutils literal notranslate"><span class="pre">SYSCALL</span> <span class="pre">0</span></code>). The Clear button is disabled while the CPU is
-running.</p></li>
-<li><p><strong>Restore default sample</strong> — replaces the editor contents with the
-bundled sample program shipped with EduMIPS64 (the same one shown
-on a fresh installation). This is useful to recover a known-good
-starting point after experimenting, or to discard the persisted
-editor contents (see <em>Saving and loading</em> below). The button is
-disabled while the CPU is running.</p></li>
-<li><p><strong>Open Code</strong> — opens a local file (typically a <code class="docutils literal notranslate"><span class="pre">.s</span></code> file) and
+<code class="docutils literal notranslate"><span class="pre">SYSCALL</span> <span class="pre">0</span></code>).</p></li>
+<li><p><strong>Open…</strong> — opens a local file (typically a <code class="docutils literal notranslate"><span class="pre">.s</span></code> file) and
 loads its contents into the editor.</p></li>
-<li><p><strong>Save Code</strong> — saves the current contents of the editor to a local
+<li><p><strong>Save…</strong> — saves the current contents of the editor to a local
 file named <code class="docutils literal notranslate"><span class="pre">code.s</span></code>.</p></li>
+<li><p><strong>Load Example</strong> — replaces the editor contents with the
+bundled sample program shipped with EduMIPS64 (the same one shown
+the first time you open the web simulator). This is useful to
+recover a known-good
+starting point after experimenting, or to discard the persisted
+editor contents (see <em>Saving and loading</em> below).</p></li>
+</ul>
+</section>
+<section id="help-button">
+<h3>Help button<a class="headerlink" href="#help-button" title="Link to this heading">¶</a></h3>
+<ul class="simple">
 <li><p><strong>Help (?)</strong> — opens this manual inside the application, with a
 navigation drawer on the left and a language selector that lets you
 switch between English, Italian and Chinese. The Help dialog also
 includes an <em>About</em> tab that shows the version of the simulator and
 a description of the running build.</p></li>
 </ul>
-<p>Buttons that would have no effect in the current state are
-automatically disabled. For example, <code class="docutils literal notranslate"><span class="pre">Single</span> <span class="pre">Step</span></code>, <code class="docutils literal notranslate"><span class="pre">Multi</span> <span class="pre">Step</span></code>
-and <code class="docutils literal notranslate"><span class="pre">Run</span> <span class="pre">All</span></code> are disabled until a program has been loaded with
-<code class="docutils literal notranslate"><span class="pre">Load</span></code>, and <code class="docutils literal notranslate"><span class="pre">Pause</span></code> is only available while a long execution is
-in progress.</p>
+</section>
 </section>
 <section id="the-code-editor">
 <h2>The code editor<a class="headerlink" href="#the-code-editor" title="Link to this heading">¶</a></h2>

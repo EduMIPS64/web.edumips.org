@@ -5,10 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Understanding versions &#8212; EduMIPS64 1.4.0-102-gc0027167 documentation</title>
+    <title>Understanding versions &#8212; EduMIPS64 1.4.0-113-gfdd86763 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/epub.css?v=e4d0adb4" />
-    <script src="_static/documentation_options.js?v=c0cbdb62"></script>
+    <script src="_static/documentation_options.js?v=85957f9d"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -60,17 +60,19 @@ next to the <strong>“Web Version”</strong> label in the toolbar:</p>
 <ul class="simple">
 <li><p><strong>No badge</strong> — you are on the normal production build. This is the stable
 version at <a class="reference external" href="https://web.edumips.org">https://web.edumips.org</a>.</p></li>
-<li><p><strong>``NIGHTLY``</strong> (orange badge) — a build that is <strong>rebuilt automatically
-every night</strong> from the latest development code. It always has the newest
-features, but it <strong>may be unstable</strong>. Hovering over the badge shows a
-tooltip confirming this.</p></li>
+<li><p><strong>``CANDIDATE``</strong> (purple badge) — a build automatically deployed from every
+commit to the latest development code. Each candidate build is labeled with
+its date and sequence number (e.g., <cite>2026-06-13 #2</cite>). You can browse all
+available candidates and share their URLs from the <strong>About</strong> tab. Candidates
+may be unstable and are retained for 14 days. Hovering over the badge shows
+a tooltip confirming this.</p></li>
 <li><p><strong>``PR #N``</strong> (yellow badge) — a temporary preview built for a specific
 proposed change (pull request) on GitHub. Clicking the badge opens the
 corresponding pull request page.</p></li>
 <li><p><strong>``dev``</strong> (blue badge) — someone is running a local development build
 directly on their machine.</p></li>
 </ul>
-<p>In short: <strong>no badge → stable production; ``NIGHTLY`` → newest features but
+<p>In short: <strong>no badge → stable production; ``CANDIDATE`` → newest features but
 possibly unstable; ``PR #N`` / ``dev`` → temporary or preview builds.</strong></p>
 </section>
 <section id="viewing-previous-versions">

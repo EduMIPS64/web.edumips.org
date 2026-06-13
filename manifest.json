@@ -1,12 +1,20 @@
 {
-  "current": 3,
-  "prev": 2,
-  "sha": "fdd86763bf571b11923563cbe07fba6a6eafb09f",
-  "build": "1.4.0-113-gfdd86763",
+  "current": 4,
+  "prev": 3,
+  "sha": "99b56ff4218fdf4c3c6a1e172339ecbea9defcc4",
+  "build": "1.4.0-114-g99b56ff4",
   "targetRelease": "1.4.1",
-  "promotedAt": "2026-06-13T20:56:50Z",
+  "promotedAt": "2026-06-13T22:04:30Z",
   "promotedBy": "lupino3",
   "history": [
+    {
+      "n": 4,
+      "build": "1.4.0-114-g99b56ff4",
+      "sha": "99b56ff4218fdf4c3c6a1e172339ecbea9defcc4",
+      "targetRelease": "1.4.1",
+      "promotedAt": "2026-06-13T22:04:30Z",
+      "promotedBy": "lupino3"
+    },
     {
       "n": 3,
       "build": "1.4.0-113-gfdd86763",
