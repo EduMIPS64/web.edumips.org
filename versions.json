@@ -1,0 +1,60 @@
+{
+  "current": "a08b8d56ebc959216ea1d576dc465fab0a5cfc22",
+  "versions": [
+    {
+      "sha": "a08b8d56ebc959216ea1d576dc465fab0a5cfc22",
+      "shortsha": "a08b8d5",
+      "seq": 2345,
+      "build": "1.4.0-116-ga08b8d56",
+      "targetRelease": "1.4.1",
+      "pushedAt": "2026-06-14T06:49:01Z",
+      "promoted": true,
+      "promotedAt": "2026-06-14T06:49:01Z",
+      "promotedBy": "lupino3"
+    },
+    {
+      "sha": "99b56ff4218fdf4c3c6a1e172339ecbea9defcc4",
+      "shortsha": "99b56ff",
+      "seq": 2343,
+      "build": "1.4.0-114-g99b56ff4",
+      "targetRelease": "1.4.1",
+      "pushedAt": "2026-06-13T22:04:30Z",
+      "promoted": true,
+      "promotedAt": "2026-06-13T22:04:30Z",
+      "promotedBy": "lupino3"
+    },
+    {
+      "sha": "fdd86763bf571b11923563cbe07fba6a6eafb09f",
+      "shortsha": "fdd8676",
+      "seq": 2342,
+      "build": "1.4.0-113-gfdd86763",
+      "targetRelease": "1.4.1",
+      "pushedAt": "2026-06-13T20:56:50Z",
+      "promoted": true,
+      "promotedAt": "2026-06-13T20:56:50Z",
+      "promotedBy": "lupino3"
+    },
+    {
+      "sha": "c0027167ae1a5164220ed4a3b4a0de52eecdb83d",
+      "shortsha": "c002716",
+      "seq": 2331,
+      "build": "1.4.0-102-gc0027167",
+      "targetRelease": "1.4.1",
+      "pushedAt": "2026-06-09T12:28:51Z",
+      "promoted": true,
+      "promotedAt": "2026-06-09T12:28:51Z",
+      "promotedBy": "lupino3"
+    },
+    {
+      "sha": "1d037b231477007b35cda34c8ade7080f30e1ab6",
+      "shortsha": "1d037b2",
+      "seq": 2321,
+      "build": "1.4.0-92-g1d037b23",
+      "targetRelease": "1.4.1",
+      "pushedAt": "2026-06-08T13:51:52Z",
+      "promoted": true,
+      "promotedAt": "2026-06-08T13:51:52Z",
+      "promotedBy": "lupino3"
+    }
+  ]
+}
