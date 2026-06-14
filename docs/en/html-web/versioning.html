@@ -5,10 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Understanding versions &#8212; EduMIPS64 1.4.0-116-ga08b8d56 documentation</title>
+    <title>Understanding versions &#8212; EduMIPS64 1.4.0-120-gb71f37ab documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/epub.css?v=e4d0adb4" />
-    <script src="_static/documentation_options.js?v=2fedbdf5"></script>
+    <script src="_static/documentation_options.js?v=e57ea88e"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -53,43 +53,59 @@ next to the <strong>“Web Version”</strong> label in the top toolbar.</p></li
 <section id="which-web-build-am-i-running">
 <h2>Which web build am I running?<a class="headerlink" href="#which-web-build-am-i-running" title="Link to this heading">¶</a></h2>
 <p>The <strong>production</strong> web app at <a class="reference external" href="https://web.edumips.org">https://web.edumips.org</a> carries the stable
-version. It is only updated when the maintainers explicitly promote a new
-release, so it is the safest choice for everyday use.</p>
-<p>There are also other web builds, identified by a small coloured badge shown
-next to the <strong>“Web Version”</strong> label in the toolbar:</p>
+version. It is only updated when the maintainers explicitly <em>promote</em> a new
+build, so it is the safest choice for everyday use.</p>
+<p>Every commit to the development code is also built and published to its own
+permanent address under <code class="docutils literal notranslate"><span class="pre">https://web.edumips.org/c/&lt;commit&gt;/</span></code>. A small
+coloured badge next to the <strong>“Web Version”</strong> label in the toolbar tells you
+which kind of build you are on:</p>
 <ul class="simple">
 <li><p><strong>No badge</strong> — you are on the normal production build. This is the stable
 version at <a class="reference external" href="https://web.edumips.org">https://web.edumips.org</a>.</p></li>
-<li><p><strong>``CANDIDATE``</strong> (purple badge) — a build automatically deployed from every
-commit to the latest development code. Each candidate build is labeled with
-its date and sequence number (e.g., <cite>2026-06-13 #2</cite>). You can browse all
-available candidates and share their URLs from the <strong>About</strong> tab. Candidates
-may be unstable and are retained for 14 days. Hovering over the badge shows
-a tooltip confirming this.</p></li>
+<li><p><strong>``ARCHIVED``</strong> — you are viewing a specific per-commit build served from
+<code class="docutils literal notranslate"><span class="pre">/c/&lt;commit&gt;/</span></code>. This may be a previously promoted version or a candidate
+awaiting promotion; either way it is not the live production site. Hovering
+over the badge shows a tooltip confirming this.</p></li>
 <li><p><strong>``PR #N``</strong> (yellow badge) — a temporary preview built for a specific
 proposed change (pull request) on GitHub. Clicking the badge opens the
 corresponding pull request page.</p></li>
 <li><p><strong>``dev``</strong> (blue badge) — someone is running a local development build
 directly on their machine.</p></li>
 </ul>
-<p>In short: <strong>no badge → stable production; ``CANDIDATE`` → newest features but
-possibly unstable; ``PR #N`` / ``dev`` → temporary or preview builds.</strong></p>
+<p>In short: <strong>no badge → stable production; ``ARCHIVED`` → a specific per-commit
+build; ``PR #N`` / ``dev`` → temporary or preview builds.</strong></p>
 </section>
-<section id="viewing-previous-versions">
-<h2>Viewing previous versions<a class="headerlink" href="#viewing-previous-versions" title="Link to this heading">¶</a></h2>
-<p>Every released web version is kept as an immutable snapshot and remains
-available for you to use. You can see a list of all retained versions and open
-an older one directly from the <strong>Help</strong> dialog:</p>
+<section id="browsing-and-switching-versions">
+<h2>Browsing and switching versions<a class="headerlink" href="#browsing-and-switching-versions" title="Link to this heading">¶</a></h2>
+<p>All retained web builds — both the promoted releases and the pending
+candidates — are listed in one place, addressed by their commit identifier.
+Open the list from the <strong>Help</strong> dialog:</p>
 <ol class="arabic simple">
 <li><p>Click <strong>Help</strong> → <strong>About</strong> (in the web app toolbar).</p></li>
-<li><p>Look for the <strong>Previous Versions</strong> section in the About tab.</p></li>
-<li><p>You will see a list of released versions with their dates.</p></li>
-<li><p>The current version is marked with a label so you know which one is live.</p></li>
-<li><p>Click any older version to open it in a new tab — your current work is
+<li><p>The About tab shows two lists:</p>
+<ul class="simple">
+<li><p><strong>Promoted versions</strong> — the manually promoted releases, shown
+prominently. The live one is marked <strong>current</strong>.</p></li>
+<li><p><strong>Candidate builds</strong> — newer builds that have not yet been promoted. All
+pending candidates are shown (there are usually only a few).</p></li>
+</ul>
+</li>
+<li><p>Click any entry to open that exact build in a new tab — your current work is
 preserved in the original tab.</p></li>
 </ol>
-<p>This is useful if you need to compare versions, verify a bug in an older release,
-or work with a version that suits your needs better.</p>
+</section>
+<section id="what-is-kept-and-for-how-long">
+<h2>What is kept, and for how long<a class="headerlink" href="#what-is-kept-and-for-how-long" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>Promoted versions</strong> are kept permanently as immutable snapshots, so you can
+always go back to any release.</p></li>
+<li><p><strong>Candidate builds</strong> are kept until a promotion happens. When a build is
+promoted, the candidates that came <em>before</em> it (and were never promoted) are
+removed; candidates newer than the promoted build are preserved and stay
+available until they are themselves promoted or superseded.</p></li>
+</ul>
+<p>This keeps the list focused: every promoted release plus the handful of builds
+that are still waiting to be promoted.</p>
 </section>
 </section>
 

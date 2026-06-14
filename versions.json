@@ -1,5 +1,5 @@
 {
-  "current": "a08b8d56ebc959216ea1d576dc465fab0a5cfc22",
+  "current": "b71f37abcd1b03e3ee143ee1ea10247db8299e32",
   "versions": [
     {
       "sha": "b71f37abcd1b03e3ee143ee1ea10247db8299e32",
@@ -8,7 +8,9 @@
       "build": "1.4.0-120-gb71f37ab",
       "targetRelease": "1.4.1",
       "pushedAt": "2026-06-14T12:46:39Z",
-      "promoted": false
+      "promoted": true,
+      "promotedAt": "2026-06-14T12:48:22Z",
+      "promotedBy": "lupino3"
     },
     {
       "sha": "a08b8d56ebc959216ea1d576dc465fab0a5cfc22",

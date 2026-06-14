@@ -5,10 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Capire le versioni &#8212; Documentazione EduMIPS64 1.4.0-116-ga08b8d56 </title>
+    <title>Capire le versioni &#8212; Documentazione EduMIPS64 1.4.0-120-gb71f37ab </title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/epub.css?v=e4d0adb4" />
-    <script src="_static/documentation_options.js?v=491363a5"></script>
+    <script src="_static/documentation_options.js?v=838076de"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/translations.js?v=45930005"></script>
@@ -57,47 +57,62 @@ in alto.</p></li>
 <h2>Quale build web sto eseguendo?<a class="headerlink" href="#quale-build-web-sto-eseguendo" title="Link to this heading">¶</a></h2>
 <p>L’applicazione web di <strong>produzione</strong> all’indirizzo <a class="reference external" href="https://web.edumips.org">https://web.edumips.org</a>
 contiene la versione stabile. Viene aggiornata solo quando i mantainer
-promuovono esplicitamente una nuova release, quindi è la scelta più sicura per
+<em>promuovono</em> esplicitamente una nuova build, quindi è la scelta più sicura per
 un utilizzo quotidiano.</p>
-<p>Esistono anche altre build web, identificate da un piccolo badge colorato
-mostrato accanto all’etichetta <strong>«Web Version»</strong> nella barra degli strumenti:</p>
+<p>Anche ogni commit del codice di sviluppo viene compilato e pubblicato a un
+proprio indirizzo permanente sotto <code class="docutils literal notranslate"><span class="pre">https://web.edumips.org/c/&lt;commit&gt;/</span></code>. Un
+piccolo badge colorato accanto all’etichetta <strong>«Web Version»</strong> nella barra
+degli strumenti indica su quale tipo di build ti trovi:</p>
 <ul class="simple">
 <li><p><strong>Nessun badge</strong> — ti trovi sulla normale build di produzione. È la versione
 stabile di <a class="reference external" href="https://web.edumips.org">https://web.edumips.org</a>.</p></li>
-<li><p><strong>``CANDIDATE``</strong> (badge viola) — una build distribuita automaticamente da ogni
-commit al codice di sviluppo più recente. Ogni build candidate è etichettata
-con la sua data e numero di sequenza (es., <cite>2026-06-13 #2</cite>). Puoi sfogliare
-tutti i candidati disponibili e condividere i loro URL dalla scheda <strong>About</strong>.
-I candidati possono essere instabili e vengono conservati per 14 giorni.
-Passando con il mouse sul badge viene mostrato un tooltip che lo conferma.</p></li>
+<li><p><strong>``ARCHIVED``</strong> — stai visualizzando una build specifica di un singolo
+commit, servita da <code class="docutils literal notranslate"><span class="pre">/c/&lt;commit&gt;/</span></code>. Può trattarsi di una versione promossa
+in passato o di un candidato in attesa di promozione; in ogni caso non è il
+sito di produzione attivo. Passando con il mouse sul badge viene mostrato un
+tooltip che lo conferma.</p></li>
 <li><p><strong>``PR #N``</strong> (badge giallo) — un’anteprima temporanea creata per una
 specifica modifica proposta (pull request) su GitHub. Cliccando sul badge si
 apre la pagina della pull request corrispondente.</p></li>
 <li><p><strong>``dev``</strong> (badge blu) — qualcuno sta eseguendo una build di sviluppo
 locale direttamente sul proprio computer.</p></li>
 </ul>
-<p>In sintesi: <strong>nessun badge → produzione stabile; ``CANDIDATE`` → funzionalità
-più recenti ma possibilmente instabile; ``PR #N`` / ``dev`` → build
-temporanee o di anteprima.</strong></p>
+<p>In sintesi: <strong>nessun badge → produzione stabile; ``ARCHIVED`` → una build
+specifica di un singolo commit; ``PR #N`` / ``dev`` → build temporanee o di
+anteprima.</strong></p>
 </section>
-<section id="visualizzazione-di-versioni-precedenti">
-<h2>Visualizzazione di versioni precedenti<a class="headerlink" href="#visualizzazione-di-versioni-precedenti" title="Link to this heading">¶</a></h2>
-<p>Ogni versione web rilasciata viene conservata come snapshot immutabile e
-rimane disponibile per l’uso. Puoi visualizzare un elenco di tutte le versioni
-conservate e aprire una versione precedente direttamente dalla finestra di
-dialogo <strong>Help</strong>:</p>
+<section id="sfogliare-e-cambiare-versione">
+<h2>Sfogliare e cambiare versione<a class="headerlink" href="#sfogliare-e-cambiare-versione" title="Link to this heading">¶</a></h2>
+<p>Tutte le build web conservate — sia le release promosse sia i candidati in
+attesa — sono elencate in un unico posto, identificate dal loro commit. Apri
+l’elenco dalla finestra di dialogo <strong>Help</strong>:</p>
 <ol class="arabic simple">
 <li><p>Fai clic su <strong>Help</strong> → <strong>About</strong> (nella barra degli strumenti dell’app web).</p></li>
-<li><p>Cerca la sezione <strong>Previous Versions</strong> nella scheda About.</p></li>
-<li><p>Vedrai un elenco delle versioni rilasciate con le rispettive date.</p></li>
-<li><p>La versione corrente è contrassegnata con un’etichetta in modo da sapere
-quale è quella attiva.</p></li>
-<li><p>Fai clic su qualsiasi versione precedente per aprirla in una nuova scheda — il
-tuo lavoro attuale viene preservato nella scheda originale.</p></li>
+<li><p>La scheda About mostra due elenchi:</p>
+<ul class="simple">
+<li><p><strong>Promoted versions</strong> — le release promosse manualmente, mostrate in
+evidenza. Quella attiva è contrassegnata come <strong>current</strong>.</p></li>
+<li><p><strong>Candidate builds</strong> — le build più recenti non ancora promosse. Vengono
+mostrati tutti i candidati in attesa (di solito sono pochi).</p></li>
+</ul>
+</li>
+<li><p>Fai clic su una voce qualsiasi per aprire quella build esatta in una nuova
+scheda — il tuo lavoro attuale viene preservato nella scheda originale.</p></li>
 </ol>
-<p>Questo è utile se hai bisogno di confrontare versioni, verificare un bug in una
-release precedente o lavorare con una versione che si adatta meglio alle tue
-esigenze.</p>
+</section>
+<section id="cosa-viene-conservato-e-per-quanto-tempo">
+<h2>Cosa viene conservato, e per quanto tempo<a class="headerlink" href="#cosa-viene-conservato-e-per-quanto-tempo" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Le <strong>versioni promosse</strong> vengono conservate in modo permanente come snapshot
+immutabili, così puoi sempre tornare a qualunque release.</p></li>
+<li><p>Le <strong>build candidate</strong> vengono conservate fino a quando non avviene una
+promozione. Quando una build viene promossa, i candidati che la <em>precedevano</em>
+(e non sono mai stati promossi) vengono rimossi; i candidati più recenti
+della build promossa vengono preservati e restano disponibili finché non
+vengono a loro volta promossi o superati.</p></li>
+</ul>
+<p>In questo modo l’elenco resta essenziale: ogni release promossa più i pochi
+candidati ancora in attesa di promozione.</p>
 </section>
 </section>
 
