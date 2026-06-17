@@ -5,10 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>L’interfaccia utente web &#8212; Documentazione EduMIPS64 1.4.0-122-g8b95fbfc </title>
+    <title>L’interfaccia utente web &#8212; Documentazione EduMIPS64 1.4.0-130-g045ada34 </title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/epub.css?v=e4d0adb4" />
-    <script src="_static/documentation_options.js?v=3cf4c0c4"></script>
+    <script src="_static/documentation_options.js?v=26ec871a"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/translations.js?v=45930005"></script>
@@ -440,6 +440,14 @@ cambia.</p></li>
 <li><p><strong>CPU Forwarding</strong> — abilita o disabilita il forwarding nella
 pipeline. Disabilitato durante l’esecuzione perché modificarlo
 richiede un reset della CPU.</p></li>
+<li><p><strong>Branch Delay Slot</strong> — abilita o disabilita il classico delay slot
+del branch MIPS, come descritto in Hennessy &amp; Patterson. Quando è
+abilitato, l’istruzione immediatamente successiva ad un branch o jump
+viene <strong>sempre eseguita</strong>, indipendentemente dal fatto che il salto
+sia preso o meno; quando è disabilitato (impostazione predefinita),
+quell’istruzione viene scartata e la pipeline mostra una bolla.
+Disabilitato durante l’esecuzione perché modificarlo richiede un
+reset della CPU.</p></li>
 <li><p><strong>Multi Step Size</strong> — numero di cicli eseguiti da un singolo click
 del pulsante <em>Multi Step</em> sulla barra degli strumenti.</p></li>
 <li><p><strong>Execution Delay (ms)</strong> — ritardo inserito tra blocchi successivi
@@ -456,6 +464,49 @@ essere modificata con un selettore di colore; il pulsante
 valori RGB usati dal front-end Swing).</p></li>
 </ul>
 </section>
+</section>
+<section id="scorciatoie-da-tastiera">
+<h2>Scorciatoie da tastiera<a class="headerlink" href="#scorciatoie-da-tastiera" title="Link to this heading">¶</a></h2>
+<p>Le seguenti scorciatoie da tastiera sono disponibili in ogni momento,
+salvo quando un dialogo (Aiuto, Impostazioni, Input) è aperto.
+Tutti i tasti elencati invocano <code class="docutils literal notranslate"><span class="pre">preventDefault()</span></code>, così le azioni
+predefinite del browser (es. F10 barra dei menu, Esc) non si
+attivano.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 15.0%" />
+<col style="width: 35.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Tasto</p></th>
+<th class="head"><p>Azione</p></th>
+<th class="head"><p>Attivo quando</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>F2</strong></p></td>
+<td><p>Carica il programma</p></td>
+<td><p>Il programma non ha errori di sintassi</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>F8</strong></p></td>
+<td><p>Esegui tutto / Pausa (toggle)</p></td>
+<td><p>Esegui tutto: programma caricato (READY); Pausa: in esecuzione</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>F9</strong></p></td>
+<td><p>Passo singolo</p></td>
+<td><p>Programma caricato (READY)</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>F10</strong></p></td>
+<td><p>Passo multiplo</p></td>
+<td><p>Programma caricato (READY)</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Esc</strong></p></td>
+<td><p>Ferma e reimposta CPU</p></td>
+<td><p>Programma caricato (READY)</p></td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="eseguire-edumips64-come-applicazione-desktop-o-da-cli">
 <h2>Eseguire EduMIPS64 come applicazione desktop o da CLI<a class="headerlink" href="#eseguire-edumips64-come-applicazione-desktop-o-da-cli" title="Link to this heading">¶</a></h2>

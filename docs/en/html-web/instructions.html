@@ -5,10 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>The instruction set &#8212; EduMIPS64 1.4.0-122-g8b95fbfc documentation</title>
+    <title>The instruction set &#8212; EduMIPS64 1.4.0-130-g045ada34 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/epub.css?v=e4d0adb4" />
-    <script src="_static/documentation_options.js?v=5a0a1e94"></script>
+    <script src="_static/documentation_options.js?v=4012594a"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -262,7 +262,8 @@ circumstances.</p>
 </li>
 <li><p><cite>ANDI rt, rs, immediate</cite></p>
 <p>Executes the bitwise AND between rs and the immediate value, putting the
-result in rt.</p>
+result in rt. The 16-bit immediate is zero-extended, so it accepts the
+unsigned range <code class="docutils literal notranslate"><span class="pre">0</span></code>–<code class="docutils literal notranslate"><span class="pre">65535</span></code>.</p>
 </li>
 <li><p><cite>DADDI rt, rs, immediate</cite></p>
 <p>Executes the sum between 64-bits register rs and the immediate value,
@@ -293,7 +294,8 @@ register.</p>
 </li>
 <li><p><cite>ORI rt, rs, immediate</cite></p>
 <p>Executes the bitwise OR between rs and the immediate value, putting the
-result in rt.</p>
+result in rt. The 16-bit immediate is zero-extended, so it accepts the
+unsigned range <code class="docutils literal notranslate"><span class="pre">0</span></code>–<code class="docutils literal notranslate"><span class="pre">65535</span></code>.</p>
 </li>
 <li><p><cite>SLTI rt, rs, immediate</cite></p>
 <p>Sets the value of rt to 1 if the value of rs is less than the value of the
@@ -307,7 +309,8 @@ comparison.</p>
 </li>
 <li><p><cite>XORI rt, rs, immediate</cite></p>
 <p>Executes a bitwise exclusive OR (XOR) between rs and the immediate value,
-and puts the result into rt.</p>
+and puts the result into rt. The 16-bit immediate is zero-extended, so it
+accepts the unsigned range <code class="docutils literal notranslate"><span class="pre">0</span></code>–<code class="docutils literal notranslate"><span class="pre">65535</span></code>.</p>
 </li>
 </ul>
 </section>

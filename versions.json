@@ -1,5 +1,5 @@
 {
-  "current": "8b95fbfcbf42cb3dde089785e1a02c5677753e21",
+  "current": "045ada347a84cc993001e967653586e5949cb369",
   "versions": [
     {
       "sha": "045ada347a84cc993001e967653586e5949cb369",
@@ -8,70 +8,9 @@
       "build": "1.4.0-130-g045ada34",
       "targetRelease": "1.4.1",
       "pushedAt": "2026-06-17T19:09:11Z",
-      "promoted": false
-    },
-    {
-      "sha": "478b6b060ca033f978135b08bc126eac65e87c43",
-      "shortsha": "478b6b0",
-      "seq": 2358,
-      "build": "1.4.0-129-g478b6b06",
-      "targetRelease": "1.4.1",
-      "pushedAt": "2026-06-17T17:14:55Z",
-      "promoted": false
-    },
-    {
-      "sha": "196a0df3ccc6ff96f03ef635ea72e87aece1eb51",
-      "shortsha": "196a0df",
-      "seq": 2357,
-      "build": "1.4.0-128-g196a0df3",
-      "targetRelease": "1.4.1",
-      "pushedAt": "2026-06-15T13:22:11Z",
-      "promoted": false
-    },
-    {
-      "sha": "424ac6e77bd29db4f43a080c1fb8fa3172ee2cbf",
-      "shortsha": "424ac6e",
-      "seq": 2356,
-      "build": "1.4.0-127-g424ac6e7",
-      "targetRelease": "1.4.1",
-      "pushedAt": "2026-06-15T02:48:09Z",
-      "promoted": false
-    },
-    {
-      "sha": "390cdb1c64f9393c9cb1fd4178ae0b4bb976623a",
-      "shortsha": "390cdb1",
-      "seq": 2355,
-      "build": "1.4.0-126-g390cdb1c",
-      "targetRelease": "1.4.1",
-      "pushedAt": "2026-06-14T21:55:14Z",
-      "promoted": false
-    },
-    {
-      "sha": "ff547eb825a5e820dc0f710fffac070c3b530dba",
-      "shortsha": "ff547eb",
-      "seq": 2354,
-      "build": "1.4.0-125-gff547eb8",
-      "targetRelease": "1.4.1",
-      "pushedAt": "2026-06-14T16:50:17Z",
-      "promoted": false
-    },
-    {
-      "sha": "d25147f3a3348bae21611cb814ed7eb38e9c46aa",
-      "shortsha": "d25147f",
-      "seq": 2353,
-      "build": "1.4.0-124-gd25147f3",
-      "targetRelease": "1.4.1",
-      "pushedAt": "2026-06-14T16:07:20Z",
-      "promoted": false
-    },
-    {
-      "sha": "86bbedf0b753eb1ef6d8e2d16fbf85958513d9a9",
-      "shortsha": "86bbedf",
-      "seq": 2352,
-      "build": "1.4.0-123-g86bbedf0",
-      "targetRelease": "1.4.1",
-      "pushedAt": "2026-06-14T15:16:53Z",
-      "promoted": false
+      "promoted": true,
+      "promotedAt": "2026-06-17T19:21:58Z",
+      "promotedBy": "lupino3"
     },
     {
       "sha": "8b95fbfcbf42cb3dde089785e1a02c5677753e21",

@@ -5,10 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Il set di istruzioni &#8212; Documentazione EduMIPS64 1.4.0-122-g8b95fbfc </title>
+    <title>Il set di istruzioni &#8212; Documentazione EduMIPS64 1.4.0-130-g045ada34 </title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/epub.css?v=e4d0adb4" />
-    <script src="_static/documentation_options.js?v=3cf4c0c4"></script>
+    <script src="_static/documentation_options.js?v=26ec871a"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/translations.js?v=45930005"></script>
@@ -268,7 +268,8 @@ ponendo il risultato in rt.  Non si verificano eccezioni di overflow.</p>
 </li>
 <li><p><cite>ANDI rt, rs, immediate</cite></p>
 <p>Esegue un AND bit a bit tra rs ed il valore immediato, ponendo il risultato
-in rt.</p>
+in rt. L’immediato a 16 bit è esteso con zeri, quindi accetta l’intervallo
+senza segno <code class="docutils literal notranslate"><span class="pre">0</span></code>–<code class="docutils literal notranslate"><span class="pre">65535</span></code>.</p>
 </li>
 <li><p><cite>DADDI rt, rs, immediate</cite></p>
 <p>Effettua la somma tra il registro a 64 bit rs ed il valore immediato,
@@ -297,7 +298,8 @@ del registro.</p>
 </li>
 <li><p><cite>ORI rt, rs, immediate</cite></p>
 <p>Effettua l’OR bit a bit tra rs ed il valore immediato, ponendo il risultato
-in rt.</p>
+in rt. L’immediato a 16 bit è esteso con zeri, quindi accetta l’intervallo
+senza segno <code class="docutils literal notranslate"><span class="pre">0</span></code>–<code class="docutils literal notranslate"><span class="pre">65535</span></code>.</p>
 </li>
 <li><p><cite>SLTI rt, rs, immediate</cite></p>
 <p>Pone il valore di rt ad 1 se il valore di rs è minore di quello
@@ -311,7 +313,8 @@ confronto senza segno.</p>
 </li>
 <li><p><cite>XORI rt, rs, immediate</cite></p>
 <p>Effettua l’OR esclusivo bit a bit tra rs ed il valore immediato, ponendo il
-risultato in rt.</p>
+risultato in rt. L’immediato a 16 bit è esteso con zeri, quindi accetta
+l’intervallo senza segno <code class="docutils literal notranslate"><span class="pre">0</span></code>–<code class="docutils literal notranslate"><span class="pre">65535</span></code>.</p>
 </li>
 </ul>
 </section>

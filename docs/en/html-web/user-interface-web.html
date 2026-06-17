@@ -5,10 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>The web user interface &#8212; EduMIPS64 1.4.0-122-g8b95fbfc documentation</title>
+    <title>The web user interface &#8212; EduMIPS64 1.4.0-130-g045ada34 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/epub.css?v=e4d0adb4" />
-    <script src="_static/documentation_options.js?v=5a0a1e94"></script>
+    <script src="_static/documentation_options.js?v=4012594a"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -424,6 +424,13 @@ indicator shown on collapsed panels when their contents change.</p></li>
 <li><p><strong>CPU Forwarding</strong> — enables or disables operand forwarding in the
 pipeline. Disabled while the simulator is running because changing
 it requires a reset.</p></li>
+<li><p><strong>Branch Delay Slot</strong> — enables or disables the classical MIPS
+branch delay slot, as described in Hennessy &amp; Patterson. When
+enabled, the instruction immediately following any branch or jump
+is <strong>always executed</strong>, regardless of whether the branch is taken;
+when disabled (the default), that instruction is squashed and the
+pipeline shows a bubble. Disabled while the simulator is running
+because changing it requires a reset.</p></li>
 <li><p><strong>Multi Step Size</strong> — number of cycles executed by a single click of
 the <em>Multi Step</em> toolbar button.</p></li>
 <li><p><strong>Execution Delay (ms)</strong> — delay inserted between successive
@@ -439,6 +446,48 @@ restores the original palette (the same RGB values the Swing UI
 uses by default).</p></li>
 </ul>
 </section>
+</section>
+<section id="keyboard-shortcuts">
+<h2>Keyboard shortcuts<a class="headerlink" href="#keyboard-shortcuts" title="Link to this heading">¶</a></h2>
+<p>The following keyboard shortcuts are available at all times, unless a
+dialog (Help, Settings, Input) is open.  All listed keys call
+<code class="docutils literal notranslate"><span class="pre">preventDefault()</span></code> so the browser’s own default action (e.g. F10
+menu bar, Esc) does not also fire.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 15.0%" />
+<col style="width: 35.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Key</p></th>
+<th class="head"><p>Action</p></th>
+<th class="head"><p>Active when</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>F2</strong></p></td>
+<td><p>Load program</p></td>
+<td><p>Program has no syntax errors</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>F8</strong></p></td>
+<td><p>Run All / Pause (toggle)</p></td>
+<td><p>Run All: program loaded (READY); Pause: currently executing</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>F9</strong></p></td>
+<td><p>Single Step</p></td>
+<td><p>Program loaded (READY)</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>F10</strong></p></td>
+<td><p>Multi Step</p></td>
+<td><p>Program loaded (READY)</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Esc</strong></p></td>
+<td><p>Stop &amp; reset CPU</p></td>
+<td><p>Program loaded (READY)</p></td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="running-edumips64-as-a-desktop-or-cli-application">
 <h2>Running EduMIPS64 as a desktop or CLI application<a class="headerlink" href="#running-edumips64-as-a-desktop-or-cli-application" title="Link to this heading">¶</a></h2>

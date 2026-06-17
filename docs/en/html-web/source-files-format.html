@@ -5,10 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Source files format &#8212; EduMIPS64 1.4.0-122-g8b95fbfc documentation</title>
+    <title>Source files format &#8212; EduMIPS64 1.4.0-130-g045ada34 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/epub.css?v=e4d0adb4" />
-    <script src="_static/documentation_options.js?v=5a0a1e94"></script>
+    <script src="_static/documentation_options.js?v=4012594a"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -109,6 +109,24 @@ table.</p>
 directive or by the <cite>.word64</cite> directive.</p>
 <p>All the data types are interpreted as signed. This means that integer literals
 in the <cite>.data</cite> section must be between -2^(n-1) and 2^(n-1) - 1 (inclusive).</p>
+<p>Instead of a numeric literal, the value of an integer data directive (<cite>.byte</cite>,
+<cite>.word16</cite>, <cite>.word32</cite>, <cite>.word</cite> and <cite>.word64</cite>) can also be a label. In that case
+the assembler stores the memory address the label points to. The label may
+refer either to a location defined in the <cite>.data</cite> section or to an instruction
+in the <cite>.code</cite> section, and it can be defined before or after the directive
+that uses it (so jump tables that reference forward code labels work). The
+resolved address must fit in the directive’s width, otherwise an error is
+reported; a 64-bit directive (<cite>.word64</cite>) can always hold an address. For
+example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">data</span>
+<span class="n">buffer</span><span class="p">:</span>   <span class="o">.</span><span class="n">space</span>   <span class="mi">8</span>
+<span class="n">buf_addr</span><span class="p">:</span> <span class="o">.</span><span class="n">word64</span>  <span class="n">buffer</span>    <span class="p">;</span> <span class="n">stores</span> <span class="n">the</span> <span class="n">address</span> <span class="n">of</span> <span class="s2">&quot;buffer&quot;</span>
+<span class="n">jump_tbl</span><span class="p">:</span> <span class="o">.</span><span class="n">word64</span>  <span class="n">routine</span>   <span class="p">;</span> <span class="n">stores</span> <span class="n">the</span> <span class="n">address</span> <span class="n">of</span> <span class="n">a</span> <span class="n">code</span> <span class="n">label</span>
+<span class="o">.</span><span class="n">code</span>
+<span class="n">routine</span><span class="p">:</span>  <span class="n">daddi</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r0</span><span class="p">,</span> <span class="mi">42</span>
+          <span class="n">syscall</span> <span class="mi">0</span>
+</pre></div>
+</div>
 <p>There is a big difference between declaring a list of data elements using a
 single directive or by using multiple directives of the same type. EduMIPS64
 starts writing from the next 64-bit double word as soon as it finds a

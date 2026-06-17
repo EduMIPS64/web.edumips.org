@@ -5,10 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>The desktop user interface &#8212; EduMIPS64 1.4.0-122-g8b95fbfc documentation</title>
+    <title>The desktop user interface &#8212; EduMIPS64 1.4.0-130-g045ada34 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/epub.css?v=e4d0adb4" />
-    <script src="_static/documentation_options.js?v=5a0a1e94"></script>
+    <script src="_static/documentation_options.js?v=4012594a"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -219,8 +219,8 @@ ignored. Don’t forget to click “OK” if you want to save your changes. The
 “Reset to defaults” button restores all settings to their default values
 after asking for confirmation; this is useful to recover from a misconfigured
 simulator without having to change each option manually.</p>
-<p>The Main Settings tab allow to configure forwarding and the number of steps
-in the Multi Cycle mode.</p>
+<p>The Main Settings tab allow to configure forwarding, the branch delay slot,
+and the number of steps in the Multi Cycle mode.</p>
 <p>The Behavior tab allow to enable or disable warnings during the parsing phase,
 the “Sync graphics with CPU in multi-step execution” option, when checked,
 will synchronize the frames’ graphical status with the internal status of the
@@ -359,6 +359,74 @@ producer/consumer pairs:</p>
 </tr>
 </tbody>
 </table>
+</section>
+<section id="branch-delay-slot">
+<h3>Branch Delay Slot<a class="headerlink" href="#branch-delay-slot" title="Link to this heading">¶</a></h3>
+<p>EduMIPS64 can optionally model the classical MIPS <strong>branch delay slot</strong>, as
+described in Hennessy &amp; Patterson. The delay slot can be toggled from the
+Main Settings tab of the Settings dialog.</p>
+<p>When the delay slot is <strong>disabled</strong> (the default), the instruction
+sequentially fetched after a branch or jump is <em>squashed</em> when the jump
+resolves in the ID stage: it never reaches EX, MEM or WB, and the cycle
+view shows a bubble in the slot following the branch. This is the
+behavior the simulator has always had.</p>
+<p>When the delay slot is <strong>enabled</strong>, the instruction fetched immediately
+after a branch or jump (the <em>delay slot</em>) is <strong>always executed</strong>,
+regardless of whether the branch is taken. The branch target is then
+fetched into IF on the cycle after the delay slot. This matches the
+architectural behavior of the MIPS64 instruction set.</p>
+<p>A few notes:</p>
+<ul class="simple">
+<li><p>The setting affects every flow-control instruction that updates the
+program counter from the ID stage: unconditional branches (<code class="docutils literal notranslate"><span class="pre">B</span></code>,
+<code class="docutils literal notranslate"><span class="pre">J</span></code>, <code class="docutils literal notranslate"><span class="pre">JAL</span></code>), conditional branches (<code class="docutils literal notranslate"><span class="pre">BEQ</span></code>, <code class="docutils literal notranslate"><span class="pre">BNE</span></code>, <code class="docutils literal notranslate"><span class="pre">BEQZ</span></code>,
+<code class="docutils literal notranslate"><span class="pre">BNEZ</span></code>, <code class="docutils literal notranslate"><span class="pre">BGEZ</span></code>, <code class="docutils literal notranslate"><span class="pre">BC1T</span></code>, <code class="docutils literal notranslate"><span class="pre">BC1F</span></code>), and register-based jumps
+(<code class="docutils literal notranslate"><span class="pre">JR</span></code>, <code class="docutils literal notranslate"><span class="pre">JALR</span></code>).</p></li>
+<li><p>Toggling the delay slot resets the simulation, because the pipeline
+state would otherwise be inconsistent with the new semantics. The
+simulator asks for confirmation before applying the change while a
+program is in progress.</p></li>
+<li><p>Programs written assuming the delay-slot semantics typically place a
+<code class="docutils literal notranslate"><span class="pre">NOP</span></code> (or a useful instruction whose result is independent of the
+branch) immediately after every branch or jump.</p></li>
+</ul>
+<section id="corner-cases">
+<h4>Corner cases<a class="headerlink" href="#corner-cases" title="Link to this heading">¶</a></h4>
+<p>A number of patterns in a delay slot are classified as
+<strong>UNPREDICTABLE</strong> by the MIPS64 Architecture For Programmers,
+Volume II-A. EduMIPS64 picks a
+deterministic, documented behavior for each so that students see a
+clear diagnostic instead of silent corruption:</p>
+<ul class="simple">
+<li><p><strong>Control transfer in a delay slot</strong> — placing a branch or jump as
+the delay slot of another branch or jump raises an
+<code class="docutils literal notranslate"><span class="pre">InvalidDelaySlotException</span></code> at runtime, with a message that names
+the offending instruction. On real MIPS this is UNPREDICTABLE; an
+educational simulator surfaces the mistake instead of producing
+arbitrary state.</p></li>
+<li><p><strong>SYSCALL, HALT or BREAK in a delay slot</strong> — when the delay slot is
+enabled the slot instruction executes to completion before the
+exception or program termination fires, so any side effects of the
+syscall commit exactly once and the branch target is not fetched.
+When the delay slot is disabled the slot is squashed, matching the
+bubble semantics used everywhere else.</p></li>
+<li><p><strong>Synchronous exception in a delay slot</strong> — integer overflow,
+division by zero and similar EX-stage exceptions raised by the slot
+propagate cleanly after the slot has been advanced into ID, so the
+pipeline ends the cycle in a self-consistent state. Real MIPS sets
+<code class="docutils literal notranslate"><span class="pre">EPC</span></code> to the branch PC and <code class="docutils literal notranslate"><span class="pre">Cause.BD</span></code> to <code class="docutils literal notranslate"><span class="pre">1</span></code>; EduMIPS64 does
+not model CP0, so it simply reports the exception against the slot.</p></li>
+<li><p><strong>JAL / JALR link register</strong> — <code class="docutils literal notranslate"><span class="pre">R31</span></code> is set to the address of the
+instruction <em>after</em> the architectural delay slot
+(<code class="docutils literal notranslate"><span class="pre">JAL_PC</span> <span class="pre">+</span> <span class="pre">8</span></code>) when the delay slot is enabled, and to the slot’s
+own address (<code class="docutils literal notranslate"><span class="pre">JAL_PC</span> <span class="pre">+</span> <span class="pre">4</span></code>) when it is disabled. This matches the
+MIPS64 ISA definition of JAL/JALR in both modes.</p></li>
+<li><p><strong>Not-taken branch</strong> — the slot is the architectural fall-through and
+executes regardless of whether the branch is taken.</p></li>
+</ul>
+<p>End-to-end tests in <code class="docutils literal notranslate"><span class="pre">EndToEndTests</span></code> (search for <code class="docutils literal notranslate"><span class="pre">testDelaySlot</span></code>)
+pin down each of these cases.</p>
+</section>
 </section>
 <section id="dinero-frontend">
 <h3>Dinero Frontend<a class="headerlink" href="#dinero-frontend" title="Link to this heading">¶</a></h3>

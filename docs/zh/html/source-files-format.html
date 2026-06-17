@@ -5,10 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>源文件格式 &#8212; EduMIPS64 1.4.0-122-g8b95fbfc 文档</title>
+    <title>源文件格式 &#8212; EduMIPS64 1.4.0-130-g045ada34 文档</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/epub.css?v=e4d0adb4" />
-    <script src="_static/documentation_options.js?v=c2f1a3ae"></script>
+    <script src="_static/documentation_options.js?v=e9b2fa1a"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/translations.js?v=540d3cec"></script>
@@ -91,6 +91,19 @@
 </div></blockquote>
 <p>请注意，双字可以由 <cite>.word</cite> 指令或 <cite>.word64</cite> 指令引入。</p>
 <p>所有数据类型都解释为带符号。这意味着， <cite>.data</cite> 部分中的整数字面量必须介于 -2^(n-1) 和 2^(n-1) - 1 之间（包括 2^(n-1)）。</p>
+<p>整数数据指令（ <cite>.byte</cite> 、 <cite>.word16</cite> 、 <cite>.word32</cite> 、 <cite>.word</cite> 和 <cite>.word64</cite> ）的值除了可以是数字字面量外，
+还可以是一个标签。在这种情况下，汇编器会存储该标签所指向的内存地址。该标签既可以引用 <cite>.data</cite> 部分中定义的位置，
+也可以引用 <cite>.code</cite> 部分中的某条指令，并且可以在使用它的指令之前或之后定义（因此引用后续代码标签的跳转表也能正常工作）。
+解析得到的地址必须能放入该指令的位宽，否则会报告错误；64 位指令（ <cite>.word64</cite> ）总是能容纳一个地址。例如:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">data</span>
+<span class="n">buffer</span><span class="p">:</span>   <span class="o">.</span><span class="n">space</span>   <span class="mi">8</span>
+<span class="n">buf_addr</span><span class="p">:</span> <span class="o">.</span><span class="n">word64</span>  <span class="n">buffer</span>    <span class="p">;</span> <span class="n">存储</span> <span class="s2">&quot;buffer&quot;</span> <span class="n">的地址</span>
+<span class="n">jump_tbl</span><span class="p">:</span> <span class="o">.</span><span class="n">word64</span>  <span class="n">routine</span>   <span class="p">;</span> <span class="n">存储代码标签的地址</span>
+<span class="o">.</span><span class="n">code</span>
+<span class="n">routine</span><span class="p">:</span>  <span class="n">daddi</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r0</span><span class="p">,</span> <span class="mi">42</span>
+          <span class="n">syscall</span> <span class="mi">0</span>
+</pre></div>
+</div>
 <p>使用单个指令声明数据元素列表与使用相同类型的多个指令声明数据元素列表有很大区别。EduMIPS64 一旦发现数据类型标识符，
 就会从下一个 64 位双字开始写入，因此下面列表中的第一条 <cite>.byte</cite> 语句将把数字 1、2、3 和 4 放在 4 个字节的空间中，
 占用 32 位，而后面四行的代码将把每个数字放在不同的内存单元中，占用 32 个字节:</p>

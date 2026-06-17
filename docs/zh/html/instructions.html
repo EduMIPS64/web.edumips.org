@@ -5,10 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>指令集 &#8212; EduMIPS64 1.4.0-122-g8b95fbfc 文档</title>
+    <title>指令集 &#8212; EduMIPS64 1.4.0-130-g045ada34 文档</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/epub.css?v=e4d0adb4" />
-    <script src="_static/documentation_options.js?v=c2f1a3ae"></script>
+    <script src="_static/documentation_options.js?v=e9b2fa1a"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/translations.js?v=540d3cec"></script>
@@ -179,7 +179,7 @@
 <p>执行 32 位寄存器 rs 与立即值的和，并将结果存入 rt。在任何情况下都不会发生整数溢出。</p>
 </li>
 <li><p><cite>ANDI rt, rs, immediate</cite></p>
-<p>执行 rs 与立即值之间的位和运算，并将结果存入 rt。</p>
+<p>执行 rs 与立即值之间的位和运算，并将结果存入 rt。16 位立即数采用零扩展，因此接受无符号范围 <code class="docutils literal notranslate"><span class="pre">0</span></code>–<code class="docutils literal notranslate"><span class="pre">65535</span></code>。</p>
 </li>
 <li><p><cite>DADDI rt, rs, immediate`</cite></p>
 <p>执行 64 位寄存器 rs 与立即值的和，将结果存入 rt。如果发生溢出，则捕获。</p>
@@ -200,7 +200,7 @@
 <p>将立即值中定义的常量加载到 rt 下 32 位的上半部分（16 位），并对寄存器的上 32 位进行符号扩展。</p>
 </li>
 <li><p><cite>ORI rt, rs, immediate</cite></p>
-<p>执行 rs 和立即值之间的位操作 OR，将结果放入 rt。</p>
+<p>执行 rs 和立即值之间的位操作 OR，将结果放入 rt。16 位立即数采用零扩展，因此接受无符号范围 <code class="docutils literal notranslate"><span class="pre">0</span></code>–<code class="docutils literal notranslate"><span class="pre">65535</span></code>。</p>
 </li>
 <li><p><cite>SLTI rt, rs, immediate</cite> 设置 rt 的值为 0。</p>
 <p>如果 rs 的值小于立即值，则将 rt 的值设置为 1，否则设置为 0。</p>
@@ -209,7 +209,7 @@
 <p>如果 rs 的值小于立即值，则将 rt 的值设置为 1，否则设置为 0。</p>
 </li>
 <li><p><cite>XORI rt, rs, immediate`</cite></p>
-<p>在 rs 和立即值之间执行位排他性 OR（XOR），并将结果存入 rt。</p>
+<p>在 rs 和立即值之间执行位排他性 OR（XOR），并将结果存入 rt。16 位立即数采用零扩展，因此接受无符号范围 <code class="docutils literal notranslate"><span class="pre">0</span></code>–<code class="docutils literal notranslate"><span class="pre">65535</span></code>。</p>
 </li>
 </ul>
 </section>

@@ -5,10 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>L’interfaccia utente desktop &#8212; Documentazione EduMIPS64 1.4.0-122-g8b95fbfc </title>
+    <title>L’interfaccia utente desktop &#8212; Documentazione EduMIPS64 1.4.0-130-g045ada34 </title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/epub.css?v=e4d0adb4" />
-    <script src="_static/documentation_options.js?v=3cf4c0c4"></script>
+    <script src="_static/documentation_options.js?v=26ec871a"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/translations.js?v=45930005"></script>
@@ -237,8 +237,9 @@ chiusura della finestra) comporta il mancato salvataggiu delle stesse.
 Il tasto «Ripristina predefiniti» riporta tutte le impostazioni ai valori
 predefiniti, previa conferma da parte dell’utente; è utile per recuperare
 una configurazione errata senza dover modificare manualmente ogni opzione.</p>
-<p>La sezione «Impostazioni generali» consente di configurare il forwarding ed il
-numero di passi da effettuare nella modalità Cicli multipli.</p>
+<p>La sezione «Impostazioni generali» consente di configurare il forwarding, il
+branch delay slot ed il numero di passi da effettuare nella modalità Cicli
+multipli.</p>
 <p>La sezione «Comportamento» permette di abilitare o disabilitare gli avvisi
 durante la fase di parsing, l’opzione «sincronizza la GUI con la CPU
 nell’esecuzione multi step», quando abilitata, sincronizzerà lo stato
@@ -386,6 +387,79 @@ produttore/consumatore più comuni:</p>
 </tr>
 </tbody>
 </table>
+</section>
+<section id="branch-delay-slot">
+<h3>Branch Delay Slot<a class="headerlink" href="#branch-delay-slot" title="Link to this heading">¶</a></h3>
+<p>EduMIPS64 può opzionalmente simulare il classico <strong>delay slot</strong> del
+branch del MIPS, come descritto in Hennessy &amp; Patterson. Il delay slot
+può essere attivato dalla scheda Impostazioni Generali della finestra
+delle impostazioni.</p>
+<p>Quando il delay slot è <strong>disabilitato</strong> (impostazione predefinita),
+l’istruzione recuperata sequenzialmente dopo un branch o un jump viene
+<em>scartata</em> quando il salto viene risolto in fase ID: non raggiunge mai
+EX, MEM o WB, e la vista a cicli mostra una bolla nello slot successivo
+al branch. Questo è il comportamento storico del simulatore.</p>
+<p>Quando il delay slot è <strong>abilitato</strong>, l’istruzione recuperata
+immediatamente dopo un branch o un jump (il <em>delay slot</em>) viene
+<strong>eseguita sempre</strong>, indipendentemente dal fatto che il branch sia
+preso o meno. Il bersaglio del salto viene quindi recuperato in IF nel
+ciclo successivo al delay slot. Ciò corrisponde al comportamento
+architetturale dell’instruction set MIPS64.</p>
+<p>Alcune note:</p>
+<ul class="simple">
+<li><p>L’impostazione interessa tutte le istruzioni di controllo del flusso
+che aggiornano il PC dallo stadio ID: branch incondizionati (<code class="docutils literal notranslate"><span class="pre">B</span></code>,
+<code class="docutils literal notranslate"><span class="pre">J</span></code>, <code class="docutils literal notranslate"><span class="pre">JAL</span></code>), branch condizionati (<code class="docutils literal notranslate"><span class="pre">BEQ</span></code>, <code class="docutils literal notranslate"><span class="pre">BNE</span></code>, <code class="docutils literal notranslate"><span class="pre">BEQZ</span></code>,
+<code class="docutils literal notranslate"><span class="pre">BNEZ</span></code>, <code class="docutils literal notranslate"><span class="pre">BGEZ</span></code>, <code class="docutils literal notranslate"><span class="pre">BC1T</span></code>, <code class="docutils literal notranslate"><span class="pre">BC1F</span></code>) e jump basati su registro
+(<code class="docutils literal notranslate"><span class="pre">JR</span></code>, <code class="docutils literal notranslate"><span class="pre">JALR</span></code>).</p></li>
+<li><p>La modifica del delay slot causa il reset della simulazione, perché
+altrimenti lo stato della pipeline sarebbe inconsistente con la
+nuova semantica. Il simulatore chiede conferma prima di applicare la
+modifica quando un programma è in esecuzione.</p></li>
+<li><p>I programmi scritti assumendo la semantica del delay slot
+tipicamente inseriscono un <code class="docutils literal notranslate"><span class="pre">NOP</span></code> (o un’istruzione utile il cui
+risultato non dipende dal branch) immediatamente dopo ogni branch o
+jump.</p></li>
+</ul>
+<section id="casi-particolari">
+<h4>Casi particolari<a class="headerlink" href="#casi-particolari" title="Link to this heading">¶</a></h4>
+<p>Alcuni schemi all’interno di un delay slot sono classificati come
+<strong>UNPREDICTABLE</strong> dal MIPS64 Architecture For Programmers,
+Volume II-A. EduMIPS64 sceglie per ciascuno
+un comportamento deterministico e documentato, in modo che lo
+studente veda una diagnostica chiara invece di stati corrotti
+silenziosamente:</p>
+<ul class="simple">
+<li><p><strong>Istruzione di salto in un delay slot</strong> — inserire un branch o un
+jump come delay slot di un altro branch o jump solleva a runtime
+un’eccezione <code class="docutils literal notranslate"><span class="pre">InvalidDelaySlotException</span></code>, con un messaggio che
+identifica l’istruzione problematica. Sui MIPS reali questo caso è
+UNPREDICTABLE; un simulatore didattico segnala l’errore invece di
+produrre stati arbitrari.</p></li>
+<li><p><strong>SYSCALL, HALT o BREAK in un delay slot</strong> — quando il delay slot è
+abilitato, l’istruzione dello slot viene eseguita fino in fondo
+prima che l’eccezione o la terminazione abbiano effetto: le syscall
+con effetti collaterali vengono eseguite esattamente una volta e il
+bersaglio del salto non viene mai fetched. Quando il delay slot è
+disabilitato, lo slot viene scartato come una normale bolla.</p></li>
+<li><p><strong>Eccezione sincrona in un delay slot</strong> — overflow su intero,
+divisione per zero e simili eccezioni dello stadio EX generate dallo
+slot si propagano correttamente dopo che lo slot è stato avanzato in
+ID, lasciando la pipeline in uno stato coerente. Sui MIPS reali
+<code class="docutils literal notranslate"><span class="pre">EPC</span></code> punta al branch e <code class="docutils literal notranslate"><span class="pre">Cause.BD</span></code> vale <code class="docutils literal notranslate"><span class="pre">1</span></code>; EduMIPS64 non
+modella CP0 e riporta semplicemente l’eccezione contro lo slot.</p></li>
+<li><p><strong>Registro di link di JAL / JALR</strong> — <code class="docutils literal notranslate"><span class="pre">R31</span></code> viene impostato
+all’indirizzo dell’istruzione <em>successiva</em> al delay slot
+architetturale (<code class="docutils literal notranslate"><span class="pre">JAL_PC</span> <span class="pre">+</span> <span class="pre">8</span></code>) quando il delay slot è abilitato, e
+all’indirizzo dello slot stesso (<code class="docutils literal notranslate"><span class="pre">JAL_PC</span> <span class="pre">+</span> <span class="pre">4</span></code>) quando è
+disabilitato. In entrambi i casi il comportamento corrisponde alla
+definizione MIPS64 di JAL/JALR.</p></li>
+<li><p><strong>Branch non preso</strong> — lo slot è il fall-through architetturale e
+viene comunque eseguito, indipendentemente dall’esito del branch.</p></li>
+</ul>
+<p>I test end-to-end in <code class="docutils literal notranslate"><span class="pre">EndToEndTests</span></code> (cercare <code class="docutils literal notranslate"><span class="pre">testDelaySlot</span></code>)
+verificano ciascuno di questi casi.</p>
+</section>
 </section>
 <section id="dinero-frontend">
 <h3>Dinero Frontend<a class="headerlink" href="#dinero-frontend" title="Link to this heading">¶</a></h3>

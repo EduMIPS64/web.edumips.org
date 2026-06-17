@@ -5,10 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>桌面用户界面 &#8212; EduMIPS64 1.4.0-122-g8b95fbfc 文档</title>
+    <title>桌面用户界面 &#8212; EduMIPS64 1.4.0-130-g045ada34 文档</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/epub.css?v=e4d0adb4" />
-    <script src="_static/documentation_options.js?v=c2f1a3ae"></script>
+    <script src="_static/documentation_options.js?v=e9b2fa1a"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/translations.js?v=540d3cec"></script>
@@ -150,7 +150,7 @@
 <h3>设置<a class="headerlink" href="#id20" title="链接到此标题。">¶</a></h3>
 <p>在设置对话框中可以对模拟器的各个方面进行配置。
 单击OK（确定）&quot;按钮将保存选项，而单击Cancel（取消）（或直接关闭窗口）将忽略更改。如果要保存更改，请不要忘记点击确定&quot;。单击&quot;重置为默认值&quot;按钮会在确认后将所有设置恢复为默认值；当模拟器配置错误时，可以用它快速恢复，无需逐项修改。</p>
-<p>主设置选项卡允许配置转发和多循环模式下的步数。</p>
+<p>主设置选项卡允许配置转发、分支延迟槽和多循环模式下的步数。</p>
 <p>行为选项卡允许启用或禁用解析阶段的警告。&quot;多步执行中图形与 CPU 同步选项选中后，将使窗口的图形状态与模拟器的内部状态同步。这意味着模拟速度会变慢，但在模拟过程中会有明确的图形反馈。如果选中该选项，&quot;循环间隔选项将影响模拟器在开始一个新循环之前需要等待多少毫秒。
 这些选项只有在使用
 运行或执行菜单中的多循环选项运行模拟时，这些选项才会生效。</p>
@@ -261,18 +261,72 @@ the user manual; the Chinese wording above is a best-effort translation
 and may benefit from review by a native speaker.</p>
 </div>
 </section>
+<section id="branch-delay-slot">
+<h3>分支延迟槽（Branch Delay Slot）<a class="headerlink" href="#branch-delay-slot" title="链接到此标题。">¶</a></h3>
+<p>EduMIPS64 可以选择性地模拟经典 MIPS 的**分支延迟槽**，正如
+Hennessy &amp; Patterson 中所描述的那样。可以在设置对话框的&quot;主设置&quot;选项卡中
+启用或禁用延迟槽。</p>
+<p>当延迟槽**被禁用**（默认设置）时，紧随分支或跳转之后顺序取出的指令
+在 ID 阶段解析跳转时会被*丢弃*：它永远不会进入 EX、MEM 或 WB，
+循环视图会在分支之后的槽位显示一个气泡。这是模拟器一贯的行为。</p>
+<p>当延迟槽**被启用**时，紧随分支或跳转之后取出的指令（即 <em>延迟槽</em>）
+<strong>始终被执行</strong>，无论分支是否被采用。分支目标会在延迟槽之后的下一个
+周期被取入 IF。这与 MIPS64 指令集的体系结构行为一致。</p>
+<p>一些说明：</p>
+<ul class="simple">
+<li><p>该设置影响所有在 ID 阶段更新程序计数器的控制流指令：无条件分支
+（<code class="docutils literal notranslate"><span class="pre">B</span></code>、<code class="docutils literal notranslate"><span class="pre">J</span></code>、<code class="docutils literal notranslate"><span class="pre">JAL</span></code>）、条件分支（<code class="docutils literal notranslate"><span class="pre">BEQ</span></code>、<code class="docutils literal notranslate"><span class="pre">BNE</span></code>、<code class="docutils literal notranslate"><span class="pre">BEQZ</span></code>、
+<code class="docutils literal notranslate"><span class="pre">BNEZ</span></code>、<code class="docutils literal notranslate"><span class="pre">BGEZ</span></code>、<code class="docutils literal notranslate"><span class="pre">BC1T</span></code>、<code class="docutils literal notranslate"><span class="pre">BC1F</span></code>）以及基于寄存器的跳转
+（<code class="docutils literal notranslate"><span class="pre">JR</span></code>、<code class="docutils literal notranslate"><span class="pre">JALR</span></code>）。</p></li>
+<li><p>切换延迟槽设置会重置模拟，否则流水线状态将与新的语义不一致。
+在程序运行期间，模拟器会在应用更改前请求确认。</p></li>
+<li><p>假定延迟槽语义编写的程序，通常会在每个分支或跳转之后紧接放置一个
+<a href="#id21"><span class="problematic" id="id22">``</span></a>NOP``（或者一个其结果与分支无关的有用指令）。</p></li>
+</ul>
+<section id="id23">
+<h4>特殊情况<a class="headerlink" href="#id23" title="链接到此标题。">¶</a></h4>
+<p>延迟槽内的若干模式被 MIPS64 Architecture For Programmers
+Volume II-A 归类为 <strong>UNPREDICTABLE</strong>。
+EduMIPS64 为每一种情况选择了确定且文档化的行为，使学习者看到
+清晰的诊断信息，而不是被静默破坏的状态：</p>
+<ul class="simple">
+<li><p><strong>延迟槽中的控制转移指令</strong> —— 将分支或跳转放在另一条分支或
+跳转的延迟槽中，会在运行时抛出
+<code class="docutils literal notranslate"><span class="pre">InvalidDelaySlotException</span></code> 异常，消息中会指出问题指令。
+在真实 MIPS 上此情况为 UNPREDICTABLE；教学型模拟器选择直接
+报告错误而非产生任意状态。</p></li>
+<li><p><strong>延迟槽中的 SYSCALL、HALT 或 BREAK</strong> —— 启用延迟槽时，
+延迟槽指令会先执行完毕，然后异常或程序终止才会生效，因此
+syscall 的副作用恰好发生一次，分支目标也不会被取指。禁用
+延迟槽时，延迟槽指令会像普通气泡一样被丢弃。</p></li>
+<li><p><strong>延迟槽中的同步异常</strong> —— 整数溢出、除零等由延迟槽产生的
+EX 阶段异常会在延迟槽推进到 ID 后再被传播，从而使流水线在
+周期结束时处于自洽状态。真实 MIPS 会把 <code class="docutils literal notranslate"><span class="pre">EPC</span></code> 设为分支 PC
+并将 <code class="docutils literal notranslate"><span class="pre">Cause.BD</span></code> 置 <code class="docutils literal notranslate"><span class="pre">1</span></code>；EduMIPS64 未建模 CP0，因此直接
+将异常报告在延迟槽指令上。</p></li>
+<li><p><strong>JAL / JALR 的链接寄存器</strong> —— 启用延迟槽时，<code class="docutils literal notranslate"><span class="pre">R31</span></code> 被设置为
+延迟槽之后那条指令的地址（<code class="docutils literal notranslate"><span class="pre">JAL_PC</span> <span class="pre">+</span> <span class="pre">8</span></code>）；禁用延迟槽时，
+<code class="docutils literal notranslate"><span class="pre">R31</span></code> 被设置为延迟槽自身的地址（<code class="docutils literal notranslate"><span class="pre">JAL_PC</span> <span class="pre">+</span> <span class="pre">4</span></code>）。两种模式
+下都符合 MIPS64 ISA 对 JAL/JALR 的定义。</p></li>
+<li><p><strong>未采用的分支</strong> —— 延迟槽是体系结构上的顺序后继，
+无论分支是否被采用都会执行。</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">EndToEndTests</span></code> 中的端到端测试（搜索 <code class="docutils literal notranslate"><span class="pre">testDelaySlot</span></code>）
+对上述每种情况都进行了固化。</p>
+</section>
+</section>
 <section id="dinero">
 <h3>Dinero 前端<a class="headerlink" href="#dinero" title="链接到此标题。">¶</a></h3>
 <p>通过 Dinero Frontend 对话框，可以向 DineroIV 进程提供程序执行时内部生成的跟踪文件。第一个文本框中是 DineroIV 可执行文件的路径，第二个文本框中必须是 DineroIV 的参数。</p>
 <p>下部包含 DineroIV 进程的输出，你可以从中获取所需的数据。</p>
 </section>
-<section id="id21">
-<h3>帮助<a class="headerlink" href="#id21" title="链接到此标题。">¶</a></h3>
+<section id="id24">
+<h3>帮助<a class="headerlink" href="#id24" title="链接到此标题。">¶</a></h3>
 <p>通过帮助（Help）对话框可以查看在线手册，该手册是本文档的 HTML 副本。</p>
 </section>
 </section>
 <section id="command-line-options-zh">
-<span id="id22"></span><h2>命令行选项<a class="headerlink" href="#command-line-options-zh" title="链接到此标题。">¶</a></h2>
+<span id="id25"></span><h2>命令行选项<a class="headerlink" href="#command-line-options-zh" title="链接到此标题。">¶</a></h2>
 <p>有多个命令行选项可用。下面的列表对它们进行了说明，长名称用圆括号括起来。长名称和短名称的使用方法相同。</p>
 <ul class="simple">
 <li><p><cite>-v (--version)</cite> 打印模拟器版本并退出。</p></li>
