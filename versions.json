@@ -2,6 +2,15 @@
   "current": "2bfcf1e20a7eec286a4a1321b216c5cce8f36107",
   "versions": [
     {
+      "sha": "600c39e053cce40dc7c54402763acd42866599eb",
+      "shortsha": "600c39e",
+      "seq": 2415,
+      "build": "1.4.0-186-g600c39e0",
+      "targetRelease": "1.4.1",
+      "pushedAt": "2026-07-03T12:53:55Z",
+      "promoted": false
+    },
+    {
       "sha": "2bfcf1e20a7eec286a4a1321b216c5cce8f36107",
       "shortsha": "2bfcf1e",
       "seq": 2414,
