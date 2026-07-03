@@ -1,0 +1,46 @@
+# Deploy web.edumips.org to GitHub Pages via Actions.
+#
+# Replaces the legacy branch-based Pages build (EduMIPS64/edumips64#1913):
+# every push to master publishes the repository contents as-is. There is no
+# build step on purpose — the EduMIPS64/edumips64 repo's push-web /
+# promote-web / rollback-web workflows prepare the content and push it here;
+# this workflow only packages and deploys it.
+#
+# workflow_dispatch is kept as a manual re-deploy lever (the equivalent of
+# the old "re-request a Pages build" API call).
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deploy at a time, in commit order; never cancel an in-flight deploy.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy site
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Upload site artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
