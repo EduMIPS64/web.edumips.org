@@ -1,5 +1,5 @@
 {
-  "current": "ef9d1114ad5ec263844adeb2188e0f7976b1c571",
+  "current": "ef563da0242fd90fb5701c67387d1af1784ffd5f",
   "versions": [
     {
       "sha": "ef563da0242fd90fb5701c67387d1af1784ffd5f",
@@ -8,16 +8,9 @@
       "build": "1.4.0-192-gef563da0",
       "targetRelease": "1.4.1",
       "pushedAt": "2026-07-03T19:47:43Z",
-      "promoted": false
-    },
-    {
-      "sha": "b71ded0b98c2496df0f5675b5d600c0154a5d8ce",
-      "shortsha": "b71ded0",
-      "seq": 2420,
-      "build": "1.4.0-191-gb71ded0b",
-      "targetRelease": "1.4.1",
-      "pushedAt": "2026-07-03T18:29:13Z",
-      "promoted": false
+      "promoted": true,
+      "promotedAt": "2026-07-04T05:14:31Z",
+      "promotedBy": "lupino3"
     },
     {
       "sha": "ef9d1114ad5ec263844adeb2188e0f7976b1c571",
@@ -127,7 +120,8 @@
       "pushedAt": "2026-06-14T13:46:16Z",
       "promoted": true,
       "promotedAt": "2026-06-14T14:03:51Z",
-      "promotedBy": "lupino3"
+      "promotedBy": "lupino3",
+      "pruned": true
     },
     {
       "sha": "b71f37abcd1b03e3ee143ee1ea10247db8299e32",
