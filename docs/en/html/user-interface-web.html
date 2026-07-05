@@ -5,10 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>The web user interface &#8212; EduMIPS64 1.4.0-193-gd8c5c270 documentation</title>
+    <title>The web user interface &#8212; EduMIPS64 1.4.0-205-g9cdfc871 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/epub.css?v=e4d0adb4" />
-    <script src="_static/documentation_options.js?v=963d9cb4"></script>
+    <script src="_static/documentation_options.js?v=b6642a50"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -33,14 +33,31 @@ the other chapters of this manual: those are independent of the user
 interface.</p>
 <section id="layout-overview">
 <h2>Layout overview<a class="headerlink" href="#layout-overview" title="Link to this heading">¶</a></h2>
-<p>The window is split into a top toolbar and two main areas:</p>
+<p>The window is organized into a top toolbar and a resizable workspace with
+three regions:</p>
 <ul class="simple">
-<li><p>On the left, the <strong>code editor</strong> (a Monaco-based MIPS64 editor).</p></li>
-<li><p>On the right, a stack of collapsible panels showing the runtime
-state of the simulation: <strong>Issues</strong>, <strong>Statistics</strong>, <strong>Pipeline</strong>,
-<strong>Registers</strong>, <strong>Memory</strong>, <strong>Standard Output</strong>, <strong>Cache
-Configuration</strong> and <strong>General Settings</strong>.</p></li>
+<li><p>On the left of the upper area, the <strong>code editor</strong> (a Monaco-based
+MIPS64 editor).</p></li>
+<li><p>On the right of the upper area, a column of collapsible panels showing
+the runtime state of the simulation: <strong>Issues</strong>, <strong>Statistics</strong>,
+<strong>Pipeline</strong>, <strong>Registers</strong>, <strong>Memory</strong> and <strong>Standard Output</strong>.</p></li>
+<li><p>Across the full width of the lower area, the <strong>Cycles</strong> diagram — a
+temporal, instruction-versus-cycle view of the pipeline that grows
+horizontally as the program runs (see <em>The Cycles diagram</em> below).</p></li>
 </ul>
+<p>The boundary between the code editor and the widgets column, and the
+boundary between the upper area and the Cycles region, can be dragged to
+resize them; each region keeps a minimum size so the code editor always
+stays usable. The widgets column and the Cycles region can each be
+collapsed to a thin bar with the toggle button in their header, and
+expanded again from the same button. The chosen sizes and collapsed
+states are saved in the browser’s local storage and restored on the next
+visit.</p>
+<p>On narrow windows (phones and small tablets) the three regions stack
+vertically and the whole page scrolls, instead of being split.</p>
+<p>The <strong>Cache Configuration</strong> and <strong>General Settings</strong> described later in
+this chapter are reached from the gear button in the top toolbar rather
+than from the right-hand column.</p>
 </section>
 <section id="the-top-toolbar">
 <h2>The top toolbar<a class="headerlink" href="#the-top-toolbar" title="Link to this heading">¶</a></h2>
@@ -372,6 +389,8 @@ totals shown in the <em>Statistics</em> panel.</p>
 <p>The per-stage colours (including the <em>Stall</em> colour) can be
 customised from <em>General Settings → Pipeline Colors</em> (see below) and
 are persisted in browser local storage.</p>
+<p>The Pipeline panel shows only the <em>current</em> cycle. For the history of
+every instruction across all cycles, see <em>The Cycles diagram</em> below.</p>
 </section>
 <section id="registers">
 <h3>Registers<a class="headerlink" href="#registers" title="Link to this heading">¶</a></h3>
@@ -446,6 +465,35 @@ restores the original palette (the same RGB values the Swing UI
 uses by default).</p></li>
 </ul>
 </section>
+</section>
+<section id="the-cycles-diagram">
+<h2>The Cycles diagram<a class="headerlink" href="#the-cycles-diagram" title="Link to this heading">¶</a></h2>
+<p>The <strong>Cycles</strong> region across the bottom of the window shows the
+<em>temporal</em> behaviour of the pipeline: a diagram of which stage every
+instruction occupied at every clock cycle. It mirrors the “Cycles”
+window of the classic Swing desktop UI.</p>
+<ul class="simple">
+<li><p>each <strong>row</strong> is one instruction, in the order it was fetched, labelled
+on the left with its assembly text;</p></li>
+<li><p>each <strong>column</strong> is one CPU cycle, numbered along the top;</p></li>
+<li><p>each <strong>cell</strong> shows, with the same colour code as the <em>Pipeline</em>
+panel, the stage the instruction was in during that cycle: <code class="docutils literal notranslate"><span class="pre">IF</span></code>,
+<code class="docutils literal notranslate"><span class="pre">ID</span></code>, <code class="docutils literal notranslate"><span class="pre">EX</span></code>, <code class="docutils literal notranslate"><span class="pre">MEM</span></code>, <code class="docutils literal notranslate"><span class="pre">WB</span></code> for the integer pipeline; <code class="docutils literal notranslate"><span class="pre">A1</span></code>–<code class="docutils literal notranslate"><span class="pre">A4</span></code>
+and <code class="docutils literal notranslate"><span class="pre">M1</span></code>–<code class="docutils literal notranslate"><span class="pre">M7</span></code> for the FP Adder and Multiplier; and <code class="docutils literal notranslate"><span class="pre">DIV</span></code> (with
+the per-cycle divider counter <code class="docutils literal notranslate"><span class="pre">D00</span></code>–<code class="docutils literal notranslate"><span class="pre">D24</span></code>) for the FP Divider.</p></li>
+</ul>
+<p>Stall cycles are drawn in the dedicated <em>Stall</em> colour and labelled with
+the hazard that caused them (<code class="docutils literal notranslate"><span class="pre">RAW</span></code>, <code class="docutils literal notranslate"><span class="pre">WAW</span></code> and the structural-stall
+tags <code class="docutils literal notranslate"><span class="pre">StDiv</span></code> / <code class="docutils literal notranslate"><span class="pre">StEx</span></code> / <code class="docutils literal notranslate"><span class="pre">StFun</span></code> / <code class="docutils literal notranslate"><span class="pre">Str</span></code> / <code class="docutils literal notranslate"><span class="pre">StAdd</span></code> / <code class="docutils literal notranslate"><span class="pre">StMul</span></code>),
+using exactly the same classification as the <em>Pipeline</em> panel. Because
+the diagram is built from the same data the Swing “Cycles” window draws,
+the web and desktop views never disagree on the history of a run.</p>
+<p>The diagram scrolls to follow the most recent cycle as the program
+advances; both scrollbars can be used to review earlier cycles or
+instructions. Before a program has run, the region shows an empty grid.
+For very long executions only the most recent cycles and instructions are
+kept on screen (a note above the grid says so) to keep the browser
+responsive.</p>
 </section>
 <section id="keyboard-shortcuts">
 <h2>Keyboard shortcuts<a class="headerlink" href="#keyboard-shortcuts" title="Link to this heading">¶</a></h2>

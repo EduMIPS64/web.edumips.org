@@ -5,10 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>L’interfaccia utente web &#8212; Documentazione EduMIPS64 1.4.0-193-gd8c5c270 </title>
+    <title>L’interfaccia utente web &#8212; Documentazione EduMIPS64 1.4.0-205-g9cdfc871 </title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/epub.css?v=e4d0adb4" />
-    <script src="_static/documentation_options.js?v=f0c342e4"></script>
+    <script src="_static/documentation_options.js?v=d09af400"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/translations.js?v=45930005"></script>
@@ -34,16 +34,34 @@ programmi, fai riferimento agli altri capitoli del manuale: quei
 contenuti sono indipendenti dall’interfaccia utente.</p>
 <section id="panoramica-del-layout">
 <h2>Panoramica del layout<a class="headerlink" href="#panoramica-del-layout" title="Link to this heading">¶</a></h2>
-<p>La finestra è suddivisa in una barra degli strumenti superiore e due
-aree principali:</p>
+<p>La finestra è organizzata in una barra degli strumenti superiore e in
+un’area di lavoro ridimensionabile con tre regioni:</p>
 <ul class="simple">
-<li><p>a sinistra, l”<strong>editor di codice</strong> (un editor MIPS64 basato su
-Monaco);</p></li>
-<li><p>a destra, una pila di pannelli a fisarmonica che mostrano lo stato
-della simulazione: <strong>Issues</strong>, <strong>Statistics</strong>, <strong>Pipeline</strong>,
-<strong>Registers</strong>, <strong>Memory</strong>, <strong>Standard Output</strong>, <strong>Cache
-Configuration</strong> e <strong>General Settings</strong>.</p></li>
+<li><p>a sinistra dell’area superiore, l”<strong>editor di codice</strong> (un editor
+MIPS64 basato su Monaco);</p></li>
+<li><p>a destra dell’area superiore, una colonna di pannelli a fisarmonica
+che mostrano lo stato della simulazione: <strong>Issues</strong>, <strong>Statistics</strong>,
+<strong>Pipeline</strong>, <strong>Registers</strong>, <strong>Memory</strong> e <strong>Standard Output</strong>;</p></li>
+<li><p>lungo tutta la larghezza dell’area inferiore, il diagramma dei
+<strong>Cycles</strong> — una vista temporale istruzioni-per-ciclo della pipeline
+che si sviluppa orizzontalmente man mano che il programma viene
+eseguito (vedi <em>Il diagramma dei cicli</em> più avanti).</p></li>
 </ul>
+<p>Il confine tra l’editor di codice e la colonna dei pannelli, e il confine
+tra l’area superiore e la regione dei cicli, possono essere trascinati per
+ridimensionarli; ogni regione mantiene una dimensione minima, così che
+l’editor di codice resti sempre utilizzabile. La colonna dei pannelli e la
+regione dei cicli possono essere ridotte a una barra sottile con il
+pulsante di attivazione presente nella loro intestazione, e riespanse con
+lo stesso pulsante. Le dimensioni scelte e lo stato ridotto/espanso sono
+salvati nella memoria locale del browser e ripristinati alla visita
+successiva.</p>
+<p>Su finestre strette (telefoni e piccoli tablet) le tre regioni vengono
+impilate verticalmente e l’intera pagina scorre, invece di essere
+suddivisa.</p>
+<p>La <strong>Cache Configuration</strong> e le <strong>General Settings</strong> descritte più avanti
+in questo capitolo si raggiungono dal pulsante a forma di ingranaggio
+nella barra degli strumenti superiore, non dalla colonna di destra.</p>
 </section>
 <section id="la-barra-degli-strumenti">
 <h2>La barra degli strumenti<a class="headerlink" href="#la-barra-degli-strumenti" title="Link to this heading">¶</a></h2>
@@ -385,6 +403,9 @@ sempre coerente con i totali mostrati nel pannello <em>Statistics</em>.</p>
 <p>I colori dei singoli stadi (incluso quello <em>Stall</em>) possono essere
 personalizzati dalla sezione <em>General Settings → Pipeline Colors</em>
 (vedi sotto) e vengono salvati nel local storage del browser.</p>
+<p>Il pannello Pipeline mostra solo il ciclo <em>corrente</em>. Per la storia di
+ogni istruzione lungo tutti i cicli, vedi <em>Il diagramma dei cicli</em> più
+avanti.</p>
 </section>
 <section id="registers">
 <h3>Registers<a class="headerlink" href="#registers" title="Link to this heading">¶</a></h3>
@@ -464,6 +485,38 @@ essere modificata con un selettore di colore; il pulsante
 valori RGB usati dal front-end Swing).</p></li>
 </ul>
 </section>
+</section>
+<section id="il-diagramma-dei-cicli">
+<h2>Il diagramma dei cicli<a class="headerlink" href="#il-diagramma-dei-cicli" title="Link to this heading">¶</a></h2>
+<p>La regione <strong>Cycles</strong>, lungo tutto il bordo inferiore della finestra,
+mostra il comportamento <em>temporale</em> della pipeline: un diagramma di quale
+stadio ha occupato ogni istruzione in ogni ciclo di clock. Riprende la
+finestra «Cycles» della classica interfaccia desktop Swing.</p>
+<ul class="simple">
+<li><p>ogni <strong>riga</strong> è un’istruzione, nell’ordine in cui è stata prelevata,
+etichettata a sinistra con il suo testo assembly;</p></li>
+<li><p>ogni <strong>colonna</strong> è un ciclo di CPU, numerato in alto;</p></li>
+<li><p>ogni <strong>cella</strong> mostra, con lo stesso codice colore del pannello
+<em>Pipeline</em>, lo stadio in cui l’istruzione si trovava in quel ciclo:
+<code class="docutils literal notranslate"><span class="pre">IF</span></code>, <code class="docutils literal notranslate"><span class="pre">ID</span></code>, <code class="docutils literal notranslate"><span class="pre">EX</span></code>, <code class="docutils literal notranslate"><span class="pre">MEM</span></code>, <code class="docutils literal notranslate"><span class="pre">WB</span></code> per la pipeline intera;
+<code class="docutils literal notranslate"><span class="pre">A1</span></code>–<code class="docutils literal notranslate"><span class="pre">A4</span></code> e <code class="docutils literal notranslate"><span class="pre">M1</span></code>–<code class="docutils literal notranslate"><span class="pre">M7</span></code> per il sommatore e il moltiplicatore FP;
+e <code class="docutils literal notranslate"><span class="pre">DIV</span></code> (con il contatore per ciclo del divisore <code class="docutils literal notranslate"><span class="pre">D00</span></code>–<code class="docutils literal notranslate"><span class="pre">D24</span></code>)
+per il divisore FP.</p></li>
+</ul>
+<p>I cicli di stallo sono disegnati con il colore dedicato <em>Stall</em> ed
+etichettati con l’hazard che li ha causati (<code class="docutils literal notranslate"><span class="pre">RAW</span></code>, <code class="docutils literal notranslate"><span class="pre">WAW</span></code> e le
+etichette di stallo strutturale <code class="docutils literal notranslate"><span class="pre">StDiv</span></code> / <code class="docutils literal notranslate"><span class="pre">StEx</span></code> / <code class="docutils literal notranslate"><span class="pre">StFun</span></code> /
+<code class="docutils literal notranslate"><span class="pre">Str</span></code> / <code class="docutils literal notranslate"><span class="pre">StAdd</span></code> / <code class="docutils literal notranslate"><span class="pre">StMul</span></code>), usando esattamente la stessa
+classificazione del pannello <em>Pipeline</em>. Poiché il diagramma è costruito
+dagli stessi dati che disegna la finestra «Cycles» di Swing, la vista web
+e quella desktop non sono mai in disaccordo sulla storia di un’esecuzione.</p>
+<p>Il diagramma scorre per seguire il ciclo più recente man mano che il
+programma avanza; entrambe le barre di scorrimento possono essere usate
+per rivedere cicli o istruzioni precedenti. Prima che un programma sia
+stato eseguito, la regione mostra una griglia vuota. Per esecuzioni molto
+lunghe vengono mantenuti sullo schermo solo i cicli e le istruzioni più
+recenti (una nota sopra la griglia lo segnala) per mantenere reattivo il
+browser.</p>
 </section>
 <section id="scorciatoie-da-tastiera">
 <h2>Scorciatoie da tastiera<a class="headerlink" href="#scorciatoie-da-tastiera" title="Link to this heading">¶</a></h2>

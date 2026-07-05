@@ -1,5 +1,5 @@
 {
-  "current": "d8c5c270e5d7f6f330bcbe8ea322ba47130e3774",
+  "current": "9cdfc8716c532d1c2615fbc6636ba00839242cca",
   "versions": [
     {
       "sha": "9cdfc8716c532d1c2615fbc6636ba00839242cca",
@@ -8,106 +8,9 @@
       "build": "1.4.0-205-g9cdfc871",
       "targetRelease": "1.4.1",
       "pushedAt": "2026-07-05T17:20:13Z",
-      "promoted": false
-    },
-    {
-      "sha": "487236206f41a63bc06d9870d08c1df33357d5cf",
-      "shortsha": "4872362",
-      "seq": 2433,
-      "build": "1.4.0-204-g48723620",
-      "targetRelease": "1.4.1",
-      "pushedAt": "2026-07-05T15:06:03Z",
-      "promoted": false
-    },
-    {
-      "sha": "92c3f1182bf5af8e519a6cd9e8707997eb2a39a6",
-      "shortsha": "92c3f11",
-      "seq": 2432,
-      "build": "1.4.0-203-g92c3f118",
-      "targetRelease": "1.4.1",
-      "pushedAt": "2026-07-05T13:28:30Z",
-      "promoted": false
-    },
-    {
-      "sha": "74da9e455ee67dd0dcb78e1a4da1cf0d17277b13",
-      "shortsha": "74da9e4",
-      "seq": 2431,
-      "build": "1.4.0-202-g74da9e45",
-      "targetRelease": "1.4.1",
-      "pushedAt": "2026-07-05T13:27:35Z",
-      "promoted": false
-    },
-    {
-      "sha": "7812628af1dba009d3f7fbe0180f8a6e50e3b570",
-      "shortsha": "7812628",
-      "seq": 2430,
-      "build": "1.4.0-201-g7812628a",
-      "targetRelease": "1.4.1",
-      "pushedAt": "2026-07-05T12:22:59Z",
-      "promoted": false
-    },
-    {
-      "sha": "21ce01ddf795e9063a3ce601e02432b292422747",
-      "shortsha": "21ce01d",
-      "seq": 2429,
-      "build": "1.4.0-200-g21ce01dd",
-      "targetRelease": "1.4.1",
-      "pushedAt": "2026-07-05T11:12:27Z",
-      "promoted": false
-    },
-    {
-      "sha": "507f9b6239ad798147c571e7624911ffd3d9b1e0",
-      "shortsha": "507f9b6",
-      "seq": 2428,
-      "build": "1.4.0-199-g507f9b62",
-      "targetRelease": "1.4.1",
-      "pushedAt": "2026-07-05T11:01:11Z",
-      "promoted": false
-    },
-    {
-      "sha": "40c1a7d70388ca43182a99bd8bbcc083e8cd4745",
-      "shortsha": "40c1a7d",
-      "seq": 2427,
-      "build": "1.4.0-198-g40c1a7d7",
-      "targetRelease": "1.4.1",
-      "pushedAt": "2026-07-05T10:52:14Z",
-      "promoted": false
-    },
-    {
-      "sha": "8d20d9322e89d9c08ab7476a5efaca5c3f76c8c4",
-      "shortsha": "8d20d93",
-      "seq": 2426,
-      "build": "1.4.0-197-g8d20d932",
-      "targetRelease": "1.4.1",
-      "pushedAt": "2026-07-05T10:34:27Z",
-      "promoted": false
-    },
-    {
-      "sha": "d0d22262c55622588eae50c4a4c667b9ac21ccda",
-      "shortsha": "d0d2226",
-      "seq": 2425,
-      "build": "1.4.0-196-gd0d22262",
-      "targetRelease": "1.4.1",
-      "pushedAt": "2026-07-05T09:18:52Z",
-      "promoted": false
-    },
-    {
-      "sha": "21d4204168c4e5467630a82d583ff53171d64b4a",
-      "shortsha": "21d4204",
-      "seq": 2424,
-      "build": "1.4.0-195-g21d42041",
-      "targetRelease": "1.4.1",
-      "pushedAt": "2026-07-04T21:44:34Z",
-      "promoted": false
-    },
-    {
-      "sha": "dc48cb6b3884fb72f5eed76dce5245419ba144d9",
-      "shortsha": "dc48cb6",
-      "seq": 2423,
-      "build": "1.4.0-194-gdc48cb6b",
-      "targetRelease": "1.4.1",
-      "pushedAt": "2026-07-04T18:09:02Z",
-      "promoted": false
+      "promoted": true,
+      "promotedAt": "2026-07-05T17:31:19Z",
+      "promotedBy": "lupino3"
     },
     {
       "sha": "d8c5c270e5d7f6f330bcbe8ea322ba47130e3774",
@@ -217,7 +120,8 @@
       "pushedAt": "2026-07-02T14:00:34Z",
       "promoted": true,
       "promotedAt": "2026-07-02T14:05:10Z",
-      "promotedBy": "lupino3"
+      "promotedBy": "lupino3",
+      "pruned": true
     },
     {
       "sha": "045ada347a84cc993001e967653586e5949cb369",
