@@ -1,0 +1,116 @@
+
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Welcome to the EduMIPS64 documentation! &#8212; EduMIPS64 1.4.0-216-g817f196d documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/epub.css?v=e4d0adb4" />
+    <script src="_static/documentation_options.js?v=4b6809c4"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ 
+  </head><body>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="welcome-to-the-edumips64-documentation">
+<h1>Welcome to the EduMIPS64 documentation!<a class="headerlink" href="#welcome-to-the-edumips64-documentation" title="Link to this heading">¶</a></h1>
+<p>EduMIPS64 is a MIPS64 Instruction Set Architecture (ISA) simulator. It is
+designed to be used to execute small programs that use the subset of the
+MIPS64 ISA implemented by the simulator, allowing the user to see how
+instructions behave in the pipeline, how stalls are handled by the CPU, the
+status of registers and memory and much more. It is both a simulator and a
+visual debugger.</p>
+<p>The website for the project is <a class="reference external" href="http://www.edumips.org">http://www.edumips.org</a>, and the code is hosted
+at <a class="reference external" href="http://github.com/EduMIPS64/edumips64">http://github.com/EduMIPS64/edumips64</a>. If you find any bugs, or have any
+suggestion for improving the simulator, please open an issue on github or send
+an email at <a class="reference external" href="mailto:bugs&#37;&#52;&#48;edumips&#46;org">bugs<span>&#64;</span>edumips<span>&#46;</span>org</a>.</p>
+<p>EduMIPS64 is developed by a group of students of the University of Catania
+(Italy), and started as a clone of WinMIPS64, even if now there are lots of
+differences between the two simulators.</p>
+<p>This manual will introduce you to EduMIPS64, and will cover some details on
+how to use it.</p>
+<p>This manual was generated for EduMIPS64 build 1.4.0-216-g817f196d.</p>
+<p>This manual is split into two parts. The first part is independent from the
+user interface in use and covers the source file format, the supported
+instruction set, the Floating Point Unit and a set of example programs.
+The second part documents the user interfaces: a chapter for the desktop
+(Swing) application, which also includes the command line options of the
+JAR, a chapter for the interactive command line shell that the JAR
+exposes in headless mode, and a chapter for the web frontend.</p>
+<p>When this manual is opened from inside the running application, only the
+chapter that is relevant for the active user interface is shown. The full
+manual (with both UI chapters) is available on
+<a class="reference external" href="https://edumips64.readthedocs.io/">Read the Docs</a> and as a PDF.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="source-files-format.html">Source files format</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="source-files-format.html#memory-limits">Memory limits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="source-files-format.html#the-data-section">The <cite>.data</cite> section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="source-files-format.html#the-code-section">The <cite>.code</cite> section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="source-files-format.html#the-include-command">The <cite>#include</cite> command</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="instructions.html">The instruction set</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="instructions.html#alu-instructions">ALU Instructions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="instructions.html#load-store-instructions">Load/Store instructions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="instructions.html#flow-control-instructions">Flow control instructions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="instructions.html#the-syscall-instruction">The <cite>SYSCALL</cite> instruction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="instructions.html#other-instructions">Other instructions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="fpu.html">Floating Point Unit</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fpu.html#special-values">Special values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fpu.html#exception-configuration">Exception configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fpu.html#the-double-directive">The .double directive</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fpu.html#the-fcsr-register">The FCSR register</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fpu.html#instruction-set">Instruction set</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Code Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#syscall">SYSCALL</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="versioning.html">Understanding versions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="versioning.html#the-version-string">The version string</a></li>
+<li class="toctree-l2"><a class="reference internal" href="versioning.html#where-to-find-the-version">Where to find the version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="versioning.html#which-web-build-am-i-running">Which web build am I running?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="versioning.html#browsing-and-switching-versions">Browsing and switching versions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="versioning.html#what-is-kept-and-for-how-long">What is kept, and for how long</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="user-interface-web.html">The web user interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user-interface-web.html#layout-overview">Layout overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-interface-web.html#the-top-toolbar">The top toolbar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-interface-web.html#the-code-editor">The code editor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-interface-web.html#the-issues-panel">The Issues panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-interface-web.html#runtime-panels">Runtime panels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-interface-web.html#the-cycles-diagram">The Cycles diagram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-interface-web.html#keyboard-shortcuts">Keyboard shortcuts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-interface-web.html#running-edumips64-as-a-desktop-or-cli-application">Running EduMIPS64 as a desktop or CLI application</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  </body>
+</html>
