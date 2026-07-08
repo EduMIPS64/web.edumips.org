@@ -1,0 +1,479 @@
+
+
+<html lang="zh-CN" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>网页用户界面 &#8212; EduMIPS64 1.4.0-218-g5135cce4 文档</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/epub.css?v=e4d0adb4" />
+    <script src="_static/documentation_options.js?v=7f7cc8a1"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/translations.js?v=540d3cec"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ 
+  </head><body>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="id1">
+<h1>网页用户界面<a class="headerlink" href="#id1" title="链接到此标题。">¶</a></h1>
+<p>EduMIPS64 还提供一个完全在浏览器中运行的网页应用程序。模拟器内核由 Java
+交叉编译为 JavaScript，并以 Web Worker 的形式运行，而用户界面则使用
+React 构建。生产环境部署在 <a class="reference external" href="https://web.edumips.org">https://web.edumips.org</a>。</p>
+<p>本章介绍网页前端。关于源文件格式、指令集、浮点单元和示例程序，请参阅
+本手册的其他章节：那些内容与具体的用户界面无关。</p>
+<section id="id2">
+<h2>布局概览<a class="headerlink" href="#id2" title="链接到此标题。">¶</a></h2>
+<p>窗口由顶部工具栏和一个可调整大小的工作区组成，工作区包含三个区域：</p>
+<ul class="simple">
+<li><p>上部区域的左侧是 <strong>代码编辑器</strong>（基于 Monaco 的 MIPS64 编辑器）。</p></li>
+<li><p>上部区域的右侧是一列可折叠的面板，显示模拟运行的状态：
+<strong>Issues</strong>、<strong>Statistics</strong>、<strong>Pipeline</strong>、<strong>Registers</strong>、<strong>Memory</strong>
+和 <strong>Standard Output</strong>。</p></li>
+<li><p>下部区域横跨整个宽度的是 <strong>Cycles</strong> 图 —— 一个按“指令对周期”展示
+流水线的时序视图，随着程序运行而横向增长（见下文<em>周期图</em>）。</p></li>
+</ul>
+<p>代码编辑器与面板列之间的边界，以及上部区域与周期区域之间的边界，都可以
+拖动来调整大小；每个区域都保留一个最小尺寸，以确保代码编辑器始终可用。
+面板列和周期区域都可以通过其标题栏上的切换按钮折叠为一条细条，并用同一
+按钮重新展开。所选的尺寸以及折叠/展开状态会保存在浏览器的本地存储中，
+并在下次访问时恢复。</p>
+<p>在较窄的窗口（手机和小型平板）上，三个区域会垂直堆叠、整个页面滚动，
+而不再进行分栏。</p>
+<p>本章后面介绍的 <strong>Cache Configuration</strong> 和 <strong>General Settings</strong> 通过顶部
+工具栏的齿轮按钮打开，而不再位于右侧的面板列中。</p>
+</section>
+<section id="id3">
+<h2>顶部工具栏<a class="headerlink" href="#id3" title="链接到此标题。">¶</a></h2>
+<p>顶部工具栏汇集了控制模拟器的所有操作。每个按钮都有一个工具提示，描述
+其作用。</p>
+<ul class="simple">
+<li><p><strong>EduMIPS64 标志和 &quot;Web Version&quot; 标签</strong> — 标识当前运行的版本。当当前
+版本不是生产版时，标签旁会显示一个彩色芯片：</p>
+<ul>
+<li><p>黄色 <code class="docutils literal notranslate"><span class="pre">PR</span> <span class="pre">#N</span></code> 芯片表示这是某个 pull request 的预览版，点击该芯片
+会跳转到对应的 PR 页面；</p></li>
+<li><p>蓝色 <code class="docutils literal notranslate"><span class="pre">dev</span></code> 芯片表示这是本地开发版本。</p></li>
+</ul>
+</li>
+<li><p><strong>CPU 状态芯片</strong> — 显示模拟 CPU 的当前状态，并使用颜色编码：</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">READY</span></code>（绿色）— 尚未加载程序，或 CPU 刚被重置；</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RUNNING</span></code>（黄色）— 已加载程序，CPU 正在执行；</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">STOPPING</span></code> / <code class="docutils literal notranslate"><span class="pre">STOPPED</span></code>（红色）— 已读取到终止指令，流水线正在
+清空；或程序已结束。</p></li>
+</ul>
+</li>
+</ul>
+<section id="id4">
+<h3>执行控制和工具栏布局<a class="headerlink" href="#id4" title="链接到此标题。">¶</a></h3>
+<p>执行控制按钮以<strong>浮动、可拖拽的纯图标工具栏</strong>的形式出现，覆盖在内容
+上方，类似 VS Code 的调试工具栏。工具栏会根据当前模拟器状态以上下文感知
+的方式显示，减少视觉混乱，让可用操作一目了然：</p>
+<ul class="simple">
+<li><p><strong>EMPTY</strong>（未加载程序）— 工具栏被隐藏；仅顶部工具栏中的 <code class="docutils literal notranslate"><span class="pre">Load</span></code>
+按钮可用。</p></li>
+<li><p><strong>READY</strong>（已加载程序，准备就绪）— 浮动工具栏出现，其中包含
+<code class="docutils literal notranslate"><span class="pre">Single</span> <span class="pre">Step</span></code>、<code class="docutils literal notranslate"><span class="pre">Multi</span> <span class="pre">Step</span></code>、<code class="docutils literal notranslate"><span class="pre">Run</span> <span class="pre">All</span></code> 和 <code class="docutils literal notranslate"><span class="pre">Stop</span></code> 作为图标
+按钮。工具栏可以拖拽到屏幕上的任何位置。</p></li>
+<li><p><strong>EXECUTING</strong>（程序正在运行）— 工具栏显示 <code class="docutils literal notranslate"><span class="pre">Pause</span></code> 和 <code class="docutils literal notranslate"><span class="pre">Stop</span></code>
+（<code class="docutils literal notranslate"><span class="pre">Stop</span></code> 被禁用，工具提示为 &quot;Pause before stopping&quot;）。工具栏
+保持可拖拽状态。</p></li>
+<li><p><strong>ENDED</strong>（程序已结束）— 工具栏被隐藏。</p></li>
+<li><p><strong>等待输入</strong>（输入对话框打开）— 工具栏被隐藏；必须先完成
+输入对话框。</p></li>
+</ul>
+<p><strong>Load</strong> 按钮、<strong>Program</strong> 菜单和 <strong>Help (?)</strong> 按钮始终在顶部工具栏
+中可见。</p>
+<p>各按钮的详细说明：</p>
+<ul class="simple">
+<li><p><strong>Single Step</strong> — 执行一个 CPU 周期。当程序已加载且准备就绪时
+显示在浮动工具栏中。</p></li>
+<li><p><strong>Multi Step</strong> — 一次点击执行可配置数量的 CPU 周期。当前数量会显示
+在按钮的工具提示中，可在 <em>General Settings</em> 面板（&quot;Multi Step
+Size&quot;）中修改。当程序已加载且准备就绪时显示在浮动工具栏中。</p></li>
+<li><p><strong>Run All</strong> — 一直执行程序，直到遇到 <code class="docutils literal notranslate"><span class="pre">SYSCALL</span> <span class="pre">0</span></code>（或等效指令）
+或 <code class="docutils literal notranslate"><span class="pre">BREAK</span></code> 指令，或者用户手动暂停或停止。在每两个内部批次的周期
+之间，模拟器可以等待一个可配置的延迟（<code class="docutils literal notranslate"><span class="pre">Execution</span> <span class="pre">Delay</span></code>），以便
+长时间运行也能在视觉上被观察到。当程序已加载且准备就绪时显示在
+浮动工具栏中。</p></li>
+<li><p><strong>Pause</strong> — 在当前周期暂停正在执行的程序。之后可以使用 <em>Single
+Step</em>、<em>Multi Step</em> 或 <em>Run All</em> 继续执行。仅在程序主动执行时显示
+在浮动工具栏中。</p></li>
+<li><p><strong>Stop</strong> — 停止当前的执行，并将 CPU 重置到 <code class="docutils literal notranslate"><span class="pre">READY</span></code> 状态，同时清空
+寄存器、内存和流水线。在 READY 和 EXECUTING 状态下显示在浮动工具栏
+中（在 EXECUTING 中被禁用，工具提示为 &quot;Pause before stopping&quot;）。</p></li>
+</ul>
+</section>
+<section id="program">
+<h3>Program 菜单<a class="headerlink" href="#program" title="链接到此标题。">¶</a></h3>
+<p><strong>Program</strong> 菜单（文件夹图标带下拉箭头）将程序管理功能整合到单个
+顶部工具栏按钮中。打开后会显示一个下拉菜单，其中包含以下选项。
+<strong>当程序被加载到模拟器时，该菜单不可用</strong>（即模拟器正在运行时），
+以防止在模拟过程中意外修改程序。一旦加载的程序完成运行或模拟器被
+重置（未加载程序），菜单就会再次可用。</p>
+<ul class="simple">
+<li><p><strong>New</strong> — 清空代码编辑器，仅保留一个空的汇编骨架（<code class="docutils literal notranslate"><span class="pre">.data</span></code> 和
+<code class="docutils literal notranslate"><span class="pre">.code</span></code> 指令以及末尾的 <code class="docutils literal notranslate"><span class="pre">SYSCALL</span> <span class="pre">0</span></code>）。</p></li>
+<li><p><strong>Open…</strong> — 打开本地文件（通常是 <code class="docutils literal notranslate"><span class="pre">.s</span></code> 文件），并将其内容加载
+到编辑器中。</p></li>
+<li><p><strong>Save…</strong> — 将编辑器的当前内容保存为本地文件 <code class="docutils literal notranslate"><span class="pre">code.s</span></code>。</p></li>
+<li><p><strong>Load Example</strong> — 将编辑器的内容替换为 EduMIPS64 自带的示例程序
+（与首次打开网页模拟器时显示的程序相同）。该选项可在实验后恢复到一个已知
+可用的起点，或者用于丢弃保存在本地的编辑器内容（见下文
+<em>保存与加载</em>）。</p></li>
+</ul>
+</section>
+<section id="help">
+<h3>Help 按钮<a class="headerlink" href="#help" title="链接到此标题。">¶</a></h3>
+<ul class="simple">
+<li><p><strong>Help (?)</strong> — 在应用内打开本手册，左侧带有导航抽屉，并提供语言
+选择器，可在英语、意大利语和中文之间切换。Help 对话框中的 <em>About</em>
+选项卡会显示模拟器版本以及当前运行版本的说明。</p></li>
+</ul>
+</section>
+</section>
+<section id="id5">
+<h2>代码编辑器<a class="headerlink" href="#id5" title="链接到此标题。">¶</a></h2>
+<p>代码编辑器基于 <a class="reference external" href="https://microsoft.github.io/monaco-editor/">Monaco</a> ——
+即 Visual Studio Code 所使用的编辑器 —— 专门用于编写 MIPS64 汇编。
+它支持所有常见的代码编辑器功能（多光标、查找替换、行号、撤销/重做、
+自动布局、根据操作系统偏好自动切换浅色/深色主题），并提供下面描述的
+若干 EduMIPS64 专用功能。</p>
+<section id="id6">
+<h3>语法高亮<a class="headerlink" href="#id6" title="链接到此标题。">¶</a></h3>
+<p>编辑器为 MIPS64 源代码提供语法高亮：</p>
+<ul class="simple">
+<li><p>标签（以标识符后跟 <code class="docutils literal notranslate"><span class="pre">:</span></code> 开头的行）；</p></li>
+<li><p>EduMIPS64 支持的所有指令（合法指令列表在运行时由模拟器内核计算
+得出）；</p></li>
+<li><p>以 <code class="docutils literal notranslate"><span class="pre">.</span></code> 开头的指示符，例如 <code class="docutils literal notranslate"><span class="pre">.data</span></code>、<code class="docutils literal notranslate"><span class="pre">.code</span></code>、<code class="docutils literal notranslate"><span class="pre">.word</span></code>；</p></li>
+<li><p>形如 <code class="docutils literal notranslate"><span class="pre">rNN</span></code> 的寄存器名；</p></li>
+<li><p>数字字面量；</p></li>
+<li><p>字符串字面量；</p></li>
+<li><p>以 <code class="docutils literal notranslate"><span class="pre">;</span></code> 开头的注释。</p></li>
+</ul>
+</section>
+<section id="id7">
+<h3>实时校验<a class="headerlink" href="#id7" title="链接到此标题。">¶</a></h3>
+<p>当你在编辑器中输入代码时，模拟器会在后台对其进行解析，并直接在编辑器
+中报告 <strong>错误</strong> 和 <strong>警告</strong>：</p>
+<ul class="simple">
+<li><p>错误以红色波浪线标出；</p></li>
+<li><p>警告以黄色波浪线标出；</p></li>
+<li><p>将鼠标悬停在标记区域上会以工具提示形式显示问题描述；</p></li>
+<li><p>受影响的行还会在编辑器边栏中以图标标记。</p></li>
+</ul>
+<p>相同的问题也会汇总在右侧的 <strong>Issues</strong> 面板中（见下文）。警告不会
+阻止执行；错误会阻止执行 —— 在程序存在错误时点击 <em>Load</em> 会弹出
+解析器返回的错误信息。</p>
+</section>
+<section id="id8">
+<h3>悬停信息<a class="headerlink" href="#id8" title="链接到此标题。">¶</a></h3>
+<p>程序被解析后（即使用 <em>Load</em> 按钮加载之后），将鼠标悬停在编辑器中的
+某条指令上会打开一个工具提示，其中包含：</p>
+<ul class="simple">
+<li><p><strong>Address</strong> — 指令所在的内存地址；</p></li>
+<li><p><strong>OpCode</strong> — 汇编操作码（例如 <code class="docutils literal notranslate"><span class="pre">DADD</span></code>、<code class="docutils literal notranslate"><span class="pre">LD</span></code>）；</p></li>
+<li><p><strong>Binary</strong> — 32 位二进制编码；</p></li>
+<li><p><strong>Hex</strong> — 同一编码的十六进制表示，左侧补零至 8 位；</p></li>
+<li><p><strong>CPU Stage</strong> — 仅当指令当前位于流水线中时显示；标识当前周期所处
+的流水线阶段（例如 <code class="docutils literal notranslate"><span class="pre">Instruction</span> <span class="pre">Fetch</span> <span class="pre">(IF)</span></code>、<code class="docutils literal notranslate"><span class="pre">Execute</span> <span class="pre">(EX)</span></code>、
+<code class="docutils literal notranslate"><span class="pre">FPU</span> <span class="pre">Multiplier</span> <span class="pre">(3)</span></code>）。</p></li>
+</ul>
+</section>
+<section id="id9">
+<h3>流水线阶段实时可视化<a class="headerlink" href="#id9" title="链接到此标题。">¶</a></h3>
+<p>程序运行时，与每个流水线阶段当前所执行的指令对应的源代码行会被高亮
+显示，并使用一种标识该阶段的颜色。该颜色编码与 <strong>Pipeline</strong> 面板共享：</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>阶段</p></th>
+<th class="head"><p>高亮颜色</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Instruction Fetch (IF)</p></td>
+<td><p>黄色</p></td>
+</tr>
+<tr class="row-odd"><td><p>Instruction Decode (ID)</p></td>
+<td><p>蓝色</p></td>
+</tr>
+<tr class="row-even"><td><p>Execute (EX)</p></td>
+<td><p>红色</p></td>
+</tr>
+<tr class="row-odd"><td><p>Memory Access (MEM)</p></td>
+<td><p>绿色</p></td>
+</tr>
+<tr class="row-even"><td><p>Write Back (WB)</p></td>
+<td><p>品红</p></td>
+</tr>
+<tr class="row-odd"><td><p>FPU Adder (1..4)</p></td>
+<td><p>深绿色</p></td>
+</tr>
+<tr class="row-even"><td><p>FPU Multiplier (1..7)</p></td>
+<td><p>青色</p></td>
+</tr>
+<tr class="row-odd"><td><p>FPU Divider</p></td>
+<td><p>橄榄色</p></td>
+</tr>
+</tbody>
+</table>
+<p>随着模拟的推进，高亮会跟随指令在流水线中移动，从而让人一眼就能看出
+任意周期中哪些源代码行处于哪个阶段。结合上述的悬停工具提示，可以
+非常方便地在执行的任意时刻检查流水线状态。</p>
+<p>当程序被加载到模拟器时，编辑器会变为只读。要重新编辑源代码，请使用
+<em>Stop</em> 重置 CPU。</p>
+</section>
+<section id="id10">
+<h3>保存与加载<a class="headerlink" href="#id10" title="链接到此标题。">¶</a></h3>
+<p>编辑器内容可以通过工具栏的 <strong>Save Code</strong> 和 <strong>Open Code</strong> 按钮持久化。
+<em>Save Code</em> 会触发一个 <code class="docutils literal notranslate"><span class="pre">code.s</span></code> 文件的下载；<em>Open Code</em> 允许选择本地
+文件，并以其内容替换编辑器中的代码。</p>
+<p>此外，编辑器会在输入时自动将其内容保存到浏览器的 local storage 中，
+这样意外刷新页面不会再把一个写到一半的程序重置回示例程序。下次在同一
+浏览器中打开页面时，最后一次编辑的源代码会被恢复。如果需要丢弃保存的
+内容并恢复到原始示例程序，可以使用工具栏中的 <strong>Restore default
+sample</strong> 按钮。</p>
+</section>
+<section id="vi">
+<h3>可选的 Vi 模式<a class="headerlink" href="#vi" title="链接到此标题。">¶</a></h3>
+<p>可以通过 <em>General Settings</em> 面板切换编辑器的 <em>Vi 模式</em>。启用后，编辑器
+会响应基本的 vi 按键绑定（模式、移动、查找），这对习惯于在终端中编辑
+源代码的用户很方便。</p>
+</section>
+<section id="id11">
+<h3>字体大小<a class="headerlink" href="#id11" title="链接到此标题。">¶</a></h3>
+<p>可以在 <em>General Settings</em> 面板中增大或减小编辑器的字体大小；该值同时
+也用于界面中其他的等宽显示元素。</p>
+</section>
+</section>
+<section id="issues">
+<h2>Issues 面板<a class="headerlink" href="#issues" title="链接到此标题。">¶</a></h2>
+<p>右侧的 <strong>Issues</strong> 面板与编辑器中内联显示的诊断信息保持一致：</p>
+<ul class="simple">
+<li><p>每一条记录显示问题所在的行号、列号以及解析器返回的简短描述；</p></li>
+<li><p>警告图标（黄色三角形）标识警告，错误图标（红色圆形）标识错误；</p></li>
+<li><p>面板标题处会显示两个计数芯片，一个用于警告，一个用于错误。当没有
+问题时这些芯片会被隐藏；</p></li>
+<li><p>每一条记录都可以点击：选中某个问题后，编辑器会滚动并将对应的代码
+行居中显示，同时把光标定位到所报告的列并将焦点切换到编辑器，方便
+立即修改问题。</p></li>
+</ul>
+<p>Issues 面板默认展开，以便问题始终可见。</p>
+</section>
+<section id="id12">
+<h2>运行时面板<a class="headerlink" href="#id12" title="链接到此标题。">¶</a></h2>
+<p>窗口右侧由若干可独立折叠的面板（accordion）堆叠而成。每个面板可以
+通过点击其标题独立展开或折叠；展开状态会跨页面刷新保持。</p>
+<p>当面板被折叠且其内容因模拟步进而发生变化时，面板标题旁会出现一个
+小的脉动圆点。这样无需展开所有面板，也能轻松发现有趣的变化（例如
+某个寄存器被写入）。该脉动指示器可以在 <em>General Settings</em> 中通过
+&quot;Accordion Change Alerts&quot; 关闭。</p>
+<section id="statistics">
+<h3>Statistics<a class="headerlink" href="#statistics" title="链接到此标题。">¶</a></h3>
+<p>程序执行相关的计数器：</p>
+<ul class="simple">
+<li><p>已执行的周期数；</p></li>
+<li><p>已执行的指令数；</p></li>
+<li><p>CPI —— 每条指令的平均周期数（<code class="docutils literal notranslate"><span class="pre">cycles</span> <span class="pre">/</span> <span class="pre">instructions</span></code>）；</p></li>
+<li><p>RAW、WAW 和结构性停顿数；</p></li>
+<li><p>L1 指令缓存的读次数和未命中次数；</p></li>
+<li><p>L1 数据缓存的读次数、读未命中、写次数和写未命中（仅在配置缓存
+模拟器时才有意义 —— 见 <em>Cache Configuration</em>）。</p></li>
+</ul>
+</section>
+<section id="pipeline">
+<h3>Pipeline<a class="headerlink" href="#pipeline" title="链接到此标题。">¶</a></h3>
+<p>以图形化方式展示 CPU 流水线，外观参考经典的 Swing 前端的流水线
+示意图。整数流水线的五个阶段（IF、ID、EX、MEM、WB）以相互连接的
+方块绘制，FPU 功能单元——FP Adder（4 级）、FP Multiplier（7 级）
+以及 FP Divider——围绕在它们周围。每个方块：</p>
+<ul>
+<li><p>当其中持有指令时，会以该阶段的颜色高亮，并在方块中显示指令名；</p></li>
+<li><p>当阶段空闲或仅持有流水线气泡时（例如分支冲刷的槽位、程序结束时
+的排空气泡），保持为空白方框：与 Swing 流水线视图的做法一致，
+气泡渲染为空阶段；</p></li>
+<li><p>当本周期内确实发生了停顿时，方块会以斜线填充、使用专用的
+<em>Stall</em> 颜色，并标注简短的停顿类型标签。标签沿用 Swing 周期
+视图的分类：</p>
+<ul class="simple">
+<li><p><strong>RAW</strong> —— Read-After-Write 数据相关（关闭 forwarding 时
+通常出现在 ID 阶段）；</p></li>
+<li><p><strong>WAW</strong> —— 两条 FP 指令竞争同一目的寄存器引发的
+Write-After-Write 相关；</p></li>
+<li><p><strong>Struct: Div / EX / FU</strong> —— FP 除法器、整数 EX 阶段或其他
+FP 功能单元上的结构相关；</p></li>
+<li><p><strong>Struct: Mem / Add / Mul</strong> —— 由 MEM 阶段被占用、FP Adder
+末级（A4）或 FP Multiplier 末级（M7）被占用引起的结构相关。</p></li>
+</ul>
+<p>本 MIPS 实现中**不会**出现 WAR（Write-After-Read）相关：ID 阶段
+按序发射加上 WB 阶段的延迟写回，使得任意先发射的读操作总在后续
+写操作之前完成，因此模拟器从不产生此类相关。</p>
+</li>
+</ul>
+<p>停顿由更新 CPU 停顿计数器的同一套逻辑识别，因此 Web 流水线视图所
+显示的停顿与 <em>Statistics</em> 面板中的总数始终一致。</p>
+<p>各阶段的颜色（包括 <em>Stall</em> 颜色）可在 <em>General Settings → Pipeline
+Colors</em> 中自定义（见下文），并保存在浏览器的本地存储中。</p>
+<p>Pipeline 面板只显示<em>当前</em>周期。若需查看每条指令在所有周期上的历史，
+请参见下文<em>周期图</em>。</p>
+</section>
+<section id="registers">
+<h3>Registers<a class="headerlink" href="#registers" title="链接到此标题。">¶</a></h3>
+<p>显示整数通用寄存器、浮点寄存器以及 FCSR 的值。值以十六进制形式显示；
+将鼠标悬停在某个值上会以工具提示形式显示对应的十进制解释。</p>
+</section>
+<section id="memory">
+<h3>Memory<a class="headerlink" href="#memory" title="链接到此标题。">¶</a></h3>
+<p>显示模拟主存的当前内容，按可寻址单元组织。每一行显示地址（十六进制）
+以及该地址处存储的值；工具提示会显示十进制值，以及与该单元相关的
+源代码标签和注释。</p>
+</section>
+<section id="standard-output">
+<h3>Standard Output<a class="headerlink" href="#standard-output" title="链接到此标题。">¶</a></h3>
+<p>一个只读的文本区域，收集程序通过 <code class="docutils literal notranslate"><span class="pre">SYSCALL</span> <span class="pre">4</span></code>（输出整数）和
+<code class="docutils literal notranslate"><span class="pre">SYSCALL</span> <span class="pre">5</span></code>（输出字符串）打印的所有内容。<code class="docutils literal notranslate"><span class="pre">SYSCALL</span> <span class="pre">3</span></code>（读取
+字符串）通过弹窗对话框支持：当运行的程序请求输入时，会弹出 <em>Input</em>
+对话框要求用户输入。对话框会强制限制程序声明的最大长度，并且可以
+取消。</p>
+</section>
+<section id="cache-configuration">
+<h3>Cache Configuration<a class="headerlink" href="#cache-configuration" title="链接到此标题。">¶</a></h3>
+<p>用于配置 L1 缓存模拟器的参数：</p>
+<ul class="simple">
+<li><p><strong>Size</strong> — 缓存的总容量，单位字节；</p></li>
+<li><p><strong>Block Size</strong> — 单个缓存行的大小，单位字节；</p></li>
+<li><p><strong>Associativity</strong> — 每组的路数（<code class="docutils literal notranslate"><span class="pre">1</span></code> 表示直接映射，<code class="docutils literal notranslate"><span class="pre">&gt;1</span></code> 表示
+组相联）。</p></li>
+</ul>
+<p>L1 指令缓存和 L1 数据缓存可以独立配置。模拟器运行时这些字段被禁用；
+新的配置将在下次重置后生效。</p>
+</section>
+<section id="general-settings">
+<h3>General Settings<a class="headerlink" href="#general-settings" title="链接到此标题。">¶</a></h3>
+<p>影响模拟器和 UI 的持久化设置。所有值都保存在浏览器的 localStorage
+中，并在页面刷新后保留。</p>
+<ul class="simple">
+<li><p><strong>Editor Vi Mode</strong> — 在代码编辑器中切换基本的 vi 按键绑定。</p></li>
+<li><p><strong>Font Size</strong> — 代码编辑器以及其他等宽显示面板的字体大小；可以通过
+<code class="docutils literal notranslate"><span class="pre">-</span></code> 和 <code class="docutils literal notranslate"><span class="pre">+</span></code> 按钮调整。</p></li>
+<li><p><strong>Accordion Change Alerts</strong> — 启用或禁用折叠面板内容变化时显示的
+脉动指示器。</p></li>
+<li><p><strong>CPU Forwarding</strong> — 启用或禁用流水线中的转发（forwarding）。在
+模拟器运行时禁用，因为更改它需要重置 CPU。</p></li>
+<li><p><strong>Branch Delay Slot</strong> — 启用或禁用经典 MIPS 分支延迟槽
+（Hennessy &amp; Patterson 中描述的）。启用时，紧随任何分支或跳转之后
+的指令**总是被执行**，无论分支是否被采用；禁用时（默认设置），
+该指令会被丢弃，流水线会显示一个气泡。在模拟器运行时禁用，因为
+更改它需要重置 CPU。</p></li>
+<li><p><strong>Multi Step Size</strong> — 工具栏 <em>Multi Step</em> 按钮单击一次执行的周期数。</p></li>
+<li><p><strong>Execution Delay (ms)</strong> — 在 <em>Run All</em> 中两个连续内部批次之间插入
+的延迟。增大该值可以减慢长时间运行，使行高亮和面板更新等视觉反馈
+得以实时跟踪。该更改会立即生效，即使在执行中途也是如此。</p></li>
+<li><p><strong>Pipeline Colors</strong> — <em>Pipeline</em> 示意图为各阶段使用的颜色。每一项
+（<code class="docutils literal notranslate"><span class="pre">IF</span></code>、<code class="docutils literal notranslate"><span class="pre">ID</span></code>、<code class="docutils literal notranslate"><span class="pre">EX</span></code>、<code class="docutils literal notranslate"><span class="pre">MEM</span></code>、<code class="docutils literal notranslate"><span class="pre">WB</span></code>、<code class="docutils literal notranslate"><span class="pre">FP</span> <span class="pre">Adder</span></code>、
+<code class="docutils literal notranslate"><span class="pre">FP</span> <span class="pre">Multiplier</span></code>、<code class="docutils literal notranslate"><span class="pre">FP</span> <span class="pre">Divider</span></code>、<code class="docutils literal notranslate"><span class="pre">Stall</span></code>）都可以通过取色器
+修改；<em>Reset to defaults</em> 按钮可恢复原始配色（与 Swing 前端
+默认使用的 RGB 值相同）。</p></li>
+</ul>
+</section>
+</section>
+<section id="id13">
+<h2>周期图<a class="headerlink" href="#id13" title="链接到此标题。">¶</a></h2>
+<p>窗口底部横跨整个宽度的 <strong>Cycles</strong> 区域显示流水线的<em>时序</em>行为：一张
+展示每条指令在每个时钟周期处于哪个阶段的图。它对应经典 Swing 桌面界面
+中的 “Cycles” 窗口。</p>
+<ul class="simple">
+<li><p>每一 <strong>行</strong> 是一条指令，按取指顺序排列，左侧标注其汇编文本；</p></li>
+<li><p>每一 <strong>列</strong> 是一个 CPU 周期，顶部标有编号；</p></li>
+<li><p>每一 <strong>单元格</strong> 以与 <em>Pipeline</em> 面板相同的配色，显示该指令在该周期
+所处的阶段：整数流水线的 <code class="docutils literal notranslate"><span class="pre">IF</span></code>、<code class="docutils literal notranslate"><span class="pre">ID</span></code>、<code class="docutils literal notranslate"><span class="pre">EX</span></code>、<code class="docutils literal notranslate"><span class="pre">MEM</span></code>、<code class="docutils literal notranslate"><span class="pre">WB</span></code>；
+浮点加法器与乘法器的 <code class="docutils literal notranslate"><span class="pre">A1</span></code>–<code class="docutils literal notranslate"><span class="pre">A4</span></code> 和 <code class="docutils literal notranslate"><span class="pre">M1</span></code>–<code class="docutils literal notranslate"><span class="pre">M7</span></code>；以及浮点除法器
+的 <code class="docutils literal notranslate"><span class="pre">DIV</span></code>（及其逐周期计数器 <code class="docutils literal notranslate"><span class="pre">D00</span></code>–<code class="docutils literal notranslate"><span class="pre">D24</span></code>）。</p></li>
+</ul>
+<p>停顿周期以专用的 <em>Stall</em> 颜色绘制，并标注导致停顿的相关（<code class="docutils literal notranslate"><span class="pre">RAW</span></code>、
+<code class="docutils literal notranslate"><span class="pre">WAW</span></code> 以及结构停顿标签 <code class="docutils literal notranslate"><span class="pre">StDiv</span></code> / <code class="docutils literal notranslate"><span class="pre">StEx</span></code> / <code class="docutils literal notranslate"><span class="pre">StFun</span></code> / <code class="docutils literal notranslate"><span class="pre">Str</span></code> /
+<code class="docutils literal notranslate"><span class="pre">StAdd</span></code> / <code class="docutils literal notranslate"><span class="pre">StMul</span></code>），使用与 <em>Pipeline</em> 面板完全相同的分类。由于该
+图由 Swing “Cycles” 窗口所用的同一套数据构建，网页视图与桌面视图对于一
+次运行的历史永远保持一致。</p>
+<p>随着程序推进，图会滚动以跟随最新的周期；两个滚动条都可用于回看更早的
+周期或指令。在程序运行之前，该区域显示一个空网格。对于非常长的执行，只
+在屏幕上保留最近的周期和指令（网格上方会有相应提示），以保持浏览器的
+响应速度。</p>
+</section>
+<section id="id14">
+<h2>键盘快捷键<a class="headerlink" href="#id14" title="链接到此标题。">¶</a></h2>
+<p>只要没有对话框（帮助、设置、输入）处于打开状态，以下键盘快捷键随时
+可用。所有列出的按键均会调用 <code class="docutils literal notranslate"><span class="pre">preventDefault()</span></code>，以防止浏览器的默
+认行为（例如 F10 菜单栏、Esc）同时触发。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 15.0%" />
+<col style="width: 35.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>按键</p></th>
+<th class="head"><p>操作</p></th>
+<th class="head"><p>生效条件</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>F2</strong></p></td>
+<td><p>加载程序</p></td>
+<td><p>程序无语法错误</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>F8</strong></p></td>
+<td><p>运行全部 / 暂停（切换）</p></td>
+<td><p>运行全部：程序已加载（READY）；暂停：正在执行中</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>F9</strong></p></td>
+<td><p>单步执行</p></td>
+<td><p>程序已加载（READY）</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>F10</strong></p></td>
+<td><p>多步执行</p></td>
+<td><p>程序已加载（READY）</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Esc</strong></p></td>
+<td><p>停止并重置 CPU</p></td>
+<td><p>程序已加载（READY）</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="edumips64">
+<h2>将 EduMIPS64 作为桌面或命令行应用程序运行<a class="headerlink" href="#edumips64" title="链接到此标题。">¶</a></h2>
+<p>网页前端无需安装即可使用，非常方便；但 EduMIPS64 主要以 Java 桌面
+应用程序的形式发布，也可以从命令行运行。桌面 JAR 提供了额外的功能
+（更丰富的设置对话框、用于缓存追踪分析的 Dinero 前端、用于批处理 /
+headless 执行的 CLI 选项、跟踪文件写入器），这些都记录在
+<a class="reference external" href="https://edumips64.readthedocs.io/">Read the Docs</a> 上的完整手册中。</p>
+<p>要安装桌面应用程序或从命令行运行 EduMIPS64，请参阅项目的 GitHub
+仓库：</p>
+<ul class="simple">
+<li><p>项目页面：<a class="reference external" href="https://www.edumips.org">https://www.edumips.org</a></p></li>
+<li><p>源代码、发行版和安装说明：
+<a class="reference external" href="https://github.com/EduMIPS64/edumips64">https://github.com/EduMIPS64/edumips64</a></p></li>
+</ul>
+<p>如果你发现网页前端中的 bug 或希望提出改进建议，欢迎在 GitHub 上提交
+issue。</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  </body>
+</html>
