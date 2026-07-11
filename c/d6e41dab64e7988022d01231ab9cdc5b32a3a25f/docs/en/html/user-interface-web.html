@@ -1,0 +1,569 @@
+
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>The web user interface &#8212; EduMIPS64 1.4.0-231-gd6e41dab documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/epub.css?v=e4d0adb4" />
+    <script src="_static/documentation_options.js?v=085150fe"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ 
+  </head><body>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="the-web-user-interface">
+<h1>The web user interface<a class="headerlink" href="#the-web-user-interface" title="Link to this heading">¶</a></h1>
+<p>EduMIPS64 is also available as a web application that runs entirely in
+the browser. The simulator core is cross-compiled from Java to
+JavaScript and runs as a Web Worker, while the user interface is built
+with React. The production deployment is hosted at
+<a class="reference external" href="https://web.edumips.org">https://web.edumips.org</a>.</p>
+<p>This chapter describes the web frontend. For the source file format,
+the supported instruction set, the FPU and example programs, refer to
+the other chapters of this manual: those are independent of the user
+interface.</p>
+<section id="layout-overview">
+<h2>Layout overview<a class="headerlink" href="#layout-overview" title="Link to this heading">¶</a></h2>
+<p>The window is organized into a top toolbar and a resizable workspace with
+three regions:</p>
+<ul class="simple">
+<li><p>On the left of the upper area, the <strong>code editor</strong> (a Monaco-based
+MIPS64 editor).</p></li>
+<li><p>On the right of the upper area, a column of collapsible panels showing
+the runtime state of the simulation: <strong>Issues</strong>, <strong>Statistics</strong>,
+<strong>Pipeline</strong>, <strong>Registers</strong>, <strong>Memory</strong> and <strong>Standard Output</strong>.</p></li>
+<li><p>Across the full width of the lower area, the <strong>Cycles</strong> diagram — a
+temporal, instruction-versus-cycle view of the pipeline that grows
+horizontally as the program runs (see <em>The Cycles diagram</em> below).</p></li>
+</ul>
+<p>The boundary between the code editor and the widgets column, and the
+boundary between the upper area and the Cycles region, can be dragged to
+resize them; each region keeps a minimum size so the code editor always
+stays usable. The widgets column and the Cycles region can each be
+collapsed to a thin bar with the toggle button in their header, and
+expanded again from the same button. The chosen sizes and collapsed
+states are saved in the browser’s local storage and restored on the next
+visit.</p>
+<p>On narrow windows (phones and small tablets) the three regions stack
+vertically and the whole page scrolls, instead of being split.</p>
+<p>The <strong>Cache Configuration</strong> and <strong>General Settings</strong> described later in
+this chapter are reached from the gear button in the top toolbar rather
+than from the right-hand column.</p>
+</section>
+<section id="the-top-toolbar">
+<h2>The top toolbar<a class="headerlink" href="#the-top-toolbar" title="Link to this heading">¶</a></h2>
+<p>The toolbar at the top of the window groups every action that controls
+the simulator. Each button has a tooltip that describes its effect.</p>
+<ul class="simple">
+<li><p><strong>EduMIPS64 logo and “Web Version” label</strong> — indicate the running
+build. A coloured chip is shown next to the label when the build is
+not the production one:</p>
+<ul>
+<li><p>a yellow <code class="docutils literal notranslate"><span class="pre">PR</span> <span class="pre">#N</span></code> chip identifies a per-pull-request preview build
+and links back to the originating pull request on GitHub;</p></li>
+<li><p>a blue <code class="docutils literal notranslate"><span class="pre">dev</span></code> chip identifies a local development build.</p></li>
+</ul>
+</li>
+<li><p><strong>CPU status chip</strong> — shows the current state of the simulated CPU
+with a colour code:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">READY</span></code> (green) — no program is loaded yet, or the CPU has just
+been reset;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RUNNING</span></code> (yellow) — a program is loaded and the CPU is in the
+middle of an execution;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">STOPPING</span></code> / <code class="docutils literal notranslate"><span class="pre">STOPPED</span></code> (red) — a termination instruction has
+been fetched and the pipeline is draining, or the program has
+ended.</p></li>
+</ul>
+</li>
+</ul>
+<section id="execution-controls-and-toolbar-layout">
+<h3>Execution controls and toolbar layout<a class="headerlink" href="#execution-controls-and-toolbar-layout" title="Link to this heading">¶</a></h3>
+<p>The execution controls appear as a <strong>floating, draggable, icon-only
+toolbar</strong> that overlays the content, much like the debug toolbar in
+VS Code. The toolbar is contextually shown based on the current
+simulator state, reducing visual clutter and making available actions
+immediately obvious:</p>
+<ul class="simple">
+<li><p><strong>EMPTY</strong> (no program loaded) — the toolbar is hidden; only the
+<code class="docutils literal notranslate"><span class="pre">Load</span></code> button in the top header is available.</p></li>
+<li><p><strong>READY</strong> (program loaded, ready to run) — the floating toolbar
+appears with <code class="docutils literal notranslate"><span class="pre">Single</span> <span class="pre">Step</span></code>, <code class="docutils literal notranslate"><span class="pre">Multi</span> <span class="pre">Step</span></code>, <code class="docutils literal notranslate"><span class="pre">Run</span> <span class="pre">All</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">Stop</span></code> as icon buttons. The toolbar can be dragged to reposition
+it anywhere on the screen.</p></li>
+<li><p><strong>EXECUTING</strong> (program running) — the toolbar shows <code class="docutils literal notranslate"><span class="pre">Pause</span></code> and
+<code class="docutils literal notranslate"><span class="pre">Stop</span></code> (disabled with the tooltip “Pause before stopping”). The
+toolbar remains draggable.</p></li>
+<li><p><strong>ENDED</strong> (program finished) — the toolbar is hidden.</p></li>
+<li><p><strong>Waiting for input</strong> (input dialog open) — the toolbar is hidden;
+the input dialog must be resolved first.</p></li>
+</ul>
+<p>The <strong>Load</strong> button, the <strong>Program</strong> menu, and the <strong>Help (?)</strong> button
+remain always visible in the top header bar.</p>
+<p>Individual button descriptions:</p>
+<ul class="simple">
+<li><p><strong>Single Step</strong> — executes one CPU cycle. Shown in the floating
+toolbar when a program is loaded and ready to execute.</p></li>
+<li><p><strong>Multi Step</strong> — executes a configurable number of CPU cycles in a
+single click. The number of steps is shown in the button’s tooltip
+and can be changed in the <em>General Settings</em> panel (“Multi Step
+Size”). Shown in the floating toolbar when a program is loaded and
+ready to execute.</p></li>
+<li><p><strong>Run All</strong> — executes the program until it terminates with a
+<code class="docutils literal notranslate"><span class="pre">SYSCALL</span> <span class="pre">0</span></code> (or equivalent) or a <code class="docutils literal notranslate"><span class="pre">BREAK</span></code> instruction, or until
+it is paused or stopped manually. Between batches of cycles the
+simulator can wait a configurable delay (<code class="docutils literal notranslate"><span class="pre">Execution</span> <span class="pre">Delay</span></code>) so
+that long runs remain visually observable. Shown in the floating
+toolbar when a program is loaded and ready to execute.</p></li>
+<li><p><strong>Pause</strong> — interrupts a running execution at the current cycle.
+Single Step / Multi Step / Run All can then be used to continue.
+Shown in the floating toolbar only while the program is actively
+executing.</p></li>
+<li><p><strong>Stop</strong> — halts the running execution and resets the CPU to the
+<code class="docutils literal notranslate"><span class="pre">READY</span></code> state, clearing registers, memory and pipeline. Shown in
+the floating toolbar in READY and EXECUTING states (disabled in
+EXECUTING with tooltip “Pause before stopping”).</p></li>
+</ul>
+</section>
+<section id="program-menu">
+<h3>Program menu<a class="headerlink" href="#program-menu" title="Link to this heading">¶</a></h3>
+<p>The <strong>Program</strong> menu (folder icon with a dropdown caret) consolidates
+program management into a single header button. It opens a dropdown menu
+with the following items. <strong>The menu is unavailable while a program is
+loaded in the simulator</strong> (i.e. while the simulator is running), preventing
+accidental changes to the program during simulation. It becomes available
+again once the loaded program has finished running or after the simulator
+is reset (no program loaded).</p>
+<ul class="simple">
+<li><p><strong>New</strong> — empties the code editor, leaving only an empty assembly
+skeleton (<code class="docutils literal notranslate"><span class="pre">.data</span></code> and <code class="docutils literal notranslate"><span class="pre">.code</span></code> directives plus a final
+<code class="docutils literal notranslate"><span class="pre">SYSCALL</span> <span class="pre">0</span></code>).</p></li>
+<li><p><strong>Open…</strong> — opens a local file (typically a <code class="docutils literal notranslate"><span class="pre">.s</span></code> file) and
+loads its contents into the editor.</p></li>
+<li><p><strong>Save…</strong> — saves the current contents of the editor to a local
+file named <code class="docutils literal notranslate"><span class="pre">code.s</span></code>.</p></li>
+<li><p><strong>Load Example</strong> — replaces the editor contents with the
+bundled sample program shipped with EduMIPS64 (the same one shown
+the first time you open the web simulator). This is useful to
+recover a known-good
+starting point after experimenting, or to discard the persisted
+editor contents (see <em>Saving and loading</em> below).</p></li>
+</ul>
+</section>
+<section id="help-button">
+<h3>Help button<a class="headerlink" href="#help-button" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>Help (?)</strong> — opens this manual inside the application, with a
+navigation drawer on the left and a language selector that lets you
+switch between English, Italian and Chinese. The Help dialog also
+includes an <em>About</em> tab that shows the version of the simulator and
+a description of the running build.</p></li>
+</ul>
+</section>
+</section>
+<section id="the-code-editor">
+<h2>The code editor<a class="headerlink" href="#the-code-editor" title="Link to this heading">¶</a></h2>
+<p>The code editor is based on <a class="reference external" href="https://microsoft.github.io/monaco-editor/">Monaco</a> — the editor that powers
+Visual Studio Code — and is dedicated to writing MIPS64 assembly. It
+supports all the usual code-editor conveniences (multi-cursor, find &amp;
+replace, line numbers, undo/redo, automatic layout, automatic
+light/dark theme based on the OS preference) plus a number of
+EduMIPS64-specific features described below.</p>
+<section id="syntax-highlighting">
+<h3>Syntax highlighting<a class="headerlink" href="#syntax-highlighting" title="Link to this heading">¶</a></h3>
+<p>The editor provides syntax highlighting for MIPS64 sources:</p>
+<ul class="simple">
+<li><p>labels (lines starting with an identifier followed by <code class="docutils literal notranslate"><span class="pre">:</span></code>);</p></li>
+<li><p>every instruction supported by EduMIPS64 (the list of valid
+instructions is computed at runtime from the simulator core);</p></li>
+<li><p>directives that start with <code class="docutils literal notranslate"><span class="pre">.</span></code>, e.g. <code class="docutils literal notranslate"><span class="pre">.data</span></code>, <code class="docutils literal notranslate"><span class="pre">.code</span></code>,
+<code class="docutils literal notranslate"><span class="pre">.word</span></code>;</p></li>
+<li><p>register names of the form <code class="docutils literal notranslate"><span class="pre">rNN</span></code>;</p></li>
+<li><p>numeric literals;</p></li>
+<li><p>string literals;</p></li>
+<li><p>comments starting with <code class="docutils literal notranslate"><span class="pre">;</span></code>.</p></li>
+</ul>
+</section>
+<section id="live-validation">
+<h3>Live validation<a class="headerlink" href="#live-validation" title="Link to this heading">¶</a></h3>
+<p>The simulator parses the code in the background while you type and
+reports any <strong>errors</strong> and <strong>warnings</strong> directly in the editor:</p>
+<ul class="simple">
+<li><p>errors are underlined in red;</p></li>
+<li><p>warnings are underlined with a yellow squiggle;</p></li>
+<li><p>hovering over an underlined region shows the description of the
+problem in a tooltip;</p></li>
+<li><p>the affected line is also marked in the editor’s “minimap”-style
+gutter.</p></li>
+</ul>
+<p>The same problems are summarized in the <strong>Issues</strong> panel on the right
+(see below). Warnings do not block execution; errors do — pressing
+<code class="docutils literal notranslate"><span class="pre">Load</span></code> while the program contains errors will surface a popup with
+the parser’s message.</p>
+</section>
+<section id="hover-based-information">
+<h3>Hover-based information<a class="headerlink" href="#hover-based-information" title="Link to this heading">¶</a></h3>
+<p>Once a program has been parsed (i.e. once it has been loaded with the
+<code class="docutils literal notranslate"><span class="pre">Load</span></code> button), hovering over an instruction in the editor opens a
+tooltip with information about it:</p>
+<ul class="simple">
+<li><p><strong>Address</strong> — the memory address at which the instruction has been
+placed.</p></li>
+<li><p><strong>OpCode</strong> — the assembly opcode (e.g. <code class="docutils literal notranslate"><span class="pre">DADD</span></code>, <code class="docutils literal notranslate"><span class="pre">LD</span></code>).</p></li>
+<li><p><strong>Binary</strong> — the 32-bit binary encoding.</p></li>
+<li><p><strong>Hex</strong> — the same encoding in hexadecimal, zero-padded to 8 digits.</p></li>
+<li><p><strong>CPU Stage</strong> — only shown if the instruction is currently inside
+the pipeline; identifies the stage in which it sits at the current
+cycle (e.g. <code class="docutils literal notranslate"><span class="pre">Instruction</span> <span class="pre">Fetch</span> <span class="pre">(IF)</span></code>, <code class="docutils literal notranslate"><span class="pre">Execute</span> <span class="pre">(EX)</span></code>, <code class="docutils literal notranslate"><span class="pre">FPU</span>
+<span class="pre">Multiplier</span> <span class="pre">(3)</span></code>).</p></li>
+</ul>
+</section>
+<section id="real-time-pipeline-stage-visualization">
+<h3>Real-time pipeline-stage visualization<a class="headerlink" href="#real-time-pipeline-stage-visualization" title="Link to this heading">¶</a></h3>
+<p>While the program is running, the line of source corresponding to the
+instruction currently in each pipeline stage is highlighted with a
+colour that identifies the stage. The colour code is shared with the
+<strong>Pipeline</strong> panel:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Stage</p></th>
+<th class="head"><p>Highlight colour</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Instruction Fetch (IF)</p></td>
+<td><p>Yellow</p></td>
+</tr>
+<tr class="row-odd"><td><p>Instruction Decode (ID)</p></td>
+<td><p>Blue</p></td>
+</tr>
+<tr class="row-even"><td><p>Execute (EX)</p></td>
+<td><p>Red</p></td>
+</tr>
+<tr class="row-odd"><td><p>Memory Access (MEM)</p></td>
+<td><p>Green</p></td>
+</tr>
+<tr class="row-even"><td><p>Write Back (WB)</p></td>
+<td><p>Magenta</p></td>
+</tr>
+<tr class="row-odd"><td><p>FPU Adder (1..4)</p></td>
+<td><p>Dark green</p></td>
+</tr>
+<tr class="row-even"><td><p>FPU Multiplier (1..7)</p></td>
+<td><p>Teal</p></td>
+</tr>
+<tr class="row-odd"><td><p>FPU Divider</p></td>
+<td><p>Olive</p></td>
+</tr>
+</tbody>
+</table>
+<p>The highlight follows the instructions through the pipeline as the
+simulation advances, providing an at-a-glance view of which lines of
+source code are active in which stage at any given cycle. Combined
+with the per-instruction hover tooltip described above, this makes it
+easy to inspect the state of the pipeline at any point during the
+execution.</p>
+<p>The editor becomes read-only while a program is loaded into the
+simulator. Use <code class="docutils literal notranslate"><span class="pre">Stop</span></code> to reset the CPU and edit the source again.</p>
+</section>
+<section id="saving-and-loading">
+<h3>Saving and loading<a class="headerlink" href="#saving-and-loading" title="Link to this heading">¶</a></h3>
+<p>The editor’s contents can be persisted using the <strong>Save Code</strong> and
+<strong>Open Code</strong> toolbar buttons. <code class="docutils literal notranslate"><span class="pre">Save</span> <span class="pre">Code</span></code> triggers a download of
+the current source as <code class="docutils literal notranslate"><span class="pre">code.s</span></code>; <code class="docutils literal notranslate"><span class="pre">Open</span> <span class="pre">Code</span></code> lets you pick a local
+file and replaces the editor’s contents with it.</p>
+<p>In addition, the editor automatically persists its contents in the
+browser’s local storage as you type, so an accidental page reload
+does not wipe a non-trivial program back to the bundled sample. The
+last edited source is restored the next time the page is opened in
+the same browser. Use the <strong>Restore default sample</strong> toolbar button
+to discard the persisted contents and bring back the original
+example program.</p>
+</section>
+<section id="optional-vi-mode">
+<h3>Optional Vi mode<a class="headerlink" href="#optional-vi-mode" title="Link to this heading">¶</a></h3>
+<p>A <em>Vi mode</em> for the editor can be toggled in the <em>General Settings</em>
+panel. When enabled, the editor honours basic vi keybindings (modes,
+motions, search), which is convenient if you are used to editing
+sources from a terminal.</p>
+</section>
+<section id="font-size">
+<h3>Font size<a class="headerlink" href="#font-size" title="Link to this heading">¶</a></h3>
+<p>The editor’s font size can be increased or decreased from the <em>General
+Settings</em> panel; the chosen size is also used by other monospaced
+elements of the UI.</p>
+</section>
+</section>
+<section id="the-issues-panel">
+<h2>The Issues panel<a class="headerlink" href="#the-issues-panel" title="Link to this heading">¶</a></h2>
+<p>The <strong>Issues</strong> panel on the right of the window mirrors the
+diagnostics that the editor surfaces inline:</p>
+<ul class="simple">
+<li><p>every entry shows the line and column of the problem and a short
+description from the parser;</p></li>
+<li><p>a warning icon (yellow triangle) marks warnings, an error icon (red
+circle) marks errors;</p></li>
+<li><p>the panel header shows two count chips, one for warnings and one
+for errors. The chips are hidden when there is nothing to report;</p></li>
+<li><p>every entry is clickable: selecting an issue scrolls the editor so
+the offending line is centred in the viewport, places the cursor at
+the reported column and focuses the editor so you can start fixing
+the problem right away.</p></li>
+</ul>
+<p>The Issues panel is expanded by default so problems are visible at a
+glance.</p>
+</section>
+<section id="runtime-panels">
+<h2>Runtime panels<a class="headerlink" href="#runtime-panels" title="Link to this heading">¶</a></h2>
+<p>The right-hand side of the window stacks several collapsible
+“accordion” panels. Each panel can be expanded or collapsed
+independently by clicking on its header; the expansion state is
+persisted across page reloads.</p>
+<p>When a panel is collapsed and its contents change because of a
+simulation step, a small pulsating dot appears next to the panel’s
+title. This makes it easy to spot interesting changes (for example, a
+register being written) without having to keep every panel expanded.
+The pulsating indicator can be disabled in <em>General Settings</em>
+(“Accordion Change Alerts”).</p>
+<section id="statistics">
+<h3>Statistics<a class="headerlink" href="#statistics" title="Link to this heading">¶</a></h3>
+<p>Counters about the program execution:</p>
+<ul class="simple">
+<li><p>number of executed cycles;</p></li>
+<li><p>number of executed instructions;</p></li>
+<li><p>CPI — cycles per instruction (<code class="docutils literal notranslate"><span class="pre">cycles</span> <span class="pre">/</span> <span class="pre">instructions</span></code>);</p></li>
+<li><p>RAW, WAW and structural stalls;</p></li>
+<li><p>L1 instruction-cache reads and misses;</p></li>
+<li><p>L1 data-cache reads, read misses, writes and write misses (only
+meaningful when the cache simulator is configured — see <em>Cache
+Configuration</em>).</p></li>
+</ul>
+</section>
+<section id="pipeline">
+<h3>Pipeline<a class="headerlink" href="#pipeline" title="Link to this heading">¶</a></h3>
+<p>Shows a graphical representation of the CPU pipeline that resembles the
+classic Swing UI’s pipeline diagram. The five integer stages (IF, ID,
+EX, MEM, WB) are drawn as connected blocks, with the FPU functional
+units — the FP Adder (4 stages), FP Multiplier (7 stages) and FP
+Divider — laid out around them. Each block:</p>
+<ul>
+<li><p>lights up with the stage’s colour while it holds an instruction, and
+shows the instruction’s mnemonic inside the block;</p></li>
+<li><p>stays as an empty outline when the corresponding stage is idle or
+holds a pipeline bubble (e.g. branch-flush slots, end-of-program
+drain bubbles): just like Swing’s pipeline widget, bubbles are
+rendered as empty stages;</p></li>
+<li><p>renders with a hatched fill, the dedicated <em>Stall</em> colour and a
+short stall-type label whenever a stall actually occurred in the
+current cycle. The labels match the Swing cycle widget’s
+classification:</p>
+<ul class="simple">
+<li><p><strong>RAW</strong> — Read-After-Write data hazard (typically on the ID
+stage when forwarding is disabled);</p></li>
+<li><p><strong>WAW</strong> — Write-After-Write hazard between two FP instructions
+competing for the same destination register;</p></li>
+<li><p><strong>Struct: Div / EX / FU</strong> — structural hazard at the FP Divider,
+the integer EX stage or another FP functional unit;</p></li>
+<li><p><strong>Struct: Mem / Add / Mul</strong> — structural hazard caused by an
+instruction stuck in MEM, in the FP Adder’s last stage (A4) or
+the FP Multiplier’s last stage (M7).</p></li>
+</ul>
+<p>WAR (Write-After-Read) hazards are <em>not</em> possible in this MIPS
+implementation: the in-order issue at ID combined with the late
+writeback at WB orders all reads before later writes, so the
+simulator never raises one.</p>
+</li>
+</ul>
+<p>Stalls are identified by the same logic that updates the CPU’s
+stall counters, so the Web pipeline widget always agrees with the
+totals shown in the <em>Statistics</em> panel.</p>
+<p>The per-stage colours (including the <em>Stall</em> colour) can be
+customised from <em>General Settings → Pipeline Colors</em> (see below) and
+are persisted in browser local storage.</p>
+<p>The Pipeline panel shows only the <em>current</em> cycle. For the history of
+every instruction across all cycles, see <em>The Cycles diagram</em> below.</p>
+</section>
+<section id="registers">
+<h3>Registers<a class="headerlink" href="#registers" title="Link to this heading">¶</a></h3>
+<p>The contents of the integer general-purpose registers, the
+floating-point registers and the FCSR are shown in this panel. Values
+are displayed in their hexadecimal representation; hovering on a
+value shows the corresponding decimal interpretation as a tooltip.</p>
+</section>
+<section id="memory">
+<h3>Memory<a class="headerlink" href="#memory" title="Link to this heading">¶</a></h3>
+<p>The current contents of the simulated main memory, organized in
+addressable cells. Each row shows the address (in hexadecimal) and the
+value stored at that address; tooltips reveal the decimal value and
+the source-code labels and comments associated with the cell.</p>
+</section>
+<section id="standard-output">
+<h3>Standard Output<a class="headerlink" href="#standard-output" title="Link to this heading">¶</a></h3>
+<p>A read-only text area that collects everything the program prints via
+<code class="docutils literal notranslate"><span class="pre">SYSCALL</span> <span class="pre">4</span></code> (write integer) and <code class="docutils literal notranslate"><span class="pre">SYSCALL</span> <span class="pre">5</span></code> (write string).
+<code class="docutils literal notranslate"><span class="pre">SYSCALL</span> <span class="pre">3</span></code> (read string) is supported through a popup dialog: when
+the running program issues a read, an <em>Input</em> dialog appears asking
+for the value to feed back to the program. The dialog enforces the
+maximum length declared by the program and can be cancelled.</p>
+</section>
+<section id="cache-configuration">
+<h3>Cache Configuration<a class="headerlink" href="#cache-configuration" title="Link to this heading">¶</a></h3>
+<p>Lets you configure the parameters of the L1 cache simulator:</p>
+<ul class="simple">
+<li><p><strong>Size</strong> — total capacity of the cache, in bytes;</p></li>
+<li><p><strong>Block Size</strong> — size of a single cache line, in bytes;</p></li>
+<li><p><strong>Associativity</strong> — number of ways per set (<code class="docutils literal notranslate"><span class="pre">1</span></code> is direct mapped,
+<code class="docutils literal notranslate"><span class="pre">&gt;1</span></code> is set-associative).</p></li>
+</ul>
+<p>The L1 instruction cache and the L1 data cache are configured
+independently. The fields are disabled while the simulator is
+running; the new configuration takes effect on the next reset.</p>
+</section>
+<section id="general-settings">
+<h3>General Settings<a class="headerlink" href="#general-settings" title="Link to this heading">¶</a></h3>
+<p>Persistent settings that influence the simulator and the UI. All
+values are saved in the browser’s local storage and survive page
+reloads.</p>
+<ul class="simple">
+<li><p><strong>Editor Vi Mode</strong> — toggles basic vi keybindings in the code
+editor.</p></li>
+<li><p><strong>Font Size</strong> — font size for the code editor and other monospaced
+panels; can be adjusted with the <code class="docutils literal notranslate"><span class="pre">-</span></code> and <code class="docutils literal notranslate"><span class="pre">+</span></code> buttons.</p></li>
+<li><p><strong>Accordion Change Alerts</strong> — enables or disables the pulsating
+indicator shown on collapsed panels when their contents change.</p></li>
+<li><p><strong>CPU Forwarding</strong> — enables or disables operand forwarding in the
+pipeline. Disabled while the simulator is running because changing
+it requires a reset.</p></li>
+<li><p><strong>Branch Delay Slot</strong> — enables or disables the classical MIPS
+branch delay slot, as described in Hennessy &amp; Patterson. When
+enabled, the instruction immediately following any branch or jump
+is <strong>always executed</strong>, regardless of whether the branch is taken;
+when disabled (the default), that instruction is squashed and the
+pipeline shows a bubble. Disabled while the simulator is running
+because changing it requires a reset.</p></li>
+<li><p><strong>Multi Step Size</strong> — number of cycles executed by a single click of
+the <em>Multi Step</em> toolbar button.</p></li>
+<li><p><strong>Execution Delay (ms)</strong> — delay inserted between successive
+internal batches of cycles during <em>Run All</em>. Increasing it slows
+down long runs so that the visual feedback (line highlighting,
+panel updates) can be followed in real time. The change is applied
+live, even mid-execution.</p></li>
+<li><p><strong>Pipeline Colors</strong> — per-stage colours used by the <em>Pipeline</em>
+diagram. Each entry (<code class="docutils literal notranslate"><span class="pre">IF</span></code>, <code class="docutils literal notranslate"><span class="pre">ID</span></code>, <code class="docutils literal notranslate"><span class="pre">EX</span></code>, <code class="docutils literal notranslate"><span class="pre">MEM</span></code>, <code class="docutils literal notranslate"><span class="pre">WB</span></code>,
+<code class="docutils literal notranslate"><span class="pre">FP</span> <span class="pre">Adder</span></code>, <code class="docutils literal notranslate"><span class="pre">FP</span> <span class="pre">Multiplier</span></code>, <code class="docutils literal notranslate"><span class="pre">FP</span> <span class="pre">Divider</span></code>, <code class="docutils literal notranslate"><span class="pre">Stall</span></code>) can be
+edited with a colour picker, and the <em>Reset to defaults</em> button
+restores the original palette (the same RGB values the Swing UI
+uses by default).</p></li>
+</ul>
+</section>
+</section>
+<section id="the-cycles-diagram">
+<h2>The Cycles diagram<a class="headerlink" href="#the-cycles-diagram" title="Link to this heading">¶</a></h2>
+<p>The <strong>Cycles</strong> region across the bottom of the window shows the
+<em>temporal</em> behaviour of the pipeline: a diagram of which stage every
+instruction occupied at every clock cycle. It mirrors the “Cycles”
+window of the classic Swing desktop UI.</p>
+<ul class="simple">
+<li><p>each <strong>row</strong> is one instruction, in the order it was fetched, labelled
+on the left with its assembly text;</p></li>
+<li><p>each <strong>column</strong> is one CPU cycle, numbered along the top;</p></li>
+<li><p>each <strong>cell</strong> shows, with the same colour code as the <em>Pipeline</em>
+panel, the stage the instruction was in during that cycle: <code class="docutils literal notranslate"><span class="pre">IF</span></code>,
+<code class="docutils literal notranslate"><span class="pre">ID</span></code>, <code class="docutils literal notranslate"><span class="pre">EX</span></code>, <code class="docutils literal notranslate"><span class="pre">MEM</span></code>, <code class="docutils literal notranslate"><span class="pre">WB</span></code> for the integer pipeline; <code class="docutils literal notranslate"><span class="pre">A1</span></code>–<code class="docutils literal notranslate"><span class="pre">A4</span></code>
+and <code class="docutils literal notranslate"><span class="pre">M1</span></code>–<code class="docutils literal notranslate"><span class="pre">M7</span></code> for the FP Adder and Multiplier; and <code class="docutils literal notranslate"><span class="pre">DIV</span></code> (with
+the per-cycle divider counter <code class="docutils literal notranslate"><span class="pre">D00</span></code>–<code class="docutils literal notranslate"><span class="pre">D24</span></code>) for the FP Divider.</p></li>
+</ul>
+<p>Stall cycles are drawn in the dedicated <em>Stall</em> colour and labelled with
+the hazard that caused them (<code class="docutils literal notranslate"><span class="pre">RAW</span></code>, <code class="docutils literal notranslate"><span class="pre">WAW</span></code> and the structural-stall
+tags <code class="docutils literal notranslate"><span class="pre">StDiv</span></code> / <code class="docutils literal notranslate"><span class="pre">StEx</span></code> / <code class="docutils literal notranslate"><span class="pre">StFun</span></code> / <code class="docutils literal notranslate"><span class="pre">Str</span></code> / <code class="docutils literal notranslate"><span class="pre">StAdd</span></code> / <code class="docutils literal notranslate"><span class="pre">StMul</span></code>),
+using exactly the same classification as the <em>Pipeline</em> panel. Because
+the diagram is built from the same data the Swing “Cycles” window draws,
+the web and desktop views never disagree on the history of a run.</p>
+<p>The diagram scrolls to follow the most recent cycle as the program
+advances; both scrollbars can be used to review earlier cycles or
+instructions. Before a program has run, the region shows an empty grid.
+For very long executions only the most recent cycles and instructions are
+kept on screen (a note above the grid says so) to keep the browser
+responsive.</p>
+</section>
+<section id="keyboard-shortcuts">
+<h2>Keyboard shortcuts<a class="headerlink" href="#keyboard-shortcuts" title="Link to this heading">¶</a></h2>
+<p>The following keyboard shortcuts are available at all times, unless a
+dialog (Help, Settings, Input) is open.  All listed keys call
+<code class="docutils literal notranslate"><span class="pre">preventDefault()</span></code> so the browser’s own default action (e.g. F10
+menu bar, Esc) does not also fire.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 15.0%" />
+<col style="width: 35.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Key</p></th>
+<th class="head"><p>Action</p></th>
+<th class="head"><p>Active when</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>F2</strong></p></td>
+<td><p>Load program</p></td>
+<td><p>Program has no syntax errors</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>F8</strong></p></td>
+<td><p>Run All / Pause (toggle)</p></td>
+<td><p>Run All: program loaded (READY); Pause: currently executing</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>F9</strong></p></td>
+<td><p>Single Step</p></td>
+<td><p>Program loaded (READY)</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>F10</strong></p></td>
+<td><p>Multi Step</p></td>
+<td><p>Program loaded (READY)</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Esc</strong></p></td>
+<td><p>Stop &amp; reset CPU</p></td>
+<td><p>Program loaded (READY)</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="running-edumips64-as-a-desktop-or-cli-application">
+<h2>Running EduMIPS64 as a desktop or CLI application<a class="headerlink" href="#running-edumips64-as-a-desktop-or-cli-application" title="Link to this heading">¶</a></h2>
+<p>The web frontend is convenient because it requires no installation,
+but EduMIPS64 is primarily distributed as a Java desktop application
+that can also be run from the command line. The desktop JAR exposes
+additional features (a richer settings dialog, the Dinero frontend
+for cache trace analysis, CLI options for batch / headless execution,
+a tracefile writer) that are documented in the full manual available
+on <a class="reference external" href="https://edumips64.readthedocs.io/">Read the Docs</a>.</p>
+<p>To install the desktop application or run EduMIPS64 from the command
+line, see the project’s GitHub repository:</p>
+<ul class="simple">
+<li><p>Project page: <a class="reference external" href="https://www.edumips.org">https://www.edumips.org</a></p></li>
+<li><p>Source code, releases and installation instructions:
+<a class="reference external" href="https://github.com/EduMIPS64/edumips64">https://github.com/EduMIPS64/edumips64</a></p></li>
+</ul>
+<p>If you find a bug or want to suggest an improvement to the web
+frontend, please open an issue on GitHub.</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  </body>
+</html>
