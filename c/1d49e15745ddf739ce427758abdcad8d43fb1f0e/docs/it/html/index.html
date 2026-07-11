@@ -1,0 +1,119 @@
+
+
+<html lang="it" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Benvenuti nella documentazione di EduMIPS64! &#8212; Documentazione EduMIPS64 1.4.0-228-g1d49e157 </title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/epub.css?v=e4d0adb4" />
+    <script src="_static/documentation_options.js?v=5df647bc"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/translations.js?v=45930005"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ 
+  </head><body>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="benvenuti-nella-documentazione-di-edumips64">
+<h1>Benvenuti nella documentazione di EduMIPS64!<a class="headerlink" href="#benvenuti-nella-documentazione-di-edumips64" title="Link to this heading">¶</a></h1>
+<p>EduMIPS64 è un simulatore di Instruction Set Architecture (ISA) MIPS64,
+progettato per eseguire piccoli programmi che utilizzino il sottoinsieme
+dell’Instruction Set MIPS64 implementato dal simulatore stesso; permette
+all’utente di vedere come le istruzioni si comportino nella pipeline, come gli
+stalli siano gestiti dalla CPU, lo stato di registri e memoria e molto altro.
+È classificabile sia come simulatore, sia come debugger visuale.</p>
+<p>Il sito web del progetto è <a class="reference external" href="http://www.edumips.org">http://www.edumips.org</a>, ed il codice sorgente è
+disponibile presso <a class="reference external" href="http://github.com/EduMIPS64/edumips64">http://github.com/EduMIPS64/edumips64</a>. Per segnalare bug o
+inviare suggerimenti sul simulatore, è possibile aprire una issue su github o
+inviare una mail a <a class="reference external" href="mailto:bugs&#37;&#52;&#48;edumips&#46;org">bugs<span>&#64;</span>edumips<span>&#46;</span>org</a>.</p>
+<p>EduMIPS64 è stato progettato e sviluppato da un gruppo di studenti
+dell’Università degli Studi di Catania, ed ha tratto spunto, come interfaccia
+e come funzionamento, dal simulatore WinMIPS64, sebbene vi siano alcune
+differenze importanti con quest’ultimo.</p>
+<p>Questo manuale vi introdurrà ad EduMIPS64, e spiegherà come utilizzarlo.</p>
+<p>Questo manuale è stato generato per la build 1.4.0-228-g1d49e157 di EduMIPS64.</p>
+<p>Il manuale è suddiviso in due parti. La prima parte è indipendente
+dall’interfaccia utente in uso e copre il formato dei file sorgente,
+l’insieme di istruzioni supportato, la Floating Point Unit e una serie
+di programmi di esempio. La seconda parte documenta le interfacce
+utente: un capitolo dedicato all’applicazione desktop (Swing), che
+include anche le opzioni da linea di comando del JAR, un capitolo
+dedicato alla shell interattiva a linea di comando esposta dal JAR in
+modalità headless, ed un capitolo dedicato al frontend web.</p>
+<p>Quando il manuale viene aperto dall’interno dell’applicazione, viene
+mostrato solo il capitolo relativo all’interfaccia utente attiva. Il
+manuale completo (con entrambi i capitoli sulle interfacce utente) è
+disponibile su <a class="reference external" href="https://edumips64.readthedocs.io/">Read the Docs</a> ed
+in formato PDF.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="source-files-format.html">Formato dei file sorgenti</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="source-files-format.html#limiti-di-memoria">Limiti di memoria</a></li>
+<li class="toctree-l2"><a class="reference internal" href="source-files-format.html#la-sezione-data">La sezione <cite>.data</cite></a></li>
+<li class="toctree-l2"><a class="reference internal" href="source-files-format.html#la-sezione-code">La sezione <cite>.code</cite></a></li>
+<li class="toctree-l2"><a class="reference internal" href="source-files-format.html#il-comando-include">Il comando <cite>#include</cite></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="instructions.html">Il set di istruzioni</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="instructions.html#le-istruzioni-alu">Le istruzioni ALU</a></li>
+<li class="toctree-l2"><a class="reference internal" href="instructions.html#istruzioni-load-store">Istruzioni load/store</a></li>
+<li class="toctree-l2"><a class="reference internal" href="instructions.html#istruzioni-di-controllo-del-flusso">Istruzioni di controllo del flusso</a></li>
+<li class="toctree-l2"><a class="reference internal" href="instructions.html#l-istruzione-syscall">L’istruzione <cite>SYSCALL</cite></a></li>
+<li class="toctree-l2"><a class="reference internal" href="instructions.html#altre-istruzioni">Altre istruzioni</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="fpu.html">Floating Point Unit</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fpu.html#valori-speciali">Valori speciali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fpu.html#configurazione-delle-eccezioni">Configurazione delle eccezioni</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fpu.html#direttiva-double">Direttiva .double</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fpu.html#registro-fcsr">Registro FCSR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fpu.html#instruction-set">Instruction set</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Listati di esempio</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#syscall">SYSCALL</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="versioning.html">Capire le versioni</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="versioning.html#il-numero-di-versione">Il numero di versione</a></li>
+<li class="toctree-l2"><a class="reference internal" href="versioning.html#dove-trovare-la-versione">Dove trovare la versione</a></li>
+<li class="toctree-l2"><a class="reference internal" href="versioning.html#quale-build-web-sto-eseguendo">Quale build web sto eseguendo?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="versioning.html#sfogliare-e-cambiare-versione">Sfogliare e cambiare versione</a></li>
+<li class="toctree-l2"><a class="reference internal" href="versioning.html#cosa-viene-conservato-e-per-quanto-tempo">Cosa viene conservato, e per quanto tempo</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="user-interface-web.html">L’interfaccia utente web</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user-interface-web.html#panoramica-del-layout">Panoramica del layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-interface-web.html#la-barra-degli-strumenti">La barra degli strumenti</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-interface-web.html#l-editor-di-codice">L’editor di codice</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-interface-web.html#il-pannello-issues">Il pannello Issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-interface-web.html#pannelli-a-runtime">Pannelli a runtime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-interface-web.html#il-diagramma-dei-cicli">Il diagramma dei cicli</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-interface-web.html#scorciatoie-da-tastiera">Scorciatoie da tastiera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-interface-web.html#eseguire-edumips64-come-applicazione-desktop-o-da-cli">Eseguire EduMIPS64 come applicazione desktop o da CLI</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  </body>
+</html>
