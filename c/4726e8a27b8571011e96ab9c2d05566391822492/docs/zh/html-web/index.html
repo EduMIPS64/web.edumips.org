@@ -1,0 +1,109 @@
+
+
+<html lang="zh-CN" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>欢迎访问 EduMIPS64 文档！ &#8212; EduMIPS64 1.4.0-236-g4726e8a2 文档</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/epub.css?v=e4d0adb4" />
+    <script src="_static/documentation_options.js?v=44f97a6c"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/translations.js?v=540d3cec"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ 
+  </head><body>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="edumips64">
+<h1>欢迎访问 EduMIPS64 文档！<a class="headerlink" href="#edumips64" title="链接到此标题。">¶</a></h1>
+<p>If the characters in the document are badly garbled, please set the environment variable JAVA_TOOL_OPTIONS to -Dfile.encoding=UTF8, or load the jar file with -Dfile.encoding=utf-8.</p>
+<p>For more information on this bug, please see here:</p>
+<p><a class="reference external" href="https://github.com/EduMIPS64/edumips64/issues/785">https://github.com/EduMIPS64/edumips64/issues/785</a></p>
+<hr class="docutils" />
+<p><strong>译者注：</strong></p>
+<p>中文文档使用了 DeepL 机翻，不能保证完全准确。如发现错误，请以英文文档为准，并在 GitHub 上提交修改 Pull Request。</p>
+<hr class="docutils" />
+<p>EduMIPS64 是 MIPS64 指令集架构 (ISA) 模拟器。它设计用于执行使用模拟器实现的 MIPS64 ISA 子集的小程序，允许用户查看指令在流水线中的行为、CPU 如何处理停滞、寄存器和内存的状态等。它既是一个模拟器，也是一个可视化调试器。</p>
+<p>该项目的网站是 <a class="reference external" href="http://www.edumips.org">http://www.edumips.org</a>，代码托管在 <a class="reference external" href="http://github.com/EduMIPS64/edumips64">http://github.com/EduMIPS64/edumips64</a>。如果发现任何错误，或有任何改进模拟器的建议，请在 github 上发布问题，或发送电子邮件至 <a class="reference external" href="mailto:bugs&#37;&#52;&#48;edumips&#46;org">bugs<span>&#64;</span>edumips<span>&#46;</span>org</a>。</p>
+<p>EduMIPS64 是由卡塔尼亚大学（意大利）的一群学生开发的，起初是 WinMIPS64 的克隆版，尽管现在这两个模拟器之间有很多不同之处。</p>
+<p>本手册将向您介绍 EduMIPS64，并详细介绍如何使用它。</p>
+<p>本手册是针对 EduMIPS64 构建版本 1.4.0-236-g4726e8a2 生成的。</p>
+<p>本手册分为两个部分。第一部分与所使用的用户界面无关，涵盖源文件格式、所支持的指令集、
+浮点单元以及一组示例程序。第二部分介绍用户界面：一章用于桌面（Swing）应用程序——
+其中也包含 JAR 的命令行选项；一章用于 JAR 在 headless 模式下提供的交互式命令行 shell；
+另一章则用于网页前端。</p>
+<p>当从正在运行的应用程序中打开本手册时，只会显示与当前用户界面相关的章节。包含两个用户
+界面章节的完整手册可在
+<a class="reference external" href="https://edumips64.readthedocs.io/">Read the Docs</a> 上以及 PDF 格式中查阅。</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="source-files-format.html">源文件格式</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="source-files-format.html#id2">内存限制</a></li>
+<li class="toctree-l2"><a class="reference internal" href="source-files-format.html#data"><cite>.data</cite> 部分</a></li>
+<li class="toctree-l2"><a class="reference internal" href="source-files-format.html#code"><cite>.code</cite> 部分</a></li>
+<li class="toctree-l2"><a class="reference internal" href="source-files-format.html#include"><cite>#include</cite> 命令</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="instructions.html">指令集</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="instructions.html#alu">ALU 指令</a></li>
+<li class="toctree-l2"><a class="reference internal" href="instructions.html#id2">加载/存储指令</a></li>
+<li class="toctree-l2"><a class="reference internal" href="instructions.html#id3">流控制指令</a></li>
+<li class="toctree-l2"><a class="reference internal" href="instructions.html#syscall">SYSCALL 指令</a></li>
+<li class="toctree-l2"><a class="reference internal" href="instructions.html#id6">其他指令</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="fpu.html">浮点单元</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fpu.html#special-values">特殊价值</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fpu.html#exception-configuration">异常配置</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fpu.html#double">.double 指令</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fpu.html#fcsr">FCSR 寄存器</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fpu.html#id9">指令集</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">代码示例</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#syscall">SYSCALL</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="versioning.html">了解版本信息</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="versioning.html#id2">版本字符串</a></li>
+<li class="toctree-l2"><a class="reference internal" href="versioning.html#id3">在哪里查找版本</a></li>
+<li class="toctree-l2"><a class="reference internal" href="versioning.html#id4">我正在使用哪个网页构建版本？</a></li>
+<li class="toctree-l2"><a class="reference internal" href="versioning.html#id5">浏览与切换版本</a></li>
+<li class="toctree-l2"><a class="reference internal" href="versioning.html#id6">保留哪些版本，以及保留多久</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="user-interface-web.html">网页用户界面</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user-interface-web.html#id2">布局概览</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-interface-web.html#id3">顶部工具栏</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-interface-web.html#id5">代码编辑器</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-interface-web.html#issues">Issues 面板</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-interface-web.html#id12">运行时面板</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-interface-web.html#id13">周期图</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-interface-web.html#id14">键盘快捷键</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-interface-web.html#edumips64">将 EduMIPS64 作为桌面或命令行应用程序运行</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  </body>
+</html>
