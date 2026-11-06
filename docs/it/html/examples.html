@@ -5,10 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Listati di esempio &#8212; Documentazione EduMIPS64 1.4.0-223-gce45a8d9 </title>
+    <title>Listati di esempio &#8212; Documentazione EduMIPS64 1.4.0-361-gbc3df710 </title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/epub.css?v=e4d0adb4" />
-    <script src="_static/documentation_options.js?v=7b519190"></script>
+    <script src="_static/documentation_options.js?v=fe201a13"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/translations.js?v=45930005"></script>
@@ -41,7 +41,7 @@ SYSCALL 1.</p>
 del programma. Esempio:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">code</span>
 <span class="n">daddi</span>   <span class="n">r1</span><span class="p">,</span> <span class="n">r0</span><span class="p">,</span> <span class="mi">0</span>    <span class="p">;</span> <span class="n">salva</span> <span class="n">il</span> <span class="n">valore</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">R1</span>
-<span class="n">syscall</span> <span class="mi">0</span>            <span class="p">;</span> <span class="n">termina</span> <span class="n">l</span><span class="s1">&#39;esecuzione</span>
+<span class="n">syscall</span> <span class="mi">0</span>            <span class="p">;</span> <span class="n">termina</span> <span class="n">l</span><span class="s1">'esecuzione</span>
 </pre></div>
 </div>
 </section>
@@ -49,9 +49,9 @@ del programma. Esempio:</p>
 <h3>SYSCALL 1<a class="headerlink" href="#syscall-1" title="Link to this heading">¶</a></h3>
 <p>Programma d’esempio che apre un file:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                .data
-error_op:       .asciiz     &quot;Errore durante l&#39;apertura del file&quot;
-ok_message:     .asciiz     &quot;Tutto ok.&quot;
-params_sys1:    .asciiz     &quot;filename.txt&quot;
+error_op:       .asciiz     "Errore durante l'apertura del file"
+ok_message:     .asciiz     "Tutto ok."
+params_sys1:    .asciiz     "filename.txt"
                 .word64     0xF
 
                 .text
@@ -96,8 +96,8 @@ SYSCALL).</p>
 <p>Programma di esempio che chiude un file:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                .data
 params_sys2:    .space 8
-error_cl:       .asciiz     &quot;Errore durante la chiususra del file&quot;
-ok_message:     .asciiz     &quot;Tutto a posto&quot;
+error_cl:       .asciiz     "Errore durante la chiususra del file"
+ok_message:     .asciiz     "Tutto a posto"
 
                 .text
 close:          daddi       r14, r0, params_sys2
@@ -134,8 +134,8 @@ messaggio di successo (riga 11).</p>
 params_sys3:    .space      8
 ind_value:      .space      8
                 .word64     16
-error_3:        .asciiz     &quot;Errore durante la lettura da file.&quot;
-ok_message:     .asciiz     &quot;Tutto ok.&quot;
+error_3:        .asciiz     "Errore durante la lettura da file."
+ok_message:     .asciiz     "Tutto ok."
 
 value:          .space      30
 
@@ -175,8 +175,8 @@ successo o di errore, a seconda dell’esito della SYSCALL.</p>
 params_sys4:    .space      8
 ind_value:      .space      8
                 .word64     16
-error_4:        .asciiz     &quot;Errore durante la scrittura su stringa.&quot;
-ok_message:     .asciiz     &quot;Tutto ok.&quot;
+error_4:        .asciiz     "Errore durante la scrittura su stringa."
+ok_message:     .asciiz     "Tutto ok."
 value:          .space      30
 
                 .text
@@ -228,9 +228,9 @@ dell’istruzione successiva alla chiamata di funzione.</p>
 <p>La SYSCALL 5 utilizza un meccanismo di passaggio parametri non semplicissimo,
 che sarà illustrato nel seguente esempio:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                <span class="o">.</span><span class="n">data</span>
-<span class="n">format_str</span><span class="p">:</span>     <span class="o">.</span><span class="n">asciiz</span>   <span class="s2">&quot;</span><span class="si">%d</span><span class="s2"> </span><span class="si">%s</span><span class="s2">:</span><span class="se">\n</span><span class="s2">Test di </span><span class="si">%s</span><span class="s2"> versione </span><span class="si">%i</span><span class="s2">.</span><span class="si">%i</span><span class="s2">!&quot;</span>
-<span class="n">s1</span><span class="p">:</span>             <span class="o">.</span><span class="n">asciiz</span>   <span class="s2">&quot;Giugno&quot;</span>
-<span class="n">s2</span><span class="p">:</span>             <span class="o">.</span><span class="n">asciiz</span>   <span class="s2">&quot;EduMIPS64&quot;</span>
+<span class="n">format_str</span><span class="p">:</span>     <span class="o">.</span><span class="n">asciiz</span>   <span class="s2">"</span><span class="si">%d</span><span class="s2"> </span><span class="si">%s</span><span class="s2">:</span><span class="se">\n</span><span class="s2">Test di </span><span class="si">%s</span><span class="s2"> versione </span><span class="si">%i</span><span class="s2">.</span><span class="si">%i</span><span class="s2">!"</span>
+<span class="n">s1</span><span class="p">:</span>             <span class="o">.</span><span class="n">asciiz</span>   <span class="s2">"Giugno"</span>
+<span class="n">s2</span><span class="p">:</span>             <span class="o">.</span><span class="n">asciiz</span>   <span class="s2">"EduMIPS64"</span>
 <span class="n">fs_addr</span><span class="p">:</span>        <span class="o">.</span><span class="n">space</span>    <span class="mi">4</span>
                 <span class="o">.</span><span class="n">word</span>     <span class="mi">5</span>
 <span class="n">s1_addr</span><span class="p">:</span>        <span class="o">.</span><span class="n">space</span>    <span class="mi">4</span>

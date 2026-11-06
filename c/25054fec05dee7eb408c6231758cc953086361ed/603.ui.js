@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunkedumips64_webui=self.webpackChunkedumips64_webui||[]).push([[603],{2603(e,r,s){s.r(r),s.d(r,{DraggedTreeItemsIdentifier:()=>t,TreeViewsDnDService:()=>i});class i{constructor(){this._dragOperations=new Map}removeDragOperationTransfer(e){if(e&&this._dragOperations.has(e)){const r=this._dragOperations.get(e);return this._dragOperations.delete(e),r}}}class t{constructor(e){this.identifier=e}}}}]);
-//# sourceMappingURL=603.ui.js.map

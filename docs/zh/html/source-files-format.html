@@ -5,10 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>源文件格式 &#8212; EduMIPS64 1.4.0-223-gce45a8d9 文档</title>
+    <title>源文件格式 &#8212; EduMIPS64 1.4.0-361-gbc3df710 文档</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/epub.css?v=e4d0adb4" />
-    <script src="_static/documentation_options.js?v=ac581ef7"></script>
+    <script src="_static/documentation_options.js?v=b05ebb81"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/translations.js?v=540d3cec"></script>
@@ -97,7 +97,7 @@
 解析得到的地址必须能放入该指令的位宽，否则会报告错误；64 位指令（ <cite>.word64</cite> ）总是能容纳一个地址。例如:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">data</span>
 <span class="n">buffer</span><span class="p">:</span>   <span class="o">.</span><span class="n">space</span>   <span class="mi">8</span>
-<span class="n">buf_addr</span><span class="p">:</span> <span class="o">.</span><span class="n">word64</span>  <span class="n">buffer</span>    <span class="p">;</span> <span class="n">存储</span> <span class="s2">&quot;buffer&quot;</span> <span class="n">的地址</span>
+<span class="n">buf_addr</span><span class="p">:</span> <span class="o">.</span><span class="n">word64</span>  <span class="n">buffer</span>    <span class="p">;</span> <span class="n">存储</span> <span class="s2">"buffer"</span> <span class="n">的地址</span>
 <span class="n">jump_tbl</span><span class="p">:</span> <span class="o">.</span><span class="n">word64</span>  <span class="n">routine</span>   <span class="p">;</span> <span class="n">存储代码标签的地址</span>
 <span class="o">.</span><span class="n">code</span>
 <span class="n">routine</span><span class="p">:</span>  <span class="n">daddi</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r0</span><span class="p">,</span> <span class="mi">42</span>

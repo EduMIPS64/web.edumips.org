@@ -5,10 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Code Examples &#8212; EduMIPS64 1.4.0-223-gce45a8d9 documentation</title>
+    <title>Code Examples &#8212; EduMIPS64 1.4.0-361-gbc3df710 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/epub.css?v=e4d0adb4" />
-    <script src="_static/documentation_options.js?v=1daf4fc0"></script>
+    <script src="_static/documentation_options.js?v=98dec443"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -47,9 +47,9 @@ Example:</p>
 <h3>SYSCALL 1<a class="headerlink" href="#syscall-1" title="Link to this heading">¶</a></h3>
 <p>Example program that opens a file:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                .data
-error_op:       .asciiz     &quot;Error opening the file&quot;
-ok_message:     .asciiz     &quot;All right&quot;
-params_sys1:    .asciiz     &quot;filename.txt&quot;
+error_op:       .asciiz     "Error opening the file"
+ok_message:     .asciiz     "All right"
+params_sys1:    .asciiz     "filename.txt"
                 .word64     0xF
 
                 .text
@@ -93,8 +93,8 @@ everything went smoothly (rows 12 and 16).</p>
 <p>Example program that closes a file:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                .data
 params_sys2:    .space 8
-error_cl:       .asciiz     &quot;Error closing the file&quot;
-ok_message:     .asciiz     &quot;All right&quot;
+error_cl:       .asciiz     "Error closing the file"
+ok_message:     .asciiz     "All right"
 
                 .text
 close:          daddi       r14, r0, params_sys2
@@ -131,8 +131,8 @@ file descriptor of the file to use.</p>
 params_sys3:    .space      8
 ind_value:      .space      8
                 .word64     16
-error_3:        .asciiz     &quot;Error while reading from file&quot;
-ok_message:     .asciiz     &quot;All right&quot;
+error_3:        .asciiz     "Error while reading from file"
+ok_message:     .asciiz     "All right"
 
 value:          .space      30
 
@@ -174,8 +174,8 @@ operation.</p>
 params_sys4:    .space      8
 ind_value:      .space      8
                 .word64     16
-error_4:        .asciiz     &quot;Error writing to file&quot;
-ok_message:     .asciiz     &quot;All right&quot;
+error_4:        .asciiz     "Error writing to file"
+ok_message:     .asciiz     "All right"
 value:          .space      30
 
                 .text
@@ -237,9 +237,9 @@ counter to the content of r31, as the usual MIPS calling convention states.</p>
 <p>SYSCALL 5 uses a not-so-simple arguments passing mechanism, that will be
 shown in the following example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                <span class="o">.</span><span class="n">data</span>
-<span class="n">format_str</span><span class="p">:</span>     <span class="o">.</span><span class="n">asciiz</span>   <span class="s2">&quot;</span><span class="si">%d</span><span class="s2">th of </span><span class="si">%s</span><span class="s2">:</span><span class="se">\n</span><span class="si">%s</span><span class="s2"> version </span><span class="si">%i</span><span class="s2">.</span><span class="si">%i</span><span class="s2"> is being tested!&quot;</span>
-<span class="n">s1</span><span class="p">:</span>             <span class="o">.</span><span class="n">asciiz</span>   <span class="s2">&quot;June&quot;</span>
-<span class="n">s2</span><span class="p">:</span>             <span class="o">.</span><span class="n">asciiz</span>   <span class="s2">&quot;EduMIPS64&quot;</span>
+<span class="n">format_str</span><span class="p">:</span>     <span class="o">.</span><span class="n">asciiz</span>   <span class="s2">"</span><span class="si">%d</span><span class="s2">th of </span><span class="si">%s</span><span class="s2">:</span><span class="se">\n</span><span class="si">%s</span><span class="s2"> version </span><span class="si">%i</span><span class="s2">.</span><span class="si">%i</span><span class="s2"> is being tested!"</span>
+<span class="n">s1</span><span class="p">:</span>             <span class="o">.</span><span class="n">asciiz</span>   <span class="s2">"June"</span>
+<span class="n">s2</span><span class="p">:</span>             <span class="o">.</span><span class="n">asciiz</span>   <span class="s2">"EduMIPS64"</span>
 <span class="n">fs_addr</span><span class="p">:</span>        <span class="o">.</span><span class="n">space</span>    <span class="mi">4</span>
                 <span class="o">.</span><span class="n">word</span>     <span class="mi">5</span>
 <span class="n">s1_addr</span><span class="p">:</span>        <span class="o">.</span><span class="n">space</span>    <span class="mi">4</span>

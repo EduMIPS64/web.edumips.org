@@ -5,10 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Formato dei file sorgenti &#8212; Documentazione EduMIPS64 1.4.0-223-gce45a8d9 </title>
+    <title>Formato dei file sorgenti &#8212; Documentazione EduMIPS64 1.4.0-361-gbc3df710 </title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/epub.css?v=e4d0adb4" />
-    <script src="_static/documentation_options.js?v=7b519190"></script>
+    <script src="_static/documentation_options.js?v=fe201a13"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/translations.js?v=45930005"></script>
@@ -127,8 +127,8 @@ viene segnalato un errore; una direttiva a 64 bit (<cite>.word64</cite>) può se
 contenere un indirizzo. Ad esempio:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">data</span>
 <span class="n">buffer</span><span class="p">:</span>   <span class="o">.</span><span class="n">space</span>   <span class="mi">8</span>
-<span class="n">buf_addr</span><span class="p">:</span> <span class="o">.</span><span class="n">word64</span>  <span class="n">buffer</span>    <span class="p">;</span> <span class="n">memorizza</span> <span class="n">l</span><span class="s1">&#39;indirizzo di &quot;buffer&quot;</span>
-<span class="n">jump_tbl</span><span class="p">:</span> <span class="o">.</span><span class="n">word64</span>  <span class="n">routine</span>   <span class="p">;</span> <span class="n">memorizza</span> <span class="n">l</span><span class="s1">&#39;indirizzo di una label di codice</span>
+<span class="n">buf_addr</span><span class="p">:</span> <span class="o">.</span><span class="n">word64</span>  <span class="n">buffer</span>    <span class="p">;</span> <span class="n">memorizza</span> <span class="n">l</span><span class="s1">'indirizzo di "buffer"</span>
+<span class="n">jump_tbl</span><span class="p">:</span> <span class="o">.</span><span class="n">word64</span>  <span class="n">routine</span>   <span class="p">;</span> <span class="n">memorizza</span> <span class="n">l</span><span class="s1">'indirizzo di una label di codice</span>
 <span class="o">.</span><span class="n">code</span>
 <span class="n">routine</span><span class="p">:</span>  <span class="n">daddi</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r0</span><span class="p">,</span> <span class="mi">42</span>
           <span class="n">syscall</span> <span class="mi">0</span>
